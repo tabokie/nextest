@@ -151,7 +151,73 @@
                         <h1 id="configuration"><a class="header" href="#configuration">Configuration</a></h1>
 <p>cargo-nextest supports repository-specific configuration at the location <code>.config/nextest.toml</code> from the Cargo workspace root. The location of the configuration file can be overridden with the <code>--config-file</code> option.</p>
 <p>The default configuration shipped with cargo-nextest is:</p>
-<pre><code class="language-toml">{{#include ../../nextest-runner/default-config.toml}}
+<pre><code class="language-toml"># This is the default config used by nextest. It is embedded in the binary at
+# build time. It may be used as a template for .config/nextest.toml.
+
+[store]
+# The directory under the workspace root at which nextest-related files are
+# written. Profile-specific storage is currently written to dir/&lt;profile-name&gt;.
+dir = &quot;target/nextest&quot;
+
+# This section defines the default nextest profile. Custom profiles are layered
+# on top of the default profile.
+[profile.default]
+# &quot;retries&quot; defines the number of times a test should be retried. If set to a
+# non-zero value, tests that succeed on a subsequent attempt will be marked as
+# non-flaky. Can be overridden through the `--retries` option.
+retries = 0
+
+# Show these test statuses in the output.
+#
+# The possible values this can take are:
+# * none: no output
+# * fail: show failed (including exec-failed) tests
+# * retry: show flaky and retried tests
+# * slow: show slow tests
+# * pass: show passed tests
+# * skip: show skipped tests (most useful for CI)
+# * all: all of the above
+#
+# Each value includes all the values above it; for example, &quot;slow&quot; includes
+# failed and retried tests.
+#
+# Can be overridden through the `--status-level` flag.
+status-level = &quot;pass&quot;
+
+# &quot;failure-output&quot; defines when test failures are output to standard output.
+# Accepted values are
+# * &quot;immediate&quot;: output failures as soon as they happen
+# * &quot;final&quot;: output failures at the end of the test run
+# * &quot;immediate-final&quot;: output failures as soon as they happen and at the end of
+#   the test run
+# * &quot;never&quot;: don't output failures at all
+#
+# For large test suites and CI it is generally useful to use &quot;immediate-final&quot;.
+#
+# Can be overridden through the `--failure-output` option.
+failure-output = &quot;immediate&quot;
+
+# &quot;success-output&quot; controls output on success. This should generally be set to
+# &quot;never&quot;.
+success-output = &quot;never&quot;
+
+# Cancel the test run on the first failure. For CI runs, consider setting this
+# to false.
+fail-fast = true
+
+# Treat a test that takes longer than this as slow, and print a message.
+slow-timeout = &quot;60s&quot;
+
+[profile.default.junit]
+# Output a JUnit report into the given file inside 'store.dir/&lt;profile-name&gt;'.
+# If unspecified, JUnit is not written out.
+
+# path = &quot;junit.xml&quot;
+
+# The name of the top-level &quot;report&quot; element in JUnit report. If aggregating
+# reports across different test runs, it may be useful to provide separate names
+# for each report.
+report-name = &quot;nextest-run&quot;
 </code></pre>
 <h2 id="profiles"><a class="header" href="#profiles">Profiles</a></h2>
 <p>With cargo-nextest, local and CI runs often need to use different settings. For example, CI test runs should not be cancelled as soon as the first test failure is seen.</p>
