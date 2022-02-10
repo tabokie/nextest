@@ -3,14 +3,14 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>The nextest book</title>
+        <title>nextest</title>
         <meta name="robots" content="noindex" />
 
 
         <!-- Custom HTML head -->
         
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <meta name="description" content="Usage and documentation for cargo-nextest.">
+        <meta name="description" content="A new, faster Rust test runner.">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
 
@@ -82,7 +82,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Introduction</a></li><li class="chapter-item expanded "><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation and usage</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="running.html"><strong aria-hidden="true">1.1.</strong> Running tests</a></li><li class="chapter-item expanded "><a href="listing.html"><strong aria-hidden="true">1.2.</strong> Listing tests</a></li><li class="chapter-item expanded "><a href="retries.html"><strong aria-hidden="true">1.3.</strong> Retries and flaky tests</a></li><li class="chapter-item expanded "><a href="partitioning.html"><strong aria-hidden="true">1.4.</strong> Partitioning test runs in CI</a></li><li class="chapter-item expanded "><a href="other-options.html"><strong aria-hidden="true">1.5.</strong> Other options</a></li><li class="chapter-item expanded "><a href="env-vars.html"><strong aria-hidden="true">1.6.</strong> Environment variables</a></li><li class="chapter-item expanded "><a href="stability.html"><strong aria-hidden="true">1.7.</strong> Stability policy</a></li></ol></li><li class="chapter-item expanded "><a href="machine-readable.html"><strong aria-hidden="true">2.</strong> Machine-readable output</a></li><li class="chapter-item expanded "><a href="configuration.html"><strong aria-hidden="true">3.</strong> Configuration</a></li><li class="chapter-item expanded "><a href="junit.html"><strong aria-hidden="true">4.</strong> JUnit support</a></li><li class="chapter-item expanded "><a href="how-it-works.html"><strong aria-hidden="true">5.</strong> How nextest works</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="custom-test-harnesses.html"><strong aria-hidden="true">5.1.</strong> Custom test harnesses</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Introduction</a></li><li class="chapter-item expanded "><a href="book/installation.html"><strong aria-hidden="true">1.</strong> Installation and usage</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="book/running.html"><strong aria-hidden="true">1.1.</strong> Running tests</a></li><li class="chapter-item expanded "><a href="book/listing.html"><strong aria-hidden="true">1.2.</strong> Listing tests</a></li><li class="chapter-item expanded "><a href="book/retries.html"><strong aria-hidden="true">1.3.</strong> Retries and flaky tests</a></li><li class="chapter-item expanded "><a href="book/partitioning.html"><strong aria-hidden="true">1.4.</strong> Partitioning test runs in CI</a></li><li class="chapter-item expanded "><a href="book/other-options.html"><strong aria-hidden="true">1.5.</strong> Other options</a></li><li class="chapter-item expanded "><a href="book/env-vars.html"><strong aria-hidden="true">1.6.</strong> Environment variables</a></li><li class="chapter-item expanded "><a href="book/stability.html"><strong aria-hidden="true">1.7.</strong> Stability policy</a></li></ol></li><li class="chapter-item expanded "><a href="book/machine-readable.html"><strong aria-hidden="true">2.</strong> Machine-readable output</a></li><li class="chapter-item expanded "><a href="book/configuration.html"><strong aria-hidden="true">3.</strong> Configuration</a></li><li class="chapter-item expanded "><a href="book/junit.html"><strong aria-hidden="true">4.</strong> JUnit support</a></li><li class="chapter-item expanded "><a href="book/how-it-works.html"><strong aria-hidden="true">5.</strong> How nextest works</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="book/custom-test-harnesses.html"><strong aria-hidden="true">5.1.</strong> Custom test harnesses</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -111,13 +111,13 @@
                         </button>
                     </div>
 
-                    <h1 class="menu-title">The nextest book</h1>
+                    <h1 class="menu-title">nextest</h1>
 
                     <div class="right-buttons">
                         <a href="print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
-                        <a href="https://github.com/nextest-rs/nextest/tree/main/book" title="Git repository" aria-label="Git repository">
+                        <a href="https://github.com/nextest-rs/nextest/tree/main/site" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
 
@@ -175,7 +175,7 @@
 <p>To build and run all tests in a workspace, cd into the workspace and run:</p>
 <pre><code>cargo nextest run
 </code></pre>
-<p>For more information about running tests, see <a href="running.html">Running tests</a>.</p>
+<p>For more information about running tests, see <a href="book/running.html">Running tests</a>.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="running-tests-1"><a class="header" href="#running-tests-1">Running tests</a></h1>
 <p>To build and run all tests in a workspace<sup class="footnote-reference"><a href="#doctest">1</a></sup>, cd into the workspace and run:</p>
 <pre><code>cargo nextest run
@@ -232,8 +232,8 @@
 <img src="https://user-images.githubusercontent.com/180618/153311213-0fde9a74-f8ee-4701-a754-6866b80c476f.png"/>
 <p><code>--retries 2</code> means that the test is retried twice, for a total of three attempts. In this case, the test fails on the first try but succeeds on the second try. The <code>TRY 2 PASS</code> text means that the test passed on the second try.</p>
 <p>Flaky tests are treated as ultimately successful. If there are no other tests that failed, the exit code for the test run is 0.</p>
-<p>Retries can also be <a href="configuration.html">configured in <code>.config/nextest.toml</code></a>. The command-line <code>--retries</code> option overrides the configured value.</p>
-<p>Flaky test detection is integrated with nextest's JUnit support. For more information, see <a href="junit.html">JUnit support</a>.</p>
+<p>Retries can also be <a href="book/configuration.html">configured in <code>.config/nextest.toml</code></a>. The command-line <code>--retries</code> option overrides the configured value.</p>
+<p>Flaky test detection is integrated with nextest's JUnit support. For more information, see <a href="book/junit.html">JUnit support</a>.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="partitioning-test-runs-in-ci"><a class="header" href="#partitioning-test-runs-in-ci">Partitioning test runs in CI</a></h1>
 <p>For CI scenarios where test runs take too long on a single machine, nextest supports automatically <em>partitioning</em> or <em>sharding</em> tests into buckets.</p>
 <p>cargo-nextest supports both <em>hash-based</em> and <em>count-based</em> partitioning. Here's an example of count-based partitioning, running tests in bucket 1 of 2.</p>
@@ -293,8 +293,8 @@
 <p>The cargo-nextest binary follows <a href="https://semver.org/">semantic versioning</a>, where the <a href="https://semver.org/#spec-item-1">public API</a> is declared to consist of exactly the following:</p>
 <ol>
 <li>command-line arguments</li>
-<li><a href="machine-readable.html">machine-readable output</a></li>
-<li>the <a href="configuration.html">configuration file format</a></li>
+<li><a href="book/machine-readable.html">machine-readable output</a></li>
+<li>the <a href="book/configuration.html">configuration file format</a></li>
 </ol>
 <p>Within a version series, the public API will be append-only. New options or keys may be added, but existing keys will continue to be as they were.</p>
 <p>The public API does <em>not</em> include human-readable output generated by nextest, or in general anything printed to stderr.</p>
@@ -352,73 +352,7 @@
 <div style="break-before: page; page-break-before: always;"></div><h1 id="configuration"><a class="header" href="#configuration">Configuration</a></h1>
 <p>cargo-nextest supports repository-specific configuration at the location <code>.config/nextest.toml</code> from the Cargo workspace root. The location of the configuration file can be overridden with the <code>--config-file</code> option.</p>
 <p>The default configuration shipped with cargo-nextest is:</p>
-<pre><code class="language-toml"># This is the default config used by nextest. It is embedded in the binary at
-# build time. It may be used as a template for .config/nextest.toml.
-
-[store]
-# The directory under the workspace root at which nextest-related files are
-# written. Profile-specific storage is currently written to dir/&lt;profile-name&gt;.
-dir = &quot;target/nextest&quot;
-
-# This section defines the default nextest profile. Custom profiles are layered
-# on top of the default profile.
-[profile.default]
-# &quot;retries&quot; defines the number of times a test should be retried. If set to a
-# non-zero value, tests that succeed on a subsequent attempt will be marked as
-# non-flaky. Can be overridden through the `--retries` option.
-retries = 0
-
-# Show these test statuses in the output.
-#
-# The possible values this can take are:
-# * none: no output
-# * fail: show failed (including exec-failed) tests
-# * retry: show flaky and retried tests
-# * slow: show slow tests
-# * pass: show passed tests
-# * skip: show skipped tests (most useful for CI)
-# * all: all of the above
-#
-# Each value includes all the values above it; for example, &quot;slow&quot; includes
-# failed and retried tests.
-#
-# Can be overridden through the `--status-level` flag.
-status-level = &quot;pass&quot;
-
-# &quot;failure-output&quot; defines when test failures are output to standard output.
-# Accepted values are
-# * &quot;immediate&quot;: output failures as soon as they happen
-# * &quot;final&quot;: output failures at the end of the test run
-# * &quot;immediate-final&quot;: output failures as soon as they happen and at the end of
-#   the test run
-# * &quot;never&quot;: don't output failures at all
-#
-# For large test suites and CI it is generally useful to use &quot;immediate-final&quot;.
-#
-# Can be overridden through the `--failure-output` option.
-failure-output = &quot;immediate&quot;
-
-# &quot;success-output&quot; controls output on success. This should generally be set to
-# &quot;never&quot;.
-success-output = &quot;never&quot;
-
-# Cancel the test run on the first failure. For CI runs, consider setting this
-# to false.
-fail-fast = true
-
-# Treat a test that takes longer than this as slow, and print a message.
-slow-timeout = &quot;60s&quot;
-
-[profile.default.junit]
-# Output a JUnit report into the given file inside 'store.dir/&lt;profile-name&gt;'.
-# If unspecified, JUnit is not written out.
-
-# path = &quot;junit.xml&quot;
-
-# The name of the top-level &quot;report&quot; element in JUnit report. If aggregating
-# reports across different test runs, it may be useful to provide separate names
-# for each report.
-report-name = &quot;nextest-run&quot;
+<pre><code class="language-toml">{{#include ../../nextest-runner/default-config.toml}}
 </code></pre>
 <h2 id="profiles"><a class="header" href="#profiles">Profiles</a></h2>
 <p>With cargo-nextest, local and CI runs often need to use different settings. For example, CI test runs should not be cancelled as soon as the first test failure is seen.</p>
@@ -460,46 +394,7 @@ path = &quot;junit.xml&quot;
 <li>Standard output and standard error are included for failed and retried tests. (However, <a href="https://en.wikipedia.org/wiki/Valid_characters_in_XML">invalid XML characters</a> are stripped out.)</li>
 </ul>
 <p>Here's an example JUnit file generated by <code>cargo-nextest</code>.</p>
-<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;testsuites name=&quot;my-test-run&quot; tests=&quot;6&quot; failures=&quot;2&quot; errors=&quot;1&quot; timestamp=&quot;2021-04-01T10:52:37.000-08:00&quot; time=&quot;42.235&quot;&gt;
-    &lt;testsuite name=&quot;testsuite0&quot; tests=&quot;6&quot; disabled=&quot;1&quot; errors=&quot;1&quot; failures=&quot;2&quot; timestamp=&quot;2021-04-01T10:52:39.000-08:00&quot;&gt;
-        &lt;properties&gt;
-            &lt;property name=&quot;env&quot; value=&quot;FOOBAR&quot;/&gt;
-        &lt;/properties&gt;
-        &lt;testcase name=&quot;testcase0&quot;&gt;
-            &lt;system-out&gt;testcase0-output&lt;/system-out&gt;
-        &lt;/testcase&gt;
-        &lt;testcase name=&quot;testcase1&quot; time=&quot;4.242&quot;&gt;
-            &lt;failure message=&quot;testcase1-message&quot;&gt;this is the failure description&lt;/failure&gt;
-            &lt;system-err&gt;some sort of failure output&lt;/system-err&gt;
-        &lt;/testcase&gt;
-        &lt;testcase name=&quot;testcase2&quot; time=&quot;0.000&quot;&gt;
-            &lt;error type=&quot;error type&quot;&gt;testcase2 error description&lt;/error&gt;
-        &lt;/testcase&gt;
-        &lt;testcase name=&quot;testcase3&quot; assertions=&quot;20&quot; timestamp=&quot;2021-04-01T11:52:41.000-07:00&quot;&gt;
-            &lt;skipped message=&quot;skipped message&quot; type=&quot;skipped type&quot;/&gt;
-            &lt;system-out&gt;testcase3 output&lt;/system-out&gt;
-            &lt;system-err&gt;testcase3 error&lt;/system-err&gt;
-        &lt;/testcase&gt;
-        &lt;testcase name=&quot;testcase4&quot; time=&quot;661.661&quot;&gt;
-            &lt;flakyFailure type=&quot;flaky failure type&quot;&gt;this is a flaky failure description&lt;/flakyFailure&gt;
-            &lt;flakyError type=&quot;flaky error type&quot;&gt;flaky error description
-                &lt;stackTrace&gt;flaky stack trace&lt;/stackTrace&gt;
-                &lt;system-out&gt;flaky system output&lt;/system-out&gt;
-                &lt;system-err&gt;flaky system error with [34mANSI escape codes[39m&lt;/system-err&gt;
-            &lt;/flakyError&gt;
-        &lt;/testcase&gt;
-        &lt;testcase name=&quot;testcase5&quot; time=&quot;0.156&quot;&gt;
-            &lt;failure&gt;main test failure description&lt;/failure&gt;
-            &lt;rerunFailure type=&quot;retry failure type&quot;&gt;
-            &lt;/rerunFailure&gt;
-            &lt;rerunError type=&quot;retry error type&quot;&gt;
-                &lt;stackTrace&gt;retry error stack trace&lt;/stackTrace&gt;
-                &lt;system-out&gt;retry error system output&lt;/system-out&gt;
-            &lt;/rerunError&gt;
-        &lt;/testcase&gt;
-    &lt;/testsuite&gt;
-&lt;/testsuites&gt;
+<pre><code class="language-xml">{{#include ../../quick-junit/tests/fixtures/basic_report.xml}}
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="how-nextest-works"><a class="header" href="#how-nextest-works">How nextest works</a></h1>
 <p>To understand how nextest works, it is useful to first look at the execution model used by cargo test.</p>
@@ -522,14 +417,14 @@ path = &quot;junit.xml&quot;
 <li><strong>The list phase.</strong> cargo-nextest first builds all test binaries with <code>cargo test --no-run</code>, then queries those binaries to produce a list of all tests within them.</li>
 <li><strong>The run phase.</strong> cargo-nextest then executes each individual test in a separate process, in parallel. It then collects, displays and aggregates results for each individual test.</li>
 </ul>
-<p>This model solves all the problems of cargo test's execution model, at the cost of a <em>significantly</em> thicker interface to test binaries. <strong>This means that custom test harnesses <a href="custom-test-harnesses.html">may need to be adapted</a> to work with cargo-nextest.</strong></p>
+<p>This model solves all the problems of cargo test's execution model, at the cost of a <em>significantly</em> thicker interface to test binaries. <strong>This means that custom test harnesses <a href="book/custom-test-harnesses.html">may need to be adapted</a> to work with cargo-nextest.</strong></p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="custom-test-harnesses"><a class="header" href="#custom-test-harnesses">Custom test harnesses</a></h1>
 <p>A custom test harness is defined in <code>Cargo.toml</code> as:</p>
 <pre><code class="language-toml">[[test]]
 name = &quot;my-test&quot;
 harness = false
 </code></pre>
-<p>As mentioned in <a href="how-it-works.html">How nextest works</a>, cargo-nextest has a much thicker interface with the test harness than cargo test does. If you don't use any custom harnesses, cargo-nextest will run out of the box. However, users of custom test harnesses may need to be changed to work with cargo nextest. In general, the changes make the test harness look more like the default Rust test harness, and are pretty small overall.</p>
+<p>As mentioned in <a href="book/how-it-works.html">How nextest works</a>, cargo-nextest has a much thicker interface with the test harness than cargo test does. If you don't use any custom harnesses, cargo-nextest will run out of the box. However, users of custom test harnesses may need to be changed to work with cargo nextest. In general, the changes make the test harness look more like the default Rust test harness, and are pretty small overall.</p>
 <ul>
 <li>
 <p><strong>Custom test harnesses MUST support being run with <code>--list --format terse</code>.</strong> This command MUST print to stdout all tests in <em>exactly</em> the format</p>
