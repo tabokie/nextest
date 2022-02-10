@@ -338,8 +338,6 @@
 <span id="337">337</span>
 <span id="338">338</span>
 <span id="339">339</span>
-<span id="340">340</span>
-<span id="341">341</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -358,6 +356,10 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// This is the root data structure for nextest configuration. Most runner-specific configuration is managed</span>
 <span class="doccomment">/// through [profiles](NextestProfile), obtained through the [`profile`](Self::profile) method.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// For more about configuration, see</span>
+<span class="doccomment">/// [Configuration](https://nextest-rs.github.io/nextest/book/configuration.html) in the nextest</span>
+<span class="doccomment">/// book.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">NextestConfig</span> {
     <span class="ident">workspace_root</span>: <span class="ident">Utf8PathBuf</span>,
@@ -370,12 +372,6 @@
     <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">CONFIG_PATH</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;.config/nextest.toml&quot;</span>;
 
     <span class="doccomment">/// Contains the default config as a TOML file.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// The default rules included with this copy of nextest-runner are:</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```toml</span>
-    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="ident">include_str</span> <span class="op">!</span> (<span class="string">&quot;../default-config.toml&quot;</span>)]</span>
-    <span class="doccomment">/// ```</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Repository-specific configuration is layered on top of the default config.</span>
     <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">DEFAULT_CONFIG</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span> <span class="op">=</span> <span class="macro">include_str!</span>(<span class="string">&quot;../default-config.toml&quot;</span>);
