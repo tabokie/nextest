@@ -837,6 +837,22 @@
 <span id="836">836</span>
 <span id="837">837</span>
 <span id="838">838</span>
+<span id="839">839</span>
+<span id="840">840</span>
+<span id="841">841</span>
+<span id="842">842</span>
+<span id="843">843</span>
+<span id="844">844</span>
+<span id="845">845</span>
+<span id="846">846</span>
+<span id="847">847</span>
+<span id="848">848</span>
+<span id="849">849</span>
+<span id="850">850</span>
+<span id="851">851</span>
+<span id="852">852</span>
+<span id="853">853</span>
+<span id="854">854</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -1452,9 +1468,14 @@
 
         <span class="kw">if</span> <span class="op">!</span><span class="ident">run_status</span>.<span class="ident">stdout</span>().<span class="ident">is_empty</span>() {
             <span class="macro">write!</span>(<span class="ident">writer</span>, <span class="string">&quot;\n{}&quot;</span>, <span class="string">&quot;--- &quot;</span>.<span class="ident">style</span>(<span class="ident">header_style</span>))<span class="question-mark">?</span>;
-            <span class="self">self</span>.<span class="ident">write_attempt</span>(<span class="ident">run_status</span>, <span class="ident">header_style</span>, <span class="kw-2">&amp;mut</span> <span class="ident">writer</span>)<span class="question-mark">?</span>;
-            <span class="comment">// The spacing is to align test instances.</span>
-            <span class="macro">write!</span>(<span class="ident">writer</span>, <span class="string">&quot;{}&quot;</span>, <span class="string">&quot; STDOUT:             &quot;</span>.<span class="ident">style</span>(<span class="ident">header_style</span>))<span class="question-mark">?</span>;
+            <span class="kw">let</span> <span class="ident">out_len</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">write_attempt</span>(<span class="ident">run_status</span>, <span class="ident">header_style</span>, <span class="kw-2">&amp;mut</span> <span class="ident">writer</span>)<span class="question-mark">?</span>;
+            <span class="comment">// The width is to align test instances.</span>
+            <span class="macro">write!</span>(
+                <span class="ident">writer</span>,
+                <span class="string">&quot;{:width$}&quot;</span>,
+                <span class="string">&quot;STDOUT:&quot;</span>.<span class="ident">style</span>(<span class="ident">header_style</span>),
+                <span class="ident">width</span> <span class="op">=</span> (<span class="number">21</span> <span class="op">-</span> <span class="ident">out_len</span>)
+            )<span class="question-mark">?</span>;
             <span class="self">self</span>.<span class="ident">write_instance</span>(<span class="kw-2">*</span><span class="ident">test_instance</span>, <span class="kw-2">&amp;mut</span> <span class="ident">writer</span>)<span class="question-mark">?</span>;
             <span class="macro">writeln!</span>(<span class="ident">writer</span>, <span class="string">&quot;{}&quot;</span>, <span class="string">&quot; ---&quot;</span>.<span class="ident">style</span>(<span class="ident">header_style</span>))<span class="question-mark">?</span>;
 
@@ -1470,9 +1491,14 @@
 
         <span class="kw">if</span> <span class="op">!</span><span class="ident">run_status</span>.<span class="ident">stderr</span>().<span class="ident">is_empty</span>() {
             <span class="macro">write!</span>(<span class="ident">writer</span>, <span class="string">&quot;\n{}&quot;</span>, <span class="string">&quot;--- &quot;</span>.<span class="ident">style</span>(<span class="ident">header_style</span>))<span class="question-mark">?</span>;
-            <span class="self">self</span>.<span class="ident">write_attempt</span>(<span class="ident">run_status</span>, <span class="ident">header_style</span>, <span class="kw-2">&amp;mut</span> <span class="ident">writer</span>)<span class="question-mark">?</span>;
-            <span class="comment">// The spacing is to align test instances.</span>
-            <span class="macro">write!</span>(<span class="ident">writer</span>, <span class="string">&quot;{}&quot;</span>, <span class="string">&quot; STDERR:             &quot;</span>.<span class="ident">style</span>(<span class="ident">header_style</span>))<span class="question-mark">?</span>;
+            <span class="kw">let</span> <span class="ident">out_len</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">write_attempt</span>(<span class="ident">run_status</span>, <span class="ident">header_style</span>, <span class="kw-2">&amp;mut</span> <span class="ident">writer</span>)<span class="question-mark">?</span>;
+            <span class="comment">// The width is to align test instances.</span>
+            <span class="macro">write!</span>(
+                <span class="ident">writer</span>,
+                <span class="string">&quot;{:width$}&quot;</span>,
+                <span class="string">&quot;STDERR:&quot;</span>.<span class="ident">style</span>(<span class="ident">header_style</span>),
+                <span class="ident">width</span> <span class="op">=</span> (<span class="number">21</span> <span class="op">-</span> <span class="ident">out_len</span>)
+            )<span class="question-mark">?</span>;
             <span class="self">self</span>.<span class="ident">write_instance</span>(<span class="kw-2">*</span><span class="ident">test_instance</span>, <span class="kw-2">&amp;mut</span> <span class="ident">writer</span>)<span class="question-mark">?</span>;
             <span class="macro">writeln!</span>(<span class="ident">writer</span>, <span class="string">&quot;{}&quot;</span>, <span class="string">&quot; ---&quot;</span>.<span class="ident">style</span>(<span class="ident">header_style</span>))<span class="question-mark">?</span>;
 
@@ -1489,21 +1515,27 @@
         <span class="macro">writeln!</span>(<span class="ident">writer</span>)
     }
 
+    <span class="comment">// Returns the number of characters written out to the screen.</span>
     <span class="kw">fn</span> <span class="ident">write_attempt</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">run_status</span>: <span class="kw-2">&amp;</span><span class="ident">ExecuteStatus</span>,
         <span class="ident">style</span>: <span class="ident">Style</span>,
         <span class="kw-2">mut</span> <span class="ident">writer</span>: <span class="kw">impl</span> <span class="ident">Write</span>,
-    ) -&gt; <span class="ident">io::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    ) -&gt; <span class="ident">io::Result</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="ident">run_status</span>.<span class="ident">total_attempts</span> <span class="op">&gt;</span> <span class="number">1</span> {
+            <span class="comment">// 3 for &#39;TRY&#39; + 1 for &#39; &#39; + length of the current attempt + 1 for following space.</span>
+            <span class="kw">let</span> <span class="ident">attempt_str</span> <span class="op">=</span> <span class="macro">format!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">run_status</span>.<span class="ident">attempt</span>);
+            <span class="kw">let</span> <span class="ident">out_len</span> <span class="op">=</span> <span class="number">3</span> <span class="op">+</span> <span class="number">1</span> <span class="op">+</span> <span class="ident">attempt_str</span>.<span class="ident">len</span>() <span class="op">+</span> <span class="number">1</span>;
             <span class="macro">write!</span>(
                 <span class="ident">writer</span>,
-                <span class="string">&quot;{} {}&quot;</span>,
+                <span class="string">&quot;{} {} &quot;</span>,
                 <span class="string">&quot;TRY&quot;</span>.<span class="ident">style</span>(<span class="ident">style</span>),
-                <span class="ident">run_status</span>.<span class="ident">attempt</span>.<span class="ident">style</span>(<span class="ident">style</span>)
+                <span class="ident">attempt_str</span>.<span class="ident">style</span>(<span class="ident">style</span>)
             )<span class="question-mark">?</span>;
+            <span class="prelude-val">Ok</span>(<span class="ident">out_len</span>)
+        } <span class="kw">else</span> {
+            <span class="prelude-val">Ok</span>(<span class="number">0</span>)
         }
-        <span class="prelude-val">Ok</span>(())
     }
 }
 
