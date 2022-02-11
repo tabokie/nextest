@@ -222,7 +222,7 @@ action to make your builds faster.</p>
 </code></pre>
 <p>For more information about running tests, see <a href="book/running.html">Running tests</a>.</p>
 <h2 id="doctests"><a class="header" href="#doctests">Doctests</a></h2>
-<p>Doctests are currently <a href="https://github.com/nextest-rs/nextest/issues/16">not supported</a> because of limitations in stable Rust. In CI and locally, run <code>cargo test --doc</code> to run all doctests.</p>
+<p>Doctests are currently <a href="https://github.com/nextest-rs/nextest/issues/16">not supported</a> because of limitations in stable Rust. Locally and in CI, after <code>cargo nextest run</code>, use <code>cargo test --doc</code> to run all doctests.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="running-tests"><a class="header" href="#running-tests">Running tests</a></h1>
 <p>To build and run all tests in a workspace<sup class="footnote-reference"><a href="#doctest">1</a></sup>, cd into the workspace and run:</p>
 <pre><code>cargo nextest run
