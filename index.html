@@ -7,7 +7,12 @@
 
 
         <!-- Custom HTML head -->
-        
+        <meta name="twitter:card" content="summary_large_image" />
+<meta property="og:title" content="cargo-nextest - cargo-nextest" />
+<meta property="og:url" content="https://nexte.st/index.md" />
+<meta property="og:image" content="https://nexte.st/static/cover.png" />
+<meta property="og:description" content="A next-generation test runner for Rust." />
+
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="A next-generation test runner for Rust.">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -116,7 +121,7 @@
                         <a href="print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
-                        <a href="https://github.com/nextest-rs/nextest/tree/main/site" title="Git repository" aria-label="Git repository">
+                        <a href="https://github.com/nextest-rs/nextest" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
                         <a href="https://github.com/nextest-rs/nextest/edit/main/site/src/README.md" title="Suggest an edit" aria-label="Suggest an edit">
@@ -154,7 +159,7 @@
 <ul>
 <li>Nextest is <strong>up to 60% faster</strong> than cargo test! Nextest uses a <a href="book/how-it-works.html">state-of-the-art execution model</a> for faster, more reliable test runs.</li>
 <li><strong>Detect flaky tests.</strong> Nextest can <a href="book/retries.html">automatically retry</a> failing tests for you, and if they pass later nextest will mark them as flaky.</li>
-<li><strong>Partitioning test runs across several machines.</strong> If your tests take too long on one machine in CI, nextest can automatically shard them for you across several jobs.</li>
+<li><strong>Partition test runs across several CI jobs.</strong> If your tests take too long to run in CI, nextest can automatically split them up for you across several jobs.</li>
 <li><strong>Cross-platform.</strong> nextest works on Unix, Mac and Windows, so you get the benefits of faster test runs no matter what platform you use.</li>
 <li>... and more coming soon!</li>
 </ul>
