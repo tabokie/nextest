@@ -853,6 +853,13 @@
 <span id="852">852</span>
 <span id="853">853</span>
 <span id="854">854</span>
+<span id="855">855</span>
+<span id="856">856</span>
+<span id="857">857</span>
+<span id="858">858</span>
+<span id="859">859</span>
+<span id="860">860</span>
+<span id="861">861</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -1025,6 +1032,7 @@
     <span class="ident">failure_output</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">TestOutputDisplay</span><span class="op">&gt;</span>,
     <span class="ident">success_output</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">TestOutputDisplay</span><span class="op">&gt;</span>,
     <span class="ident">status_level</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">StatusLevel</span><span class="op">&gt;</span>,
+    <span class="ident">verbose</span>: <span class="ident">bool</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">TestReporterBuilder</span> {
@@ -1052,6 +1060,12 @@
     <span class="doccomment">/// Sets the kinds of statuses to output.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_status_level</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">status_level</span>: <span class="ident">StatusLevel</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">status_level</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">status_level</span>);
+        <span class="self">self</span>
+    }
+
+    <span class="doccomment">/// Sets verbose output.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_verbose</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">verbose</span>: <span class="ident">bool</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
+        <span class="self">self</span>.<span class="ident">verbose</span> <span class="op">=</span> <span class="ident">verbose</span>;
         <span class="self">self</span>
     }
 }

@@ -136,6 +136,10 @@
 <span id="135">135</span>
 <span id="136">136</span>
 <span id="137">137</span>
+<span id="138">138</span>
+<span id="139">139</span>
+<span id="140">140</span>
+<span id="141">141</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// Copyright (c) The cargo-guppy Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
@@ -150,7 +154,10 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Copy</span>, <span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Args</span>)]</span>
 <span class="attribute">#[<span class="ident">must_use</span>]</span>
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct</span> <span class="ident">OutputOpts</span> {
-    <span class="comment">// TODO: quiet/verbose?</span>
+    <span class="doccomment">/// Verbose output</span>
+    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">short</span>, <span class="ident">global</span> <span class="op">=</span> <span class="bool-val">true</span>)]</span>
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">verbose</span>: <span class="ident">bool</span>,
+    <span class="comment">// TODO: quiet?</span>
     <span class="doccomment">/// Produce color output: auto, always, never</span>
     <span class="attribute">#[<span class="ident">clap</span>(
         <span class="ident">long</span>,
@@ -165,17 +172,18 @@
 
 <span class="kw">impl</span> <span class="ident">OutputOpts</span> {
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">init</span>(<span class="self">self</span>) -&gt; <span class="ident">OutputContext</span> {
-        <span class="kw">let</span> <span class="ident">OutputOpts</span> { <span class="ident">color</span> } <span class="op">=</span> <span class="self">self</span>;
+        <span class="kw">let</span> <span class="ident">OutputOpts</span> { <span class="ident">verbose</span>, <span class="ident">color</span> } <span class="op">=</span> <span class="self">self</span>;
 
         <span class="ident">color</span>.<span class="ident">init</span>();
 
-        <span class="ident">OutputContext</span> { <span class="ident">color</span> }
+        <span class="ident">OutputContext</span> { <span class="ident">verbose</span>, <span class="ident">color</span> }
     }
 }
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Copy</span>, <span class="ident">Clone</span>, <span class="ident">Debug</span>)]</span>
 <span class="attribute">#[<span class="ident">must_use</span>]</span>
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct</span> <span class="ident">OutputContext</span> {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">verbose</span>: <span class="ident">bool</span>,
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">color</span>: <span class="ident">Color</span>,
 }
 

@@ -156,7 +156,7 @@
                         <h1 id="partitioning-test-runs-in-ci"><a class="header" href="#partitioning-test-runs-in-ci">Partitioning test runs in CI</a></h1>
 <p>For CI scenarios where test runs take too long on a single machine, nextest supports automatically <em>partitioning</em> or <em>sharding</em> tests into buckets.</p>
 <p>cargo-nextest supports both <em>hash-based</em> and <em>count-based</em> partitioning. Here's an example of count-based partitioning, running tests in bucket 1 of 2.</p>
-<img src="https://user-images.githubusercontent.com/180618/153311562-f7a1b194-a968-4d08-b4c9-67afae19da72.png"/>
+<img src="../static/nextest-partition.png"/>
 <p>Tests not in the current bucket are marked skipped.</p>
 <p>Count-based partitioning is done <em>per test binary</em>. This means that the tests in one binary <em>do not</em> influence counting for other binaries.</p>
 <p>Hash-based partitioning is similar, except buckets are specified in the format <code>hash:m/n</code>, where <code>m</code> is the current bucket and <code>n</code> is the number of buckets. The hash is completely deterministic, and is based on a combination of the binary and test names. For sufficiently large test runs, hash-based partitioning produces roughly the same number of tests per bucket.</p>

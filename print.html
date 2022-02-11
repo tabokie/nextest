@@ -221,12 +221,14 @@ action to make your builds faster.</p>
 <pre><code>cargo nextest run
 </code></pre>
 <p>For more information about running tests, see <a href="book/running.html">Running tests</a>.</p>
+<h2 id="doctests"><a class="header" href="#doctests">Doctests</a></h2>
+<p>Doctests are currently <a href="https://github.com/nextest-rs/nextest/issues/16">not supported</a> because of limitations in stable Rust. In CI and locally, run <code>cargo test --doc</code> to run all doctests.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="running-tests"><a class="header" href="#running-tests">Running tests</a></h1>
 <p>To build and run all tests in a workspace<sup class="footnote-reference"><a href="#doctest">1</a></sup>, cd into the workspace and run:</p>
 <pre><code>cargo nextest run
 </code></pre>
 <p>This will produce output that looks like:</p>
-<img src="https://user-images.githubusercontent.com/180618/153310973-a6d8d37f-5978-4231-ae5a-ee38ed008def.png"/>
+<img src="book/../static/nextest-run.png"/>
 <p>In the output above:</p>
 <ul>
 <li>
@@ -266,15 +268,14 @@ action to make your builds faster.</p>
 <pre><code>cargo nextest list
 </code></pre>
 <p>This will produce output that looks something like:</p>
-<img src="https://user-images.githubusercontent.com/180618/153310585-48d1aacd-a3a0-4fde-97e8-6b79f2dcb85f.png" width="100%"/>
-<p>For each test binary, <strong>bin:</strong> shows the name of the test binary that is run, and <strong>cwd:</strong> shows the name of the working directory the binary will be executed within. Test names are listed below.</p>
+<img src="book/../static/nextest-list.png" width="100%"/>
 <div class="footnote-definition" id="doctest"><sup class="footnote-definition-label">1</sup>
 <p>Doctests are currently <a href="https://github.com/nextest-rs/nextest/issues/16">not supported</a> because of limitations in stable Rust.</p>
 </div>
 <p><code>cargo nextest list</code> takes most of the same options that <code>cargo nextest run</code> takes. For a full list of options accepted, see <code>cargo nextest list --help</code>.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="retries-and-flaky-tests"><a class="header" href="#retries-and-flaky-tests">Retries and flaky tests</a></h1>
 <p>Sometimes, tests fail nondeterministically, which can be quite annoying to developers locally and in CI. cargo-nextest supports <em>retrying</em> failed tests with the <code>--retries</code> option. If a test succeeds during a retry, the test is marked <em>flaky</em>. Here's an example:</p>
-<img src="https://user-images.githubusercontent.com/180618/153311213-0fde9a74-f8ee-4701-a754-6866b80c476f.png"/>
+<img src="book/../static/nextest-retry.png"/>
 <p><code>--retries 2</code> means that the test is retried twice, for a total of three attempts. In this case, the test fails on the first try but succeeds on the second try. The <code>TRY 2 PASS</code> text means that the test passed on the second try.</p>
 <p>Flaky tests are treated as ultimately successful. If there are no other tests that failed, the exit code for the test run is 0.</p>
 <p>Retries can also be <a href="book/configuration.html">configured in <code>.config/nextest.toml</code></a>. The command-line <code>--retries</code> option overrides the configured value.</p>
@@ -282,7 +283,7 @@ action to make your builds faster.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="partitioning-test-runs-in-ci"><a class="header" href="#partitioning-test-runs-in-ci">Partitioning test runs in CI</a></h1>
 <p>For CI scenarios where test runs take too long on a single machine, nextest supports automatically <em>partitioning</em> or <em>sharding</em> tests into buckets.</p>
 <p>cargo-nextest supports both <em>hash-based</em> and <em>count-based</em> partitioning. Here's an example of count-based partitioning, running tests in bucket 1 of 2.</p>
-<img src="https://user-images.githubusercontent.com/180618/153311562-f7a1b194-a968-4d08-b4c9-67afae19da72.png"/>
+<img src="book/../static/nextest-partition.png"/>
 <p>Tests not in the current bucket are marked skipped.</p>
 <p>Count-based partitioning is done <em>per test binary</em>. This means that the tests in one binary <em>do not</em> influence counting for other binaries.</p>
 <p>Hash-based partitioning is similar, except buckets are specified in the format <code>hash:m/n</code>, where <code>m</code> is the current bucket and <code>n</code> is the number of buckets. The hash is completely deterministic, and is based on a combination of the binary and test names. For sufficiently large test runs, hash-based partitioning produces roughly the same number of tests per bucket.</p>
@@ -594,7 +595,7 @@ note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 <p>To understand how nextest works, it is useful to first look at the execution model used by cargo test.</p>
 <h2 id="the-cargo-test-execution-model"><a class="header" href="#the-cargo-test-execution-model">The cargo test execution model</a></h2>
 <p>By default, cargo test uses this execution model:</p>
-<img src="https://user-images.githubusercontent.com/180618/153318042-350a4fd3-4d4a-4c64-bf3d-f0763a0bd9ee.png"/>
+<img src="book/../static/cargo-test-model.png"/>
 <p>In this model, each test binary is run serially, and binaries are responsible for running individual tests in parallel.</p>
 <p>This model provides the greatest flexibility because <em>the only interface between cargo test and the binary is the exit code</em>. For cargo test, a binary exiting with exit code 0 means that all tests within it passed, while a non-zero exit code means that some tests within it failed.</p>
 <p>However, this model has several problems:</p>
@@ -605,7 +606,7 @@ note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 </ol>
 <h2 id="the-nextest-model"><a class="header" href="#the-nextest-model">The nextest model</a></h2>
 <p>cargo-nextest uses a very different execution model, inspired by state-of-the-art test runners used at large corporations. Here's what cargo-nextest does:</p>
-<img src="https://user-images.githubusercontent.com/180618/153318044-2a1bb01b-77ff-414b-8ad3-a784934043c4.png"/>
+<img src="book/../static/nextest-model.png"/>
 <p>A cargo-nextest run has two separate phases:</p>
 <ul>
 <li><strong>The list phase.</strong> cargo-nextest first builds all test binaries with <code>cargo test --no-run</code>, then queries those binaries to produce a list of all tests within them.</li>
