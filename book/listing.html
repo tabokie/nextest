@@ -156,12 +156,11 @@
 <p>To build and list all tests in a workspace<sup class="footnote-reference"><a href="#doctest">1</a></sup>, cd into the workspace and run:</p>
 <pre><code>cargo nextest list
 </code></pre>
-<p>This will produce output that looks something like:</p>
+<p><code>cargo nextest list</code> takes most of the same options that <code>cargo nextest run</code> takes. For a full list of options accepted, see <code>cargo nextest list --help</code>.</p>
 <p><img src="../static/nextest-list.png" alt="Output of cargo nextest list" /></p>
 <div class="footnote-definition" id="doctest"><sup class="footnote-definition-label">1</sup>
 <p>Doctests are currently <a href="https://github.com/nextest-rs/nextest/issues/16">not supported</a> because of limitations in stable Rust.</p>
 </div>
-<p><code>cargo nextest list</code> takes most of the same options that <code>cargo nextest run</code> takes. For a full list of options accepted, see <code>cargo nextest list --help</code>.</p>
 
                     </main>
 
