@@ -87,7 +87,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">cargo-nextest</a></li><li class="spacer"></li><li class="chapter-item expanded "><a href="book/installation.html"><strong aria-hidden="true">1.</strong> Installation and usage</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="book/running.html"><strong aria-hidden="true">1.1.</strong> Running tests</a></li><li class="chapter-item expanded "><a href="book/listing.html"><strong aria-hidden="true">1.2.</strong> Listing tests</a></li><li class="chapter-item expanded "><a href="book/retries.html"><strong aria-hidden="true">1.3.</strong> Retries and flaky tests</a></li><li class="chapter-item expanded "><a href="book/partitioning.html"><strong aria-hidden="true">1.4.</strong> Partitioning test runs in CI</a></li><li class="chapter-item expanded "><a href="book/other-options.html"><strong aria-hidden="true">1.5.</strong> Other options</a></li><li class="chapter-item expanded "><a href="book/env-vars.html"><strong aria-hidden="true">1.6.</strong> Environment variables</a></li><li class="chapter-item expanded "><a href="book/stability.html"><strong aria-hidden="true">1.7.</strong> Stability policy</a></li></ol></li><li class="chapter-item expanded "><a href="book/machine-readable.html"><strong aria-hidden="true">2.</strong> Machine-readable output</a></li><li class="chapter-item expanded "><a href="book/configuration.html"><strong aria-hidden="true">3.</strong> Configuration</a></li><li class="chapter-item expanded "><a href="book/junit.html"><strong aria-hidden="true">4.</strong> JUnit support</a></li><li class="chapter-item expanded "><a href="book/how-it-works.html"><strong aria-hidden="true">5.</strong> How nextest works</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="book/custom-test-harnesses.html"><strong aria-hidden="true">5.1.</strong> Custom test harnesses</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Home</a></li><li class="spacer"></li><li class="chapter-item expanded "><a href="book/installation.html"><strong aria-hidden="true">1.</strong> Installation and usage</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="book/running.html"><strong aria-hidden="true">1.1.</strong> Running tests</a></li><li class="chapter-item expanded "><a href="book/listing.html"><strong aria-hidden="true">1.2.</strong> Listing tests</a></li><li class="chapter-item expanded "><a href="book/retries.html"><strong aria-hidden="true">1.3.</strong> Retries and flaky tests</a></li><li class="chapter-item expanded "><a href="book/partitioning.html"><strong aria-hidden="true">1.4.</strong> Partitioning test runs in CI</a></li><li class="chapter-item expanded "><a href="book/other-options.html"><strong aria-hidden="true">1.5.</strong> Other options</a></li><li class="chapter-item expanded "><a href="book/env-vars.html"><strong aria-hidden="true">1.6.</strong> Environment variables</a></li><li class="chapter-item expanded "><a href="book/stability.html"><strong aria-hidden="true">1.7.</strong> Stability policy</a></li></ol></li><li class="chapter-item expanded "><a href="book/machine-readable.html"><strong aria-hidden="true">2.</strong> Machine-readable output</a></li><li class="chapter-item expanded "><a href="book/configuration.html"><strong aria-hidden="true">3.</strong> Configuration</a></li><li class="chapter-item expanded "><a href="book/junit.html"><strong aria-hidden="true">4.</strong> JUnit support</a></li><li class="chapter-item expanded "><a href="book/how-it-works.html"><strong aria-hidden="true">5.</strong> How nextest works</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="book/benchmarks.html"><strong aria-hidden="true">5.1.</strong> Benchmarks</a></li><li class="chapter-item expanded "><a href="book/custom-test-harnesses.html"><strong aria-hidden="true">5.2.</strong> Custom test harnesses</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -154,12 +154,14 @@
                         <h1 id="cargo-nextest"><a class="header" href="#cargo-nextest">cargo-nextest</a></h1>
 <p>Welcome to the home page for cargo-nextest, a next-generation test runner for Rust projects.</p>
 <h2 id="features"><a class="header" href="#features">Features</a></h2>
+<img src="static/cover.png" style="float: right; width: 250px">
 <ul>
-<li>Nextest is <strong>up to 60% faster</strong> than cargo test! Nextest uses a <a href="book/how-it-works.html">state-of-the-art execution model</a> for faster, more reliable test runs.</li>
+<li><strong>Clean, beautiful user interface.</strong> nextest presents its results concisely so you can see which tests passed and failed at a glance.</li>
+<li><strong><a href="book/benchmarks.html">Up to 60% faster</a> than cargo test.</strong> Nextest uses a <a href="book/how-it-works.html">state-of-the-art execution model</a> for faster, more reliable test runs.</li>
 <li><strong>Detect flaky tests.</strong> Nextest can <a href="book/retries.html">automatically retry</a> failing tests for you, and if they pass later nextest will mark them as flaky.</li>
 <li><strong>Partition test runs across several CI jobs.</strong> If your tests take too long to run in CI, nextest can automatically split them up for you across several jobs.</li>
 <li><strong>Cross-platform.</strong> nextest works on Unix, Mac and Windows, so you get the benefits of faster test runs no matter what platform you use.</li>
-<li>... and more coming soon!</li>
+<li>... and more <a href="https://github.com/nextest-rs/nextest/projects/1">coming soon</a>!</li>
 </ul>
 <h2 id="quick-start"><a class="header" href="#quick-start">Quick start</a></h2>
 <p>Install cargo-nextest from crates.io (requires <strong>Rust 1.54</strong> or later):</p>
@@ -221,14 +223,29 @@ action to make your builds faster.</p>
 <pre><code>cargo nextest run
 </code></pre>
 <p>For more information about running tests, see <a href="book/running.html">Running tests</a>.</p>
-<h2 id="doctests"><a class="header" href="#doctests">Doctests</a></h2>
+<h2 id="limitations"><a class="header" href="#limitations">Limitations</a></h2>
+<ul>
+<li>
+<p>The <a href="book/how-it-works.html">nextest execution model</a> means that <strong>each individual test is executed as a separate process</strong>. Tests that depend on being executed within the same process <a href="https://github.com/nextest-rs/nextest/issues/27">may not work correctly</a>.</p>
+<p>To work around this, consider combining those tests into one so that nextest runs them as a
+unit, or excluding those tests from nextest.</p>
+</li>
+<li>
+<p>There's <a href="https://github.com/nextest-rs/nextest/issues/28">no way</a> to mark a particular test binary as excluded from nextest.</p>
+</li>
+<li>
+<p>The <code>--skip</code> and <code>--exact</code> test filter options are currently <a href="https://github.com/nextest-rs/nextest/issues/29">not supported</a> by nextest.</p>
+</li>
+<li>
 <p>Doctests are currently <a href="https://github.com/nextest-rs/nextest/issues/16">not supported</a> because of limitations in stable Rust. Locally and in CI, after <code>cargo nextest run</code>, use <code>cargo test --doc</code> to run all doctests.</p>
+</li>
+</ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="running-tests"><a class="header" href="#running-tests">Running tests</a></h1>
 <p>To build and run all tests in a workspace<sup class="footnote-reference"><a href="#doctest">1</a></sup>, cd into the workspace and run:</p>
 <pre><code>cargo nextest run
 </code></pre>
 <p>This will produce output that looks like:</p>
-<img src="book/../static/nextest-run.png"/>
+<p><img src="book/../static/nextest-run.png" alt="Output of cargo nextest run" /></p>
 <p>In the output above:</p>
 <ul>
 <li>
@@ -268,14 +285,14 @@ action to make your builds faster.</p>
 <pre><code>cargo nextest list
 </code></pre>
 <p>This will produce output that looks something like:</p>
-<img src="book/../static/nextest-list.png" width="100%"/>
+<p><img src="book/../static/nextest-list.png" alt="Output of cargo nextest list" /></p>
 <div class="footnote-definition" id="doctest"><sup class="footnote-definition-label">1</sup>
 <p>Doctests are currently <a href="https://github.com/nextest-rs/nextest/issues/16">not supported</a> because of limitations in stable Rust.</p>
 </div>
 <p><code>cargo nextest list</code> takes most of the same options that <code>cargo nextest run</code> takes. For a full list of options accepted, see <code>cargo nextest list --help</code>.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="retries-and-flaky-tests"><a class="header" href="#retries-and-flaky-tests">Retries and flaky tests</a></h1>
 <p>Sometimes, tests fail nondeterministically, which can be quite annoying to developers locally and in CI. cargo-nextest supports <em>retrying</em> failed tests with the <code>--retries</code> option. If a test succeeds during a retry, the test is marked <em>flaky</em>. Here's an example:</p>
-<img src="book/../static/nextest-retry.png"/>
+<p><img src="book/../static/nextest-retry.png" alt="Output of cargo nextest run --retries 2" /></p>
 <p><code>--retries 2</code> means that the test is retried twice, for a total of three attempts. In this case, the test fails on the first try but succeeds on the second try. The <code>TRY 2 PASS</code> text means that the test passed on the second try.</p>
 <p>Flaky tests are treated as ultimately successful. If there are no other tests that failed, the exit code for the test run is 0.</p>
 <p>Retries can also be <a href="book/configuration.html">configured in <code>.config/nextest.toml</code></a>. The command-line <code>--retries</code> option overrides the configured value.</p>
@@ -283,7 +300,7 @@ action to make your builds faster.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="partitioning-test-runs-in-ci"><a class="header" href="#partitioning-test-runs-in-ci">Partitioning test runs in CI</a></h1>
 <p>For CI scenarios where test runs take too long on a single machine, nextest supports automatically <em>partitioning</em> or <em>sharding</em> tests into buckets.</p>
 <p>cargo-nextest supports both <em>hash-based</em> and <em>count-based</em> partitioning. Here's an example of count-based partitioning, running tests in bucket 1 of 2.</p>
-<img src="book/../static/nextest-partition.png"/>
+<p><img src="book/../static/nextest-partition.png" alt="Output of cargo nextest run --partition count:1/2" /></p>
 <p>Tests not in the current bucket are marked skipped.</p>
 <p>Count-based partitioning is done <em>per test binary</em>. This means that the tests in one binary <em>do not</em> influence counting for other binaries.</p>
 <p>Hash-based partitioning is similar, except buckets are specified in the format <code>hash:m/n</code>, where <code>m</code> is the current bucket and <code>n</code> is the number of buckets. The hash is completely deterministic, and is based on a combination of the binary and test names. For sufficiently large test runs, hash-based partitioning produces roughly the same number of tests per bucket.</p>
@@ -595,24 +612,63 @@ note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 <p>To understand how nextest works, it is useful to first look at the execution model used by cargo test.</p>
 <h2 id="the-cargo-test-execution-model"><a class="header" href="#the-cargo-test-execution-model">The cargo test execution model</a></h2>
 <p>By default, cargo test uses this execution model:</p>
-<img src="book/../static/cargo-test-model.png"/>
+<p><img src="book/../static/cargo-test-model.png" alt="Cargo test execution model" /></p>
 <p>In this model, each test binary is run serially, and binaries are responsible for running individual tests in parallel.</p>
 <p>This model provides the greatest flexibility because <em>the only interface between cargo test and the binary is the exit code</em>. For cargo test, a binary exiting with exit code 0 means that all tests within it passed, while a non-zero exit code means that some tests within it failed.</p>
 <p>However, this model has several problems:</p>
 <ol>
 <li><strong>There's no structured way to get individual test pass/fail status</strong>, or the time taken by each test.</li>
 <li><strong>The first binary failure means that no further tests are run</strong>, unless <code>--no-fail-fast</code> is passed in. If that argument is passed in in CI scenarios, then failing test output is not printed at the end, making it hard to figure out which tests failed.</li>
-<li><strong>Performance can be affected by &quot;long pole&quot; tests.</strong> For example, if a binary has 20 tests and 19 of them take less than 5s, while one of them takes 60 seconds, then the test binary will take 60s to execute. <code>cargo test</code> has no way to start running other test binaries in those last 55 seconds. </li>
+<li><strong>Performance can be affected by test bottlenecks.</strong> For example, if a binary has 20 tests and 19 of them take less than 5s, while one of them takes 60s, then the test binary will take 60s to complete execution. <code>cargo test</code> has no way to start running other test binaries in those last 55 seconds. </li>
 </ol>
 <h2 id="the-nextest-model"><a class="header" href="#the-nextest-model">The nextest model</a></h2>
 <p>cargo-nextest uses a very different execution model, inspired by state-of-the-art test runners used at large corporations. Here's what cargo-nextest does:</p>
-<img src="book/../static/nextest-model.png"/>
+<p><img src="book/../static/nextest-model.png" alt="Nextest execution model" /></p>
 <p>A cargo-nextest run has two separate phases:</p>
 <ul>
 <li><strong>The list phase.</strong> cargo-nextest first builds all test binaries with <code>cargo test --no-run</code>, then queries those binaries to produce a list of all tests within them.</li>
 <li><strong>The run phase.</strong> cargo-nextest then executes each individual test in a separate process, in parallel. It then collects, displays and aggregates results for each individual test.</li>
 </ul>
 <p>This model solves all the problems of cargo test's execution model, at the cost of a <em>significantly</em> thicker interface to test binaries. <strong>This means that custom test harnesses <a href="book/custom-test-harnesses.html">may need to be adapted</a> to work with cargo-nextest.</strong></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="benchmarks"><a class="header" href="#benchmarks">Benchmarks</a></h1>
+<p>Nextest's <a href="book/how-it-works.html">execution model</a> generally leads to faster test runs than Cargo. How much faster depends on the specifics, but here are some general guidelines:</p>
+<ul>
+<li><em>Larger workspaces will see a greater benefit.</em> This is because larger workspaces have more crates, more test binaries, and more potential spots for bottlenecks. </li>
+<li><em>Test bottlenecks.</em> Nextest excels in situations where there are bottlenecks in multiple test binaries: cargo test can only run them serially, while nextest can run those tests in parallel.</li>
+<li><em>Build caching.</em> Test runs are one component of end-to-end execution times. Speeding up the build by using <a href="https://github.com/mozilla/sccache">sccache</a>, the <a href="https://github.com/marketplace/actions/rust-cache">Rust Cache GitHub Action</a>, or similar, will make test run times be a proportionally greater part of overall times.</li>
+</ul>
+<p>Even if nextest doesn't result in faster test builds, you may find doing occasional nextest runs useful for identifying test bottlenecks, for its user interface, or for its other features like test retries.</p>
+<h2 id="results"><a class="header" href="#results">Results</a></h2>
+<table><thead><tr><th>Project</th><th>Revision</th><th style="text-align: right">Test count</th><th style="text-align: right">cargo test (s)</th><th style="text-align: right">nextest (s)</th><th style="text-align: right">Difference</th></tr></thead><tbody>
+<tr><td><a href="https://github.com/facebookincubator/cargo-guppy/">cargo-guppy</a></td><td><a href="https://github.com/facebookincubator/cargo-guppy/commit/c135447af716d0f985557b40042b2b6df53fa653"><code>c135447a</code></a></td><td style="text-align: right">252</td><td style="text-align: right">34.70</td><td style="text-align: right">22.14</td><td style="text-align: right">-36.2%</td></tr>
+<tr><td><a href="https://github.com/diem/diem">diem</a><sup class="footnote-reference"><a href="#diem1">1</a></sup></td><td><a href="https://github.com/diem/diem/commit/6025888b264793bc2112d2ad3a6ef40f0861ee08"><code>6025888b</code></a></td><td style="text-align: right">1476</td><td style="text-align: right">1058.46</td><td style="text-align: right">400.53</td><td style="text-align: right">-62.1%</td></tr>
+<tr><td><a href="https://github.com/penumbra-zone/penumbra">penumbra</a></td><td><a href="https://github.com/penumbra-zone/penumbra/commit/44ab43f62bafa861608ac3f2e6deabb456c43983"><code>44ab43f6</code></a></td><td style="text-align: right">32</td><td style="text-align: right">54.66</td><td style="text-align: right">24.90</td><td style="text-align: right">-54.4%</td></tr>
+<tr><td><a href="https://github.com/briansmith/ring">ring</a></td><td><a href="https://github.com/briansmith/ring/commit/c14c355f51c537c99ff43935c88c22c2e04980a3"><code>c14c355f</code></a></td><td style="text-align: right">179</td><td style="text-align: right">17.64</td><td style="text-align: right">11.60</td><td style="text-align: right">-34.2%</td></tr>
+<tr><td><a href="https://github.com/rust-analyzer/rust-analyzer">rust-analyzer</a></td><td><a href="https://github.com/rust-analyzer/rust-analyzer/commit/4449a336f6965ebdfa9b7408e6ff40a6a990a43d"><code>4449a336</code></a></td><td style="text-align: right">3746</td><td style="text-align: right">6.76</td><td style="text-align: right">5.23</td><td style="text-align: right">-22.6%</td></tr>
+<tr><td><a href="https://github.com/tokio-rs/tokio">tokio</a></td><td><a href="https://github.com/tokio-rs/tokio/commit/e7a0da60cd997f10b33f32c4763c8ecef01144f8"><code>e7a0da60</code></a></td><td style="text-align: right">1014</td><td style="text-align: right">27.16</td><td style="text-align: right">11.72</td><td style="text-align: right">-56.8%</td></tr>
+</tbody></table>
+<div class="footnote-definition" id="diem1"><sup class="footnote-definition-label">1</sup>
+<p>Diem ships its own in-tree tool on top of <a href="https://crates.io/crates/nextest-runner">nextest-runner</a>, so the commands were slightly different:</p>
+<ul>
+<li>the command for cargo test is <code>cargo xtest --unit</code></li>
+<li>the command for running nextest is <code>cargo nextest --unit</code></li>
+</ul>
+</div>
+<h2 id="specifications"><a class="header" href="#specifications">Specifications</a></h2>
+<p>All measurements were done on:</p>
+<ul>
+<li><strong>Processor:</strong> AMD Ryzen 9 3900x x86_64</li>
+<li><strong>Operating system:</strong> Pop_OS! 21.04 running Linux kernel 5.15.15</li>
+<li><strong>RAM:</strong> 64GB</li>
+<li><strong>Rust:</strong> version 1.58.1</li>
+</ul>
+<p>Lines of code were measured by <code>loc</code>, while the number of tests were recorded by nextest.</p>
+<p>The commands run were:</p>
+<ul>
+<li><strong>cargo test:</strong> <code>cargo test --workspace --bins --lib --tests</code> (to exclude doctests since they're not supported by nextest)</li>
+<li><strong>nextest:</strong> <code>cargo nextest run --workspace</code></li>
+</ul>
+<p>The measurements do not include time taken to build the tests. To ensure that, each command was run 5 times in succession. The measurement recorded is the minimum of runs 3, 4 and 5.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="custom-test-harnesses"><a class="header" href="#custom-test-harnesses">Custom test harnesses</a></h1>
 <p>A custom test harness is defined in <code>Cargo.toml</code> as:</p>
 <pre><code class="language-toml">[[test]]
