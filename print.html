@@ -10,7 +10,6 @@
         <!-- Custom HTML head -->
         <meta name="twitter:card" content="summary_large_image" />
 <meta property="og:title" content="cargo-nextest" />
-<meta property="og:url" content="https://nexte.st/print.md" />
 <meta property="og:image" content="https://nexte.st/static/cover.png" />
 <meta property="og:description" content="A next-generation test runner for Rust." />
 
@@ -87,7 +86,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Home</a></li><li class="spacer"></li><li class="chapter-item expanded "><a href="book/installation.html"><strong aria-hidden="true">1.</strong> Installation and usage</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="book/running.html"><strong aria-hidden="true">1.1.</strong> Running tests</a></li><li class="chapter-item expanded "><a href="book/listing.html"><strong aria-hidden="true">1.2.</strong> Listing tests</a></li><li class="chapter-item expanded "><a href="book/retries.html"><strong aria-hidden="true">1.3.</strong> Retries and flaky tests</a></li><li class="chapter-item expanded "><a href="book/partitioning.html"><strong aria-hidden="true">1.4.</strong> Partitioning test runs in CI</a></li><li class="chapter-item expanded "><a href="book/other-options.html"><strong aria-hidden="true">1.5.</strong> Other options</a></li><li class="chapter-item expanded "><a href="book/env-vars.html"><strong aria-hidden="true">1.6.</strong> Environment variables</a></li><li class="chapter-item expanded "><a href="book/stability.html"><strong aria-hidden="true">1.7.</strong> Stability policy</a></li></ol></li><li class="chapter-item expanded "><a href="book/machine-readable.html"><strong aria-hidden="true">2.</strong> Machine-readable output</a></li><li class="chapter-item expanded "><a href="book/configuration.html"><strong aria-hidden="true">3.</strong> Configuration</a></li><li class="chapter-item expanded "><a href="book/junit.html"><strong aria-hidden="true">4.</strong> JUnit support</a></li><li class="chapter-item expanded "><a href="book/how-it-works.html"><strong aria-hidden="true">5.</strong> How nextest works</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="book/benchmarks.html"><strong aria-hidden="true">5.1.</strong> Benchmarks</a></li><li class="chapter-item expanded "><a href="book/custom-test-harnesses.html"><strong aria-hidden="true">5.2.</strong> Custom test harnesses</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Home</a></li><li class="spacer"></li><li class="chapter-item expanded "><a href="book/installation.html"><strong aria-hidden="true">1.</strong> Installation and usage</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="book/running.html"><strong aria-hidden="true">1.1.</strong> Running tests</a></li><li class="chapter-item expanded "><a href="book/listing.html"><strong aria-hidden="true">1.2.</strong> Listing tests</a></li><li class="chapter-item expanded "><a href="book/retries.html"><strong aria-hidden="true">1.3.</strong> Retries and flaky tests</a></li><li class="chapter-item expanded "><a href="book/partitioning.html"><strong aria-hidden="true">1.4.</strong> Partitioning test runs in CI</a></li><li class="chapter-item expanded "><a href="book/other-options.html"><strong aria-hidden="true">1.5.</strong> Other options</a></li><li class="chapter-item expanded "><a href="book/env-vars.html"><strong aria-hidden="true">1.6.</strong> Environment variables</a></li><li class="chapter-item expanded "><a href="book/stability.html"><strong aria-hidden="true">1.7.</strong> Stability policy</a></li></ol></li><li class="chapter-item expanded "><a href="book/machine-readable.html"><strong aria-hidden="true">2.</strong> Machine-readable output</a></li><li class="chapter-item expanded "><a href="book/configuration.html"><strong aria-hidden="true">3.</strong> Configuration</a></li><li class="chapter-item expanded "><a href="book/junit.html"><strong aria-hidden="true">4.</strong> JUnit support</a></li><li class="chapter-item expanded "><a href="book/how-it-works.html"><strong aria-hidden="true">5.</strong> How nextest works</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="book/benchmarks.html"><strong aria-hidden="true">5.1.</strong> Benchmarks</a></li><li class="chapter-item expanded "><a href="book/custom-test-harnesses.html"><strong aria-hidden="true">5.2.</strong> Custom test harnesses</a></li><li class="spacer"></li></ol></li><li class="chapter-item expanded "><a href="CHANGELOG.html">Changelog</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -171,15 +170,13 @@
 <pre><code>cargo nextest run
 </code></pre>
 <p>For more detailed installation instructions, see <a href="book/installation.html">Installation and usage</a>.</p>
-<h2 id="crates"><a class="header" href="#crates">Crates</a></h2>
-<p><strong>cargo-nextest,</strong> the main binary: <a href="https://crates.io/crates/cargo-nextest"><img src="https://img.shields.io/crates/v/cargo-nextest" alt="cargo-nextest on crates.io" /></a></p>
-<p><strong>nextest-runner,</strong> core nextest logic:
-<a href="https://crates.io/crates/nextest-runner"><img src="https://img.shields.io/crates/v/nextest-runner" alt="nextest-runner on crates.io" /></a>
-<a href="https://docs.rs/nextest-runner/"><img src="https://img.shields.io/badge/docs-latest-brightgreen" alt="Documentation (latest release)" /></a> <a href="rustdoc/nextest_runner/"><img src="https://img.shields.io/badge/docs-main-purple" alt="Documentation (main)" /></a></p>
-<p><strong>nextest-metadata,</strong> parsers for machine-readable output:
-<a href="https://crates.io/crates/nextest-metadata"><img src="https://img.shields.io/crates/v/nextest-metadata" alt="nextest-metadata on crates.io" /></a>
-<a href="https://docs.rs/nextest-metadata/"><img src="https://img.shields.io/badge/docs-latest-brightgreen" alt="Documentation (latest release)" /></a>
-<a href="rustdoc/nextest_metadata/"><img src="https://img.shields.io/badge/docs-main-purple" alt="Documentation (main)" /></a></p>
+<h2 id="crates-in-this-project"><a class="header" href="#crates-in-this-project">Crates in this project</a></h2>
+<table><thead><tr><th>Crate</th><th style="text-align: center">crates.io</th><th style="text-align: center">rustdoc (latest version)</th><th style="text-align: center">rustdoc (main)</th></tr></thead><tbody>
+<tr><td><strong>cargo-nextest,</strong> the main test binary</td><td style="text-align: center"><a href="https://crates.io/crates/cargo-nextest"><img src="https://img.shields.io/crates/v/cargo-nextest" alt="cargo-nextest on crates.io" /></a></td><td style="text-align: center"><a href="https://docs.rs/cargo-nextest"><img src="https://img.shields.io/badge/docs-latest-brightgreen" alt="Documentation (latest release)" /></a></td><td style="text-align: center"><a href="https://nexte.st/rustdoc/cargo_nextest"><img src="https://img.shields.io/badge/docs-main-purple" alt="Documentation (main)" /></a></td></tr>
+<tr><td><strong>nextest-runner,</strong> core nextest logic</td><td style="text-align: center"><a href="https://crates.io/crates/nextest-runner"><img src="https://img.shields.io/crates/v/nextest-runner" alt="nextest-runner on crates.io" /></a></td><td style="text-align: center"><a href="https://docs.rs/nextest-runner"><img src="https://img.shields.io/badge/docs-latest-brightgreen" alt="Documentation (latest release)" /></a></td><td style="text-align: center"><a href="https://nexte.st/rustdoc/nextest_runner"><img src="https://img.shields.io/badge/docs-main-purple" alt="Documentation (main)" /></a></td></tr>
+<tr><td><strong>nextest-metadata,</strong> parsers for machine-readable output</td><td style="text-align: center"><a href="https://crates.io/crates/nextest-metadata"><img src="https://img.shields.io/crates/v/nextest-metadata" alt="nextest-metadata on crates.io" /></a></td><td style="text-align: center"><a href="https://docs.rs/nextest-metadata"><img src="https://img.shields.io/badge/docs-latest-brightgreen" alt="Documentation (latest release)" /></a></td><td style="text-align: center"><a href="https://nexte.st/rustdoc/nextest_metadata"><img src="https://img.shields.io/badge/docs-main-purple" alt="Documentation (main)" /></a></td></tr>
+<tr><td><strong>quick-junit,</strong> JUnit XML serializer</td><td style="text-align: center"><a href="https://crates.io/crates/quick-junit"><img src="https://img.shields.io/crates/v/quick-junit" alt="quick-junit on crates.io" /></a></td><td style="text-align: center"><a href="https://crates.io/crates/quick-junit"><img src="https://img.shields.io/badge/docs-latest-brightgreen" alt="Documentation (latest release)" /></a></td><td style="text-align: center"><a href="https://nexte.st/rustdoc/quick_junit"><img src="https://img.shields.io/badge/docs-main-purple" alt="Documentation (main)" /></a></td></tr>
+</tbody></table>
 <h2 id="contributing"><a class="header" href="#contributing">Contributing</a></h2>
 <p>The source code for nextest and this site are hosted on GitHub, at
 <a href="https://github.com/nextest-rs/nextest">https://github.com/nextest-rs/nextest</a>.</p>
@@ -201,7 +198,7 @@ modify this material as long as you give appropriate credit.</p>
 <p><code>cargo nextest</code> must be compiled and installed with <strong>Rust 1.54</strong> or later, but it can build and run
 tests against any version of Rust.</p>
 <blockquote>
-<p>TODO: Add pre-built binaries.</p>
+<p><strong>TODO:</strong> Add <a href="https://github.com/nextest-rs/nextest/issues/31">pre-built binaries</a>.</p>
 </blockquote>
 <h3 id="using-a-cached-install-in-ci"><a class="header" href="#using-a-cached-install-in-ci">Using a cached install in CI</a></h3>
 <p>Most CI users of nextest will benefit from using cached binaries. If your CI is based on GitHub
@@ -362,13 +359,13 @@ unit, or excluding those tests from nextest.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="stability-policy"><a class="header" href="#stability-policy">Stability policy</a></h1>
 <p>This section contains information on how cargo-nextest will evolve in a backwards-compatible way over time.</p>
 <h2 id="the-cargo-nextest-binary"><a class="header" href="#the-cargo-nextest-binary">The cargo-nextest binary</a></h2>
-<p>The cargo-nextest binary follows <a href="https://semver.org/">semantic versioning</a>, where the <a href="https://semver.org/#spec-item-1">public API</a> is declared to consist of exactly the following:</p>
+<p>The cargo-nextest binary follows <a href="https://semver.org/">semantic versioning</a>, where the <a href="https://semver.org/#spec-item-1">public API</a> consists of exactly the following:</p>
 <ol>
-<li>command-line arguments</li>
+<li>command-line arguments, options and flags</li>
 <li><a href="book/machine-readable.html">machine-readable output</a></li>
 <li>the <a href="book/configuration.html">configuration file format</a></li>
 </ol>
-<p>Within a version series, the public API will be append-only. New options or keys may be added, but existing keys will continue to be as they were.</p>
+<p>Within a version series, the public API will be append-only. New options or keys may be added, but existing keys will continue to be as they were. Existing options may be deprecated but will not be removed within a version series.</p>
 <p>The public API does <em>not</em> include human-readable output generated by nextest, or in general anything printed to stderr.</p>
 <h2 id="libraries"><a class="header" href="#libraries">Libraries</a></h2>
 <p>The libraries used by cargo-nextest, <a href="https://crates.io/crates/nextest-metadata">nextest-metadata</a> and <a href="https://crates.io/crates/nextest-runner">nextest-runner</a>, follow the standard Rust library versioning policy.</p>
@@ -703,6 +700,20 @@ my-test-2: test
 <li>
 <p><strong>Custom test harnesses MUST support being run with <code>&lt;test-name&gt; --nocapture --exact</code></strong>. This command will be called with every test name provided by the harness in <code>--list</code> above.</p>
 </li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="changelog"><a class="header" href="#changelog">Changelog</a></h1>
+<p>This page documents new features and bugfixes for cargo-nextest. Please see the <a href="book/stability.html">stability
+policy</a> for how versioning works with cargo-nextest.</p>
+<h2 id="090---2022-02-14"><a class="header" href="#090---2022-02-14"><a href="https://github.com/nextest-rs/nextest/releases/tag/cargo-nextest-0.9.0">0.9.0</a> - 2022-02-14</a></h2>
+<p><strong>Initial release.</strong> Happy Valentine's day!</p>
+<h3 id="added"><a class="header" href="#added">Added</a></h3>
+<p>Supported in this initial release:</p>
+<ul>
+<li><a href="book/listing.html">Listing tests</a></li>
+<li><a href="book/running.html">Running tests in parallel</a> for faster results</li>
+<li><a href="book/partitioning.html">Partitioning tests</a> across multiple CI jobs</li>
+<li><a href="book/retries.html">Test retries</a> and flaky test detection</li>
+<li><a href="book/junit.html">JUnit support</a> for integration with other test tooling</li>
 </ul>
 
                     </main>

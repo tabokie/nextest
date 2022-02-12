@@ -372,6 +372,18 @@
 <span id="371">371</span>
 <span id="372">372</span>
 <span id="373">373</span>
+<span id="374">374</span>
+<span id="375">375</span>
+<span id="376">376</span>
+<span id="377">377</span>
+<span id="378">378</span>
+<span id="379">379</span>
+<span id="380">380</span>
+<span id="381">381</span>
+<span id="382">382</span>
+<span id="383">383</span>
+<span id="384">384</span>
+<span id="385">385</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -396,18 +408,19 @@
 <span class="kw">use</span> <span class="ident">std::io::Cursor</span>;
 <span class="kw">use</span> <span class="ident">supports_color::Stream</span>;
 
-<span class="doccomment">/// A new test runner for Rust and Cargo.</span>
+<span class="doccomment">/// A next-generation test runner for Rust.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// This binary should typically be invoked as `cargo nextest` (in which case</span>
 <span class="doccomment">/// this message will not be seen), not `cargo-nextest`.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Parser</span>)]</span>
-<span class="attribute">#[<span class="ident">clap</span>(<span class="ident">author</span>, <span class="ident">version</span>, <span class="ident">bin_name</span> <span class="op">=</span> <span class="string">&quot;cargo&quot;</span>)]</span>
+<span class="attribute">#[<span class="ident">clap</span>(<span class="ident">version</span>, <span class="ident">bin_name</span> <span class="op">=</span> <span class="string">&quot;cargo&quot;</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">CargoNextestApp</span> {
     <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">subcommand</span>)]</span>
     <span class="ident">subcommand</span>: <span class="ident">NextestSubcommand</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">CargoNextestApp</span> {
+    <span class="doccomment">/// Executes the app.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">exec</span>(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">NextestSubcommand::Nextest</span>(<span class="ident">app</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">subcommand</span>;
         <span class="ident">app</span>.<span class="ident">exec</span>()
@@ -416,11 +429,12 @@
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Subcommand</span>)]</span>
 <span class="kw">enum</span> <span class="ident">NextestSubcommand</span> {
-    <span class="doccomment">/// A new test runner for Rust and Cargo.</span>
+    <span class="doccomment">/// A next-generation test runner for Rust. &lt;https://nexte.st&gt;</span>
     <span class="ident">Nextest</span>(<span class="ident">AppImpl</span>),
 }
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Args</span>)]</span>
+<span class="attribute">#[<span class="ident">clap</span>(<span class="ident">version</span>)]</span>
 <span class="kw">struct</span> <span class="ident">AppImpl</span> {
     <span class="doccomment">/// Path to Cargo.toml</span>
     <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">global</span> <span class="op">=</span> <span class="bool-val">true</span>, <span class="ident">value_name</span> <span class="op">=</span> <span class="string">&quot;PATH&quot;</span>)]</span>
@@ -453,7 +467,12 @@
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Subcommand</span>)]</span>
 <span class="kw">enum</span> <span class="ident">Command</span> {
-    <span class="doccomment">/// List tests in binary</span>
+    <span class="doccomment">/// List tests in workspace</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This command builds test binaries and queries them for the tests they contain.</span>
+    <span class="doccomment">/// Use --message-format json to get machine-readable output.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// For more information, see &lt;https://nexte.st/book/listing&gt;.</span>
     <span class="ident">List</span> {
         <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">flatten</span>)]</span>
         <span class="ident">build_filter</span>: <span class="ident">TestBuildFilter</span>,
@@ -469,7 +488,12 @@
         )]</span>
         <span class="ident">message_format</span>: <span class="ident">MessageFormatOpts</span>,
     },
-    <span class="doccomment">/// Run tests</span>
+    <span class="doccomment">/// Build and run tests</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This command builds test binaries and queries them for the tests they contain,</span>
+    <span class="doccomment">/// then runs each test in parallel.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// For more information, see &lt;https://nexte.st/book/running&gt;.</span>
     <span class="ident">Run</span> {
         <span class="doccomment">/// Nextest profile to use</span>
         <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">short</span> <span class="op">=</span> <span class="string">&#39;P&#39;</span>)]</span>
