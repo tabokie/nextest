@@ -392,6 +392,10 @@
 <span id="391">391</span>
 <span id="392">392</span>
 <span id="393">393</span>
+<span id="394">394</span>
+<span id="395">395</span>
+<span id="396">396</span>
+<span id="397">397</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -406,6 +410,7 @@
 <span class="kw">use</span> <span class="ident">guppy::graph::PackageGraph</span>;
 <span class="kw">use</span> <span class="ident">nextest_runner</span>::{
     <span class="ident">config::NextestConfig</span>,
+    <span class="ident">errors::WriteEventError</span>,
     <span class="ident">partition::PartitionerBuilder</span>,
     <span class="ident">reporter</span>::{<span class="ident">StatusLevel</span>, <span class="ident">TestOutputDisplay</span>, <span class="ident">TestReporterBuilder</span>},
     <span class="ident">runner::TestRunnerBuilder</span>,
@@ -413,7 +418,7 @@
     <span class="ident">test_filter</span>::{<span class="ident">RunIgnored</span>, <span class="ident">TestFilterBuilder</span>},
     <span class="ident">test_list</span>::{<span class="ident">OutputFormat</span>, <span class="ident">RustTestArtifact</span>, <span class="ident">SerializableFormat</span>, <span class="ident">TestList</span>},
 };
-<span class="kw">use</span> <span class="ident">std::io::Cursor</span>;
+<span class="kw">use</span> <span class="ident">std::io</span>::{<span class="ident">BufWriter</span>, <span class="ident">Cursor</span>, <span class="ident">Write</span>};
 <span class="kw">use</span> <span class="ident">supports_color::Stream</span>;
 
 <span class="doccomment">/// A next-generation test runner for Rust.</span>
@@ -716,7 +721,10 @@
                 }
                 <span class="kw">let</span> <span class="ident">stdout</span> <span class="op">=</span> <span class="ident">std::io::stdout</span>();
                 <span class="kw">let</span> <span class="ident">lock</span> <span class="op">=</span> <span class="ident">stdout</span>.<span class="ident">lock</span>();
-                <span class="ident">test_list</span>.<span class="ident">write</span>(<span class="ident">message_format</span>.<span class="ident">to_output_format</span>(<span class="ident">output</span>.<span class="ident">verbose</span>), <span class="ident">lock</span>)<span class="question-mark">?</span>;
+                <span class="comment">// Buffer the output to minimize syscalls.</span>
+                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">writer</span> <span class="op">=</span> <span class="ident">BufWriter::new</span>(<span class="ident">lock</span>);
+                <span class="ident">test_list</span>.<span class="ident">write</span>(<span class="ident">message_format</span>.<span class="ident">to_output_format</span>(<span class="ident">output</span>.<span class="ident">verbose</span>), <span class="kw-2">&amp;mut</span> <span class="ident">writer</span>)<span class="question-mark">?</span>;
+                <span class="ident">writer</span>.<span class="ident">flush</span>()<span class="question-mark">?</span>;
             }
             <span class="ident">Command::Run</span> {
                 <span class="kw-2">ref</span> <span class="ident">profile</span>,
@@ -749,11 +757,11 @@
                     .<span class="ident">to_builder</span>(<span class="ident">no_capture</span>)
                     .<span class="ident">build</span>(<span class="kw-2">&amp;</span><span class="ident">test_list</span>, <span class="kw-2">&amp;</span><span class="ident">profile</span>, <span class="ident">handler</span>);
                 <span class="kw">let</span> <span class="ident">stderr</span> <span class="op">=</span> <span class="ident">std::io::stderr</span>();
+                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">writer</span> <span class="op">=</span> <span class="ident">BufWriter::new</span>(<span class="ident">stderr</span>);
                 <span class="kw">let</span> <span class="ident">run_stats</span> <span class="op">=</span> <span class="ident">runner</span>.<span class="ident">try_execute</span>(<span class="op">|</span><span class="ident">event</span><span class="op">|</span> {
-                    <span class="comment">// TODO: consider turning this into a trait, to initialize and carry the lock</span>
-                    <span class="comment">// across callback invocations</span>
-                    <span class="kw">let</span> <span class="ident">lock</span> <span class="op">=</span> <span class="ident">stderr</span>.<span class="ident">lock</span>();
-                    <span class="ident">reporter</span>.<span class="ident">report_event</span>(<span class="ident">event</span>, <span class="ident">lock</span>)
+                    <span class="comment">// Write and flush the event.</span>
+                    <span class="ident">reporter</span>.<span class="ident">report_event</span>(<span class="ident">event</span>, <span class="kw-2">&amp;mut</span> <span class="ident">writer</span>)<span class="question-mark">?</span>;
+                    <span class="ident">writer</span>.<span class="ident">flush</span>().<span class="ident">map_err</span>(<span class="ident">WriteEventError::Io</span>)
                 })<span class="question-mark">?</span>;
                 <span class="kw">if</span> <span class="op">!</span><span class="ident">run_stats</span>.<span class="ident">is_success</span>() {
                     <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Report::new</span>(<span class="ident">ExpectedError::test_run_failed</span>()));
