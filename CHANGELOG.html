@@ -156,8 +156,15 @@
                         <h1 id="changelog"><a class="header" href="#changelog">Changelog</a></h1>
 <p>This page documents new features and bugfixes for cargo-nextest. Please see the <a href="book/stability.html">stability
 policy</a> for how versioning works with cargo-nextest.</p>
-<h2 id="091---2022-02-14"><a class="header" href="#091---2022-02-14"><a href="https://github.com/nextest-rs/nextest/releases/tag/cargo-nextest-0.9.1">0.9.1</a> - 2022-02-14</a></h2>
+<h2 id="092---2022-02-14"><a class="header" href="#092---2022-02-14">[0.9.2] - 2022-02-14</a></h2>
 <h3 id="fixed"><a class="header" href="#fixed">Fixed</a></h3>
+<ul>
+<li>Running cargo nextest from within a crate now runs tests for just that crate, similar to cargo
+test. Thanks <a href="https://twitter.com/RealWittenstein/status/1493291441384210437">Yaron Wittenstein</a>
+for reporting this!</li>
+</ul>
+<h2 id="091---2022-02-14"><a class="header" href="#091---2022-02-14"><a href="https://github.com/nextest-rs/nextest/releases/tag/cargo-nextest-0.9.1">0.9.1</a> - 2022-02-14</a></h2>
+<h3 id="fixed-1"><a class="header" href="#fixed-1">Fixed</a></h3>
 <ul>
 <li>Updated nextest-runner to 0.1.1, fixing builds on Rust 1.54.</li>
 </ul>

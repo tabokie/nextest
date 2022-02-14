@@ -384,6 +384,14 @@
 <span id="383">383</span>
 <span id="384">384</span>
 <span id="385">385</span>
+<span id="386">386</span>
+<span id="387">387</span>
+<span id="388">388</span>
+<span id="389">389</span>
+<span id="390">390</span>
+<span id="391">391</span>
+<span id="392">392</span>
+<span id="393">393</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -563,9 +571,15 @@
 }
 
 <span class="kw">impl</span> <span class="ident">TestBuildFilter</span> {
-    <span class="kw">fn</span> <span class="ident">compute</span><span class="op">&lt;</span><span class="lifetime">&#39;g</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">graph</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;g</span> <span class="ident">PackageGraph</span>, <span class="ident">output</span>: <span class="ident">OutputContext</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TestList</span><span class="op">&lt;</span><span class="lifetime">&#39;g</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">manifest_path</span> <span class="op">=</span> <span class="ident">graph</span>.<span class="ident">workspace</span>().<span class="ident">root</span>().<span class="ident">join</span>(<span class="string">&quot;Cargo.toml&quot;</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">cargo_cli</span> <span class="op">=</span> <span class="ident">CargoCli::new</span>(<span class="string">&quot;test&quot;</span>, <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="ident">manifest_path</span>), <span class="ident">output</span>);
+    <span class="kw">fn</span> <span class="ident">compute</span><span class="op">&lt;</span><span class="lifetime">&#39;g</span><span class="op">&gt;</span>(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        <span class="ident">manifest_path</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;g</span> <span class="ident">Utf8Path</span><span class="op">&gt;</span>,
+        <span class="ident">graph</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;g</span> <span class="ident">PackageGraph</span>,
+        <span class="ident">output</span>: <span class="ident">OutputContext</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TestList</span><span class="op">&lt;</span><span class="lifetime">&#39;g</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+        <span class="comment">// Don&#39;t use the manifest path from the graph to ensure that if the user cd&#39;s into a</span>
+        <span class="comment">// particular crate and runs cargo nextest, then it behaves identically to cargo test.</span>
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">cargo_cli</span> <span class="op">=</span> <span class="ident">CargoCli::new</span>(<span class="string">&quot;test&quot;</span>, <span class="ident">manifest_path</span>, <span class="ident">output</span>);
 
         <span class="comment">// Only build tests in the cargo test invocation, do not run them.</span>
         <span class="ident">cargo_cli</span>.<span class="ident">add_args</span>([<span class="string">&quot;--no-run&quot;</span>, <span class="string">&quot;--message-format&quot;</span>, <span class="string">&quot;json-render-diagnostics&quot;</span>]);
@@ -695,7 +709,8 @@
                 <span class="ident">build_filter</span>,
                 <span class="ident">message_format</span>,
             } =&gt; {
-                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">test_list</span> <span class="op">=</span> <span class="ident">build_filter</span>.<span class="ident">compute</span>(<span class="kw-2">&amp;</span><span class="ident">graph</span>, <span class="ident">output</span>)<span class="question-mark">?</span>;
+                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">test_list</span> <span class="op">=</span>
+                    <span class="ident">build_filter</span>.<span class="ident">compute</span>(<span class="self">self</span>.<span class="ident">manifest_path</span>.<span class="ident">as_deref</span>(), <span class="kw-2">&amp;</span><span class="ident">graph</span>, <span class="ident">output</span>)<span class="question-mark">?</span>;
                 <span class="kw">if</span> <span class="ident">output</span>.<span class="ident">color</span>.<span class="ident">should_colorize</span>(<span class="ident">Stream::Stdout</span>) {
                     <span class="ident">test_list</span>.<span class="ident">colorize</span>();
                 }
@@ -718,7 +733,8 @@
                 <span class="ident">std::fs::create_dir_all</span>(<span class="kw-2">&amp;</span><span class="ident">store_dir</span>)
                     .<span class="ident">wrap_err_with</span>(<span class="op">|</span><span class="op">|</span> <span class="macro">format!</span>(<span class="string">&quot;failed to create store dir &#39;{}&#39;&quot;</span>, <span class="ident">store_dir</span>))<span class="question-mark">?</span>;
 
-                <span class="kw">let</span> <span class="ident">test_list</span> <span class="op">=</span> <span class="ident">build_filter</span>.<span class="ident">compute</span>(<span class="kw-2">&amp;</span><span class="ident">graph</span>, <span class="ident">output</span>)<span class="question-mark">?</span>;
+                <span class="kw">let</span> <span class="ident">test_list</span> <span class="op">=</span>
+                    <span class="ident">build_filter</span>.<span class="ident">compute</span>(<span class="self">self</span>.<span class="ident">manifest_path</span>.<span class="ident">as_deref</span>(), <span class="kw-2">&amp;</span><span class="ident">graph</span>, <span class="ident">output</span>)<span class="question-mark">?</span>;
 
                 <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">reporter</span> <span class="op">=</span> <span class="ident">reporter_opts</span>
                     .<span class="ident">to_builder</span>(<span class="ident">no_capture</span>)
