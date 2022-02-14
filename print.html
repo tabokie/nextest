@@ -287,6 +287,77 @@ unit, or excluding those tests from nextest.</p>
 <div class="footnote-definition" id="doctest"><sup class="footnote-definition-label">1</sup>
 <p>Doctests are currently <a href="https://github.com/nextest-rs/nextest/issues/16">not supported</a> because of limitations in stable Rust.</p>
 </div>
+<h2 id="options-and-arguments"><a class="header" href="#options-and-arguments">Options and arguments</a></h2>
+<pre><code>cargo-nextest-run 
+Build and run tests
+
+USAGE:
+    cargo nextest run [OPTIONS] [FILTERS]...
+
+ARGS:
+    &lt;FILTERS&gt;...    Test name filter
+
+OPTIONS:
+    -P, --profile &lt;PROFILE&gt;       Nextest profile to use
+        --manifest-path &lt;PATH&gt;    Path to Cargo.toml
+    -v, --verbose                 Verbose output
+        --color &lt;WHEN&gt;            Produce color output: auto, always, never [default: auto]
+        --config-file &lt;PATH&gt;      Config file [default: workspace-root/.config/nextest.toml]
+    -h, --help                    Print help information
+
+RUNNER OPTIONS:
+    -j, --test-threads &lt;THREADS&gt;    Number of tests to run simultaneously [default: logical CPU
+                                    count] [aliases: jobs]
+        --retries &lt;RETRIES&gt;         Number of retries for failing tests [default: from profile]
+        --fail-fast                 Cancel test run on the first failure
+        --no-fail-fast              Run all tests regardless of failure
+        --no-capture                Run tests serially and do not capture output
+
+CARGO OPTIONS:
+        --lib                       Test only this package's library unit tests
+        --bin &lt;BIN&gt;                 Test only the specified binary
+        --bins                      Test all binaries
+        --test &lt;TEST&gt;               Test only the specified test target
+        --tests                     Test all targets
+        --bench &lt;BENCH&gt;             Test only the specified bench target
+        --benches                   Test all benches
+        --all-targets               Test all targets
+    -p, --package &lt;PACKAGES&gt;        Package to test
+        --workspace                 Build all packages in the workspace
+        --exclude &lt;EXCLUDE&gt;         Exclude packages from the test
+        --all                       Alias for workspace (deprecated)
+        --release                   Build artifacts in release mode, with optimizations
+        --cargo-profile &lt;NAME&gt;      Build artifacts with the specified Cargo profile
+        --build-jobs &lt;JOBS&gt;         Number of build jobs to run
+        --features &lt;FEATURES&gt;       Space or comma separated list of features to activate
+        --all-features              Activate all available features
+        --no-default-features       Do not activate the `default` feature
+        --target &lt;TRIPLE&gt;           Build for the target triple
+        --target-dir &lt;DIR&gt;          Directory for all generated artifacts
+        --ignore-rust-version       Ignore `rust-version` specification in packages
+        --unit-graph                Output build graph in JSON (unstable)
+        --future-incompat-report    Outputs a future incompatibility report at the end of the build
+                                    (unstable)
+        --frozen                    Require Cargo.lock and cache are up to date
+        --locked                    Require Cargo.lock is up to date
+        --offline                   Run without accessing the network
+        --config &lt;KEY=VALUE&gt;        Override a configuration value (unstable)
+    -Z &lt;FLAG&gt;                       Unstable (nightly-only) flags to Cargo, see 'cargo -Z help' for
+                                    details
+
+FILTER OPTIONS:
+        --run-ignored &lt;WHICH&gt;      Run ignored tests [default: default] [possible values: default,
+                                   ignored-only, all]
+        --partition &lt;PARTITION&gt;    Test partition, e.g. hash:1/2 or count:2/3
+
+REPORTER OPTIONS:
+        --failure-output &lt;WHEN&gt;    Output stdout and stderr on failure [possible values: immediate,
+                                   immediate-final, final, never]
+        --success-output &lt;WHEN&gt;    Output stdout and stderr on success [possible values: immediate,
+                                   immediate-final, final, never]
+        --status-level &lt;LEVEL&gt;     Test statuses to output [possible values: none, fail, retry,
+                                   slow, pass, skip, all]
+</code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="listing-tests"><a class="header" href="#listing-tests">Listing tests</a></h1>
 <p>To build and list all tests in a workspace<sup class="footnote-reference"><a href="#doctest">1</a></sup>, cd into the workspace and run:</p>
 <pre><code>cargo nextest list
@@ -296,6 +367,64 @@ unit, or excluding those tests from nextest.</p>
 <div class="footnote-definition" id="doctest"><sup class="footnote-definition-label">1</sup>
 <p>Doctests are currently <a href="https://github.com/nextest-rs/nextest/issues/16">not supported</a> because of limitations in stable Rust.</p>
 </div>
+<h2 id="options-and-arguments-1"><a class="header" href="#options-and-arguments-1">Options and arguments</a></h2>
+<pre><code>cargo-nextest-list 
+List tests in workspace
+
+USAGE:
+    cargo nextest list [OPTIONS] [FILTERS]...
+
+ARGS:
+    &lt;FILTERS&gt;...    Test name filter
+
+OPTIONS:
+        --manifest-path &lt;PATH&gt;    Path to Cargo.toml
+    -v, --verbose                 Verbose output
+        --color &lt;WHEN&gt;            Produce color output: auto, always, never [default: auto]
+        --config-file &lt;PATH&gt;      Config file [default: workspace-root/.config/nextest.toml]
+    -h, --help                    Print help information
+
+CARGO OPTIONS:
+        --lib                       Test only this package's library unit tests
+        --bin &lt;BIN&gt;                 Test only the specified binary
+        --bins                      Test all binaries
+        --test &lt;TEST&gt;               Test only the specified test target
+        --tests                     Test all targets
+        --bench &lt;BENCH&gt;             Test only the specified bench target
+        --benches                   Test all benches
+        --all-targets               Test all targets
+    -p, --package &lt;PACKAGES&gt;        Package to test
+        --workspace                 Build all packages in the workspace
+        --exclude &lt;EXCLUDE&gt;         Exclude packages from the test
+        --all                       Alias for workspace (deprecated)
+        --release                   Build artifacts in release mode, with optimizations
+        --cargo-profile &lt;NAME&gt;      Build artifacts with the specified Cargo profile
+        --build-jobs &lt;JOBS&gt;         Number of build jobs to run
+        --features &lt;FEATURES&gt;       Space or comma separated list of features to activate
+        --all-features              Activate all available features
+        --no-default-features       Do not activate the `default` feature
+        --target &lt;TRIPLE&gt;           Build for the target triple
+        --target-dir &lt;DIR&gt;          Directory for all generated artifacts
+        --ignore-rust-version       Ignore `rust-version` specification in packages
+        --unit-graph                Output build graph in JSON (unstable)
+        --future-incompat-report    Outputs a future incompatibility report at the end of the build
+                                    (unstable)
+        --frozen                    Require Cargo.lock and cache are up to date
+        --locked                    Require Cargo.lock is up to date
+        --offline                   Run without accessing the network
+        --config &lt;KEY=VALUE&gt;        Override a configuration value (unstable)
+    -Z &lt;FLAG&gt;                       Unstable (nightly-only) flags to Cargo, see 'cargo -Z help' for
+                                    details
+
+FILTER OPTIONS:
+        --run-ignored &lt;WHICH&gt;      Run ignored tests [default: default] [possible values: default,
+                                   ignored-only, all]
+        --partition &lt;PARTITION&gt;    Test partition, e.g. hash:1/2 or count:2/3
+
+OUTPUT OPTIONS:
+    -T, --message-format &lt;FMT&gt;    Output format [default: human] [possible values: human, json,
+                                  json-pretty]
+</code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="retries-and-flaky-tests"><a class="header" href="#retries-and-flaky-tests">Retries and flaky tests</a></h1>
 <p>Sometimes, tests fail nondeterministically, which can be quite annoying to developers locally and in CI. cargo-nextest supports <em>retrying</em> failed tests with the <code>--retries</code> option. If a test succeeds during a retry, the test is marked <em>flaky</em>. Here's an example:</p>
 <p><img src="book/../static/nextest-retry.png" alt="Output of cargo nextest run --retries 2" /></p>
@@ -312,10 +441,14 @@ unit, or excluding those tests from nextest.</p>
 <p>Hash-based partitioning is similar, except buckets are specified in the format <code>hash:m/n</code>, where <code>m</code> is the current bucket and <code>n</code> is the number of buckets. The hash is completely deterministic, and is based on a combination of the binary and test names. For sufficiently large test runs, hash-based partitioning produces roughly the same number of tests per bucket.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="other-options"><a class="header" href="#other-options">Other options</a></h1>
 <p>Some other options accepted by <code>cargo nextest run</code>:</p>
+<h3 id="runner-options"><a class="header" href="#runner-options">Runner options</a></h3>
 <ul>
 <li><code>--no-fail-fast</code>: do not exit the test run on the first failure. Most useful for CI scenarios.</li>
 <li><code>-j, --test-threads</code>: number of tests to run simultaneously. Note that this is separate from the number of build jobs to run simultaneously, which is specified by <code>--build-jobs</code>.</li>
 <li><code>--run-ignored ignored-only</code> runs ignored tests, while <code>--run-ignored all</code> runs both ignored and non-ignored tests.</li>
+</ul>
+<h3 id="reporter-options"><a class="header" href="#reporter-options">Reporter options</a></h3>
+<ul>
 <li><code>--failure-output</code> and <code>--success-output</code> control when standard output and standard error are displayed for failing and passing tests, respectively. The possible values are:
 <ul>
 <li><code>immediate</code>: display output as soon as the test fails. Default for <code>--failure-output</code>.</li>
@@ -326,6 +459,7 @@ unit, or excluding those tests from nextest.</p>
 </li>
 <li><code>--status-level</code>: which test statuses (<strong>PASS</strong>, <strong>FAIL</strong> etc) to display. There are 7 status levels: <code>none, fail, retry, slow, pass, skip, all</code>. Each status level causes all earlier status levels to be displayed as well. (For example, setting <code>status-level</code> to <code>skip</code> will show failing, retried, slow and passing tests along with skipped tests.) The default is <code>pass</code>.</li>
 </ul>
+<p>For a full list of options, see <a href="book/running.html#options-and-arguments">Options and arguments</a>.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="environment-variables"><a class="header" href="#environment-variables">Environment variables</a></h1>
 <p>This section contains information about the environment variables nextest reads and sets.</p>
 <h2 id="environment-variables-nextest-reads"><a class="header" href="#environment-variables-nextest-reads">Environment variables nextest reads</a></h2>

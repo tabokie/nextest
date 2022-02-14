@@ -155,10 +155,14 @@
                     <main>
                         <h1 id="other-options"><a class="header" href="#other-options">Other options</a></h1>
 <p>Some other options accepted by <code>cargo nextest run</code>:</p>
+<h3 id="runner-options"><a class="header" href="#runner-options">Runner options</a></h3>
 <ul>
 <li><code>--no-fail-fast</code>: do not exit the test run on the first failure. Most useful for CI scenarios.</li>
 <li><code>-j, --test-threads</code>: number of tests to run simultaneously. Note that this is separate from the number of build jobs to run simultaneously, which is specified by <code>--build-jobs</code>.</li>
 <li><code>--run-ignored ignored-only</code> runs ignored tests, while <code>--run-ignored all</code> runs both ignored and non-ignored tests.</li>
+</ul>
+<h3 id="reporter-options"><a class="header" href="#reporter-options">Reporter options</a></h3>
+<ul>
 <li><code>--failure-output</code> and <code>--success-output</code> control when standard output and standard error are displayed for failing and passing tests, respectively. The possible values are:
 <ul>
 <li><code>immediate</code>: display output as soon as the test fails. Default for <code>--failure-output</code>.</li>
@@ -169,6 +173,7 @@
 </li>
 <li><code>--status-level</code>: which test statuses (<strong>PASS</strong>, <strong>FAIL</strong> etc) to display. There are 7 status levels: <code>none, fail, retry, slow, pass, skip, all</code>. Each status level causes all earlier status levels to be displayed as well. (For example, setting <code>status-level</code> to <code>skip</code> will show failing, retried, slow and passing tests along with skipped tests.) The default is <code>pass</code>.</li>
 </ul>
+<p>For a full list of options, see <a href="running.html#options-and-arguments">Options and arguments</a>.</p>
 
                     </main>
 
