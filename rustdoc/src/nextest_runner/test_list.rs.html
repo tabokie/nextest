@@ -725,6 +725,19 @@
 <span id="724">724</span>
 <span id="725">725</span>
 <span id="726">726</span>
+<span id="727">727</span>
+<span id="728">728</span>
+<span id="729">729</span>
+<span id="730">730</span>
+<span id="731">731</span>
+<span id="732">732</span>
+<span id="733">733</span>
+<span id="734">734</span>
+<span id="735">735</span>
+<span id="736">736</span>
+<span id="737">737</span>
+<span id="738">738</span>
+<span id="739">739</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -1109,13 +1122,23 @@
         <span class="comment">// &lt;test name&gt;: test</span>
         <span class="comment">// ...</span>
 
-        <span class="ident">list_output</span>.<span class="ident">lines</span>().<span class="ident">map</span>(<span class="kw">move</span> <span class="op">|</span><span class="ident">line</span><span class="op">|</span> {
-            <span class="ident">line</span>.<span class="ident">strip_suffix</span>(<span class="string">&quot;: test&quot;</span>).<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> {
+        <span class="ident">list_output</span>.<span class="ident">lines</span>().<span class="ident">filter_map</span>(<span class="kw">move</span> <span class="op">|</span><span class="ident">line</span><span class="op">|</span> {
+            <span class="kw">if</span> <span class="ident">line</span>.<span class="ident">ends_with</span>(<span class="string">&quot;: benchmark&quot;</span>) {
+                <span class="comment">// These lines are produced by the default Rust benchmark harness (#[bench]).</span>
+                <span class="comment">// Ignore them.</span>
+                <span class="kw">return</span> <span class="prelude-val">None</span>;
+            }
+
+            <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">line</span>.<span class="ident">strip_suffix</span>(<span class="string">&quot;: test&quot;</span>).<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> {
                 <span class="ident">ParseTestListError::parse_line</span>(
-                    <span class="macro">format!</span>(<span class="string">&quot;line &#39;{}&#39; did not end with the string &#39;: test&#39;&quot;</span>, <span class="ident">line</span>),
+                    <span class="macro">format!</span>(
+                        <span class="string">&quot;line &#39;{}&#39; did not end with the string &#39;: test&#39; or &#39;: benchmark&#39;&quot;</span>,
+                        <span class="ident">line</span>
+                    ),
                     <span class="ident">list_output</span>,
                 )
-            })
+            });
+            <span class="prelude-val">Some</span>(<span class="ident">res</span>)
         })
     }
 
@@ -1296,11 +1319,14 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_parse</span>() {
+        <span class="comment">// Lines ending in &#39;: benchmark&#39; (output by the default Rust bencher) should be skipped.</span>
         <span class="kw">let</span> <span class="ident">non_ignored_output</span> <span class="op">=</span> <span class="macro">indoc!</span> {<span class="string">&quot;
             tests::foo::test_bar: test
             tests::baz::test_quux: test
+            benches::should_be_skipped: benchmark
         &quot;</span>};
         <span class="kw">let</span> <span class="ident">ignored_output</span> <span class="op">=</span> <span class="macro">indoc!</span> {<span class="string">&quot;
+            benches::ignored_should_be_skipped: benchmark
             tests::ignored::test_bar: test
             tests::baz::test_ignored: test
         &quot;</span>};
