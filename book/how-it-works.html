@@ -174,7 +174,7 @@
 <li><strong>The list phase.</strong> cargo-nextest first builds all test binaries with <code>cargo test --no-run</code>, then queries those binaries to produce a list of all tests within them.</li>
 <li><strong>The run phase.</strong> cargo-nextest then executes each individual test in a separate process, in parallel. It then collects, displays and aggregates results for each individual test.</li>
 </ul>
-<p>This model solves all the problems of cargo test's execution model, at the cost of a <em>significantly</em> thicker interface to test binaries. <strong>This means that custom test harnesses <a href="custom-test-harnesses.html">may need to be adapted</a> to work with cargo-nextest.</strong></p>
+<p>This model solves all the problems of cargo test's execution model, at the cost of a <em>significantly</em> thicker interface to test binaries. This means that <strong>custom test harnesses <a href="custom-test-harnesses.html">may need to be adapted</a> to work with cargo-nextest.</strong></p>
 
                     </main>
 

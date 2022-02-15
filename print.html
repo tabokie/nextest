@@ -769,7 +769,7 @@ note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 <li><strong>The list phase.</strong> cargo-nextest first builds all test binaries with <code>cargo test --no-run</code>, then queries those binaries to produce a list of all tests within them.</li>
 <li><strong>The run phase.</strong> cargo-nextest then executes each individual test in a separate process, in parallel. It then collects, displays and aggregates results for each individual test.</li>
 </ul>
-<p>This model solves all the problems of cargo test's execution model, at the cost of a <em>significantly</em> thicker interface to test binaries. <strong>This means that custom test harnesses <a href="book/custom-test-harnesses.html">may need to be adapted</a> to work with cargo-nextest.</strong></p>
+<p>This model solves all the problems of cargo test's execution model, at the cost of a <em>significantly</em> thicker interface to test binaries. This means that <strong>custom test harnesses <a href="book/custom-test-harnesses.html">may need to be adapted</a> to work with cargo-nextest.</strong></p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="benchmarks"><a class="header" href="#benchmarks">Benchmarks</a></h1>
 <p>Nextest's <a href="book/how-it-works.html">execution model</a> generally leads to faster test runs than Cargo. How much faster depends on the specifics, but here are some general guidelines:</p>
 <ul>
