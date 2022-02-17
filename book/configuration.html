@@ -229,8 +229,6 @@ report-name = &quot;nextest-run&quot;
 <p>cargo-nextest supports multiple <em>profiles</em>, where each profile is a set of options for cargo-nextest. Profiles are selected on the command line with the <code>-P</code> or <code>--profile</code> option. Most individual configuration settings can also be overridden at the command line.</p>
 <p>Here is a recommended profile for CI runs:</p>
 <pre><code class="language-toml">[profile.ci]
-# Detect flaky tests in CI by retrying tests twice.
-retries = 2
 # Print out output for failing tests as soon as they fail, and also at the end
 # of the run (for easy scrollability).
 failure-output = &quot;immediate-final&quot;
