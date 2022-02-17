@@ -213,7 +213,7 @@ both end users and CI. The links below will stay stable.</p>
 <p>To get the latest release version of cargo-nextest on a Windows x86_64 computer, from <a href="https://get.nexte.st/latest/windows"><strong>get.nexte.st/latest/windows</strong></a>, run this in PowerShell:</p>
 <pre><code class="language-powershell">$tmp = New-TemporaryFile | Rename-Item -NewName { $_ -replace 'tmp$', 'zip' } -PassThru
 Invoke-WebRequest -OutFile $tmp https://get.nexte.st/latest/windows
-$outputDir = if ($Env:CARGO_HOME) { $Env:CARGO_HOME } else { &quot;~/.cargo/bin&quot; }
+$outputDir = if ($Env:CARGO_HOME) { Join-Path $Env:CARGO_HOME &quot;bin&quot; } else { &quot;~/.cargo/bin&quot; }
 $tmp | Expand-Archive -DestinationPath $outputDir -Force
 $tmp | Remove-Item
 </code></pre>
