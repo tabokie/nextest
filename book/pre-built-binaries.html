@@ -154,33 +154,36 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="installing-pre-built-binaries"><a class="header" href="#installing-pre-built-binaries">Installing pre-built binaries</a></h1>
+<p>The quickest way to get going with nextest is to download a pre-built binary for your platform. The latest nextest release is available at:</p>
+<ul>
+<li><a href="https://get.nexte.st/latest/linux"><strong>get.nexte.st/latest/linux</strong></a> for Linux x86_64, including Windows Subsystem for Linux (WSL)</li>
+<li><a href="https://get.nexte.st/latest/mac"><strong>get.nexte.st/latest/mac</strong></a> for macOS, both x86_64 and Apple Silicon</li>
+<li><a href="https://get.nexte.st/latest/windows"><strong>get.nexte.st/latest/windows</strong></a> for Windows x86_64</li>
+</ul>
+<p>These archives contain a single binary called <code>cargo-nextest</code>. Add this binary to a location on your PATH.</p>
 <h2 id="downloading-and-installing-from-your-terminal"><a class="header" href="#downloading-and-installing-from-your-terminal">Downloading and installing from your terminal</a></h2>
-<p>This is the easiest way to get going with cargo-nextest. The instructions below are suitable for
-both end users and CI. The links below will stay stable.</p>
+<p>The instructions below are suitable for both end users and CI. These links will stay stable.</p>
 <blockquote>
-<p>NOTE: The instructions below assume that your Rust installation is managed via rustup. You can extract the tarball to a different directory in your PATH if required.</p>
+<p>NOTE: The instructions below assume that your Rust installation is managed via rustup. You can extract the archive to a different directory in your PATH if required.</p>
 </blockquote>
 <h3 id="linux-x86_64"><a class="header" href="#linux-x86_64">Linux x86_64</a></h3>
-<p>To install the latest release version of cargo-nextest on a Linux x86_64 computer, from <a href="https://get.nexte.st/latest/linux"><strong>get.nexte.st/latest/linux</strong></a>:</p>
-<pre><code>curl -LsSF https://get.nexte.st/latest/linux | tar zxf - -C ${CARGO_HOME:-~/.cargo}/bin
+<pre><code>curl -LsSf https://get.nexte.st/latest/linux | tar zxf - -C ${CARGO_HOME:-~/.cargo}/bin
 </code></pre>
 <h3 id="macos-x86_64-and-apple-silicon"><a class="header" href="#macos-x86_64-and-apple-silicon">macOS (x86_64 and Apple Silicon)</a></h3>
-<p>To install the latest release version of cargo-nextest on a Mac, from <a href="https://get.nexte.st/latest/mac"><strong>get.nexte.st/latest/mac</strong></a>:</p>
-<pre><code>curl -LsSF https://get.nexte.st/latest/mac | tar zxf - -C ${CARGO_HOME:-~/.cargo}/bin
+<pre><code>curl -LsSf https://get.nexte.st/latest/mac | tar zxf - -C ${CARGO_HOME:-~/.cargo}/bin
 </code></pre>
 <p>This will download a universal binary that works on both Intel and Apple Silicon Macs.</p>
 <h3 id="windows-x86_64-using-powershell"><a class="header" href="#windows-x86_64-using-powershell">Windows x86_64 using PowerShell</a></h3>
-<p>To get the latest release version of cargo-nextest on a Windows x86_64 computer, from <a href="https://get.nexte.st/latest/windows"><strong>get.nexte.st/latest/windows</strong></a>, run this in PowerShell:</p>
+<p>Run this in PowerShell:</p>
 <pre><code class="language-powershell">$tmp = New-TemporaryFile | Rename-Item -NewName { $_ -replace 'tmp$', 'zip' } -PassThru
 Invoke-WebRequest -OutFile $tmp https://get.nexte.st/latest/windows
 $outputDir = if ($Env:CARGO_HOME) { Join-Path $Env:CARGO_HOME &quot;bin&quot; } else { &quot;~/.cargo/bin&quot; }
 $tmp | Expand-Archive -DestinationPath $outputDir -Force
 $tmp | Remove-Item
 </code></pre>
-<p>You can also download the zip manually and unzip it to somewhere in your PATH.</p>
 <h3 id="windows-x86_64-using-unix-tools"><a class="header" href="#windows-x86_64-using-unix-tools">Windows x86_64 using Unix tools</a></h3>
 <p>If you have access to a Unix shell, <code>curl</code> and <code>tar</code> <em>natively</em> on Windows (for example if you're using <code>shell: bash</code> on GitHub Actions):</p>
-<pre><code>curl -LsSF https://get.nexte.st/latest/windows-tar | tar zxf - -C ${CARGO_HOME:-~/.cargo}/bin
+<pre><code>curl -LsSf https://get.nexte.st/latest/windows-tar | tar zxf - -C ${CARGO_HOME:-~/.cargo}/bin
 </code></pre>
 <blockquote>
 <p>NOTE: Windows Subsystem for Linux (WSL) users should follow the <a href="#linux-x86_64">Linux x86_64 instructions</a>.</p>
