@@ -209,7 +209,7 @@ both end users and CI. The links below will stay stable.</p>
 <pre><code>curl -LsSF https://get.nexte.st/latest/mac | tar zxf - -C ${CARGO_HOME:-~/.cargo}/bin
 </code></pre>
 <p>This will download a universal binary that works on both Intel and Apple Silicon Macs.</p>
-<h3 id="windows-x86_64"><a class="header" href="#windows-x86_64">Windows x86_64</a></h3>
+<h3 id="windows-x86_64-using-powershell"><a class="header" href="#windows-x86_64-using-powershell">Windows x86_64 using PowerShell</a></h3>
 <p>To get the latest release version of cargo-nextest on a Windows x86_64 computer, from <a href="https://get.nexte.st/latest/windows"><strong>get.nexte.st/latest/windows</strong></a>, run this in PowerShell:</p>
 <pre><code class="language-powershell">$tmp = New-TemporaryFile | Rename-Item -NewName { $_ -replace 'tmp$', 'zip' } -PassThru
 Invoke-WebRequest -OutFile $tmp https://get.nexte.st/latest/windows
@@ -218,8 +218,13 @@ $tmp | Expand-Archive -DestinationPath $outputDir -Force
 $tmp | Remove-Item
 </code></pre>
 <p>You can also download the zip manually and unzip it to somewhere in your PATH.</p>
+<h3 id="windows-x86_64-using-unix-tools"><a class="header" href="#windows-x86_64-using-unix-tools">Windows x86_64 using Unix tools</a></h3>
+<p>If you have access to a Unix shell, <code>curl</code> and <code>tar</code> <em>natively</em> on Windows (for example if you're using <code>shell: bash</code> on GitHub Actions):</p>
+<pre><code>curl -LsSF https://get.nexte.st/latest/windows-tar | tar zxf - -C ${CARGO_HOME:-~/.cargo}/bin
+</code></pre>
 <blockquote>
-<p>If you're a Windows expert who can come up with a better way to do this, please <a href="https://github.com/nextest-rs/nextest/issues/new">file an issue</a> with your suggestion!</p>
+<p>NOTE: Windows Subsystem for Linux (WSL) users should follow the <a href="book/pre-built-binaries.html#linux-x86_64">Linux x86_64 instructions</a>.</p>
+<p>If you're a Windows expert who can come up with a better way to do this, please <a href="https://github.com/nextest-rs/nextest/issues/new">add a suggestion to this issue</a>!</p>
 </blockquote>
 <h2 id="release-urls"><a class="header" href="#release-urls">Release URLs</a></h2>
 <p>Binary releases of cargo-nextest will always be available at <strong><code>https://get.nexte.st/{version}/{platform}</code></strong>.</p>
@@ -233,20 +238,22 @@ $tmp | Remove-Item
 <h3 id="platform-identifier"><a class="header" href="#platform-identifier"><code>{platform}</code> identifier</a></h3>
 <p>The <code>{platform}</code> identifier is:</p>
 <ul>
-<li><code>x86_64-unknown-linux-gnu</code> for x86_64 Linux (tar.gz)</li>
-<li><code>universal-apple-darwin</code> for x86_64 and arm64 macOS (tar.gz)</li>
-<li><code>x86_64-pc-windows-msvc</code> for x86_64 Windows (zip)</li>
+<li><code>x86_64-unknown-linux-gnu.tar.gz</code> for x86_64 Linux (tar.gz)</li>
+<li><code>universal-apple-darwin.tar.gz</code> for x86_64 and arm64 macOS (tar.gz)</li>
+<li><code>x86_64-pc-windows-msvc.zip</code> for x86_64 Windows (zip)</li>
+<li><code>x86_64-pc-windows-msvc.tar</code> for x86_64 Windows (tar.gz)</li>
 </ul>
 <p>For convenience, the following shortcuts are defined:</p>
 <ul>
-<li><code>linux</code> points to <code>x86_64-unknown-linux-gnu</code></li>
-<li><code>mac</code> points to <code>universal-apple-darwin</code></li>
-<li><code>windows</code> points to <code>x86_64-pc-windows-msvc</code></li>
+<li><code>linux</code> points to <code>x86_64-unknown-linux-gnu.tar.gz</code></li>
+<li><code>mac</code> points to <code>universal-apple-darwin.tar.gz</code></li>
+<li><code>windows</code> points to <code>x86_64-pc-windows-msvc.zip</code></li>
+<li><code>windows-tar</code> points to <code>x86_64-pc-windows-msvc.tar.gz</code></li>
 </ul>
 <p>Also, each release's canonical GitHub Releases URL is available at <strong><code>https://get.nexte.st/{version}/release</code></strong>. For example, the latest GitHub release is avaiable at <a href="https://get.nexte.st/latest/release">get.nexte.st/latest/release</a>.</p>
 <h3 id="examples"><a class="header" href="#examples">Examples</a></h3>
 <p>The latest release in the 0.9 series for macOS is available as a tar.gz file at <a href="https://get.nexte.st/0.9/mac">get.nexte.st/0.9/mac</a>.</p>
-<p>Version 0.9.4 for Windows is available as a zip file at <a href="https://get.nexte.st/0.9.4/windows">get.nexte.st/0.9.4/windows</a>.</p>
+<p>Version 0.9.4 for Windows is available as a zip file at <a href="https://get.nexte.st/0.9.4/windows">get.nexte.st/0.9.4/windows</a>, and as a tar.gz file at <a href="https://get.nexte.st/0.9.4/windows-tar">get.nexte.st/0.9.4/windows-tar</a>.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="installing-from-source-1"><a class="header" href="#installing-from-source-1">Installing from source</a></h1>
 <p>If pre-built binaries are not available for your platform, or you'd like to otherwise install cargo-nextest from source, here's what you need to do:</p>
 <h2 id="installing-from-cratesio"><a class="header" href="#installing-from-cratesio">Installing from crates.io</a></h2>
