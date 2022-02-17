@@ -205,6 +205,7 @@ modify this material as long as you give appropriate credit.</p>
 <p>The instructions below are suitable for both end users and CI. These links will stay stable.</p>
 <blockquote>
 <p>NOTE: The instructions below assume that your Rust installation is managed via rustup. You can extract the archive to a different directory in your PATH if required.</p>
+<p>If you'd like to stay on the 0.9 series to avoid breaking changes (see the <a href="book/stability.html">stability policy</a> for more), replace <code>latest</code> in the URL with <code>0.9</code>.</p>
 </blockquote>
 <h3 id="linux-x86_64"><a class="header" href="#linux-x86_64">Linux x86_64</a></h3>
 <pre><code>curl -LsSf https://get.nexte.st/latest/linux | tar zxf - -C ${CARGO_HOME:-~/.cargo}/bin
@@ -229,14 +230,45 @@ $tmp | Remove-Item
 <p>NOTE: Windows Subsystem for Linux (WSL) users should follow the <a href="book/pre-built-binaries.html#linux-x86_64">Linux x86_64 instructions</a>.</p>
 <p>If you're a Windows expert who can come up with a better way to do this, please <a href="https://github.com/nextest-rs/nextest/issues/31">add a suggestion to this issue</a>!</p>
 </blockquote>
+<h3 id="example-using-a-matrix-strategy-for-cross-platform-ci-on-github-actions"><a class="header" href="#example-using-a-matrix-strategy-for-cross-platform-ci-on-github-actions">Example: using a matrix strategy for cross-platform CI on GitHub Actions</a></h3>
+<p>Here's an example for how to use a matrix strategy to perform cross-platform testing via GitHub Actions.</p>
+<pre><code class="language-yml">jobs:
+  build:
+    name: Run tests
+    runs-on: ${{ matrix.os.runs-on }}
+    strategy:
+      matrix:
+        os:
+          - runs-on: ubuntu-latest
+            nextest-platform: linux
+          - runs-on: macos-latest
+            nextest-platform: mac
+          - runs-on: windows-latest
+            nextest-platform: windows-tar
+        rust-version: [ stable, beta ]
+    steps:
+      #
+      # ... check out your code and install Rust here
+      #
+      - name: Install latest nextest release
+        # The following line is required for Windows compatibility
+        shell: bash
+        run: |
+          curl -LsSf https://get.nexte.st/latest/${{ matrix.os.nextest-platform }} | \
+            tar zxf - -C ${CARGO_HOME:-~/.cargo}/bin
+      - name: Test with latest nextest release
+        run: |
+          cargo nextest run
+</code></pre>
+<p><a href="https://github.com/nextest-rs/nextest/blob/e43ac449f53fd34e58136cd94b7a72add201fe5a/.github/workflows/ci.yml#L104-L107">See this in practice with nextest's own CI.</a></p>
 <h2 id="release-urls"><a class="header" href="#release-urls">Release URLs</a></h2>
 <p>Binary releases of cargo-nextest will always be available at <strong><code>https://get.nexte.st/{version}/{platform}</code></strong>.</p>
 <h3 id="version-identifier"><a class="header" href="#version-identifier"><code>{version}</code> identifier</a></h3>
 <p>The <code>{version}</code> identifier is:</p>
 <ul>
-<li>&quot;latest&quot; for the latest release (not including pre-releases)</li>
-<li>a version range, for example &quot;0.9&quot;, for the latest release in the 0.9 series (not including pre-releases)</li>
-<li>the exact version number, for example &quot;0.9.4&quot;, for that specific version</li>
+<li><code>latest</code> for the latest release (not including pre-releases)</li>
+<li>a version range, for example <code>0.9</code>, for the latest release in the 0.9 series (not including pre-releases)</li>
+<li>the exact version number, for example <code>0.9.4</code>, for that specific version</li>
 </ul>
 <h3 id="platform-identifier"><a class="header" href="#platform-identifier"><code>{platform}</code> identifier</a></h3>
 <p>The <code>{platform}</code> identifier is:</p>
@@ -258,7 +290,7 @@ $tmp | Remove-Item
 <p>The latest release in the 0.9 series for macOS is available as a tar.gz file at <a href="https://get.nexte.st/0.9/mac">get.nexte.st/0.9/mac</a>.</p>
 <p>Version 0.9.4 for Windows is available as a zip file at <a href="https://get.nexte.st/0.9.4/windows">get.nexte.st/0.9.4/windows</a>, and as a tar.gz file at <a href="https://get.nexte.st/0.9.4/windows-tar">get.nexte.st/0.9.4/windows-tar</a>.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="installing-from-source-1"><a class="header" href="#installing-from-source-1">Installing from source</a></h1>
-<p>If pre-built binaries are not available for your platform, or you'd like to otherwise install cargo-nextest from source, here's what you need to do:</p>
+<p>If pre-built binaries are not available for your platform, or you'd otherwise like to install cargo-nextest from source, here's what you need to do:</p>
 <h2 id="installing-from-cratesio"><a class="header" href="#installing-from-cratesio">Installing from crates.io</a></h2>
 <p>Run the following command:</p>
 <pre><code>cargo install cargo-nextest
@@ -266,7 +298,8 @@ $tmp | Remove-Item
 <p><code>cargo nextest</code> must be compiled and installed with <strong>Rust 1.54</strong> or later, but it can build and run
 tests against any version of Rust.</p>
 <h2 id="using-a-cached-install-in-ci"><a class="header" href="#using-a-cached-install-in-ci">Using a cached install in CI</a></h2>
-<p>Most CI users of nextest will benefit from using cached binaries. Consider using the <a href="book/pre-built-binaries.html">pre-built binaries</a> for this purpose. <a href="https://github.com/nextest-rs/nextest/blob/e43ac449f53fd34e58136cd94b7a72add201fe5a/.github/workflows/ci.yml#L104-L107">See this example of how the nextest repository uses pre-built binaries.</a></p>
+<p>Most CI users of nextest will benefit from using cached binaries. Consider using the <a href="book/pre-built-binaries.html">pre-built binaries</a> for this purpose.</p>
+<p><a href="https://github.com/nextest-rs/nextest/blob/e43ac449f53fd34e58136cd94b7a72add201fe5a/.github/workflows/ci.yml#L104-L107">See this example for how the nextest repository uses pre-built binaries.</a></p>
 <p>If your CI is based on GitHub Actions, you may use the
 <a href="https://github.com/marketplace/actions/cargo-install">baptiste0928/cargo-install</a> action to build cargo-nextest from source and cache
 the cargo-nextest binary.</p>
@@ -280,7 +313,8 @@ the cargo-nextest binary.</p>
         uses: baptiste0928/cargo-install@v1
         with:
           crate: cargo-nextest
-          version: 0.9
+          # Uncomment the following line if you'd like to stay on the 0.9 series
+          # version: 0.9
       # At this point, cargo-nextest will be available on your PATH
 </code></pre>
 <p>Also consider using the <a href="https://github.com/marketplace/actions/rust-cache">Swatinem/rust-cache</a>
