@@ -556,7 +556,7 @@
 }
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Args</span>)]</span>
-<span class="attribute">#[<span class="ident">clap</span>(<span class="ident">help_heading</span> <span class="op">=</span> <span class="string">&quot;FILTER OPTIONS&quot;</span>)]</span>
+<span class="attribute">#[<span class="ident">clap</span>(<span class="ident">next_help_heading</span> <span class="op">=</span> <span class="string">&quot;FILTER OPTIONS&quot;</span>)]</span>
 <span class="kw">struct</span> <span class="ident">TestBuildFilter</span> {
     <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">flatten</span>)]</span>
     <span class="ident">cargo_options</span>: <span class="ident">CargoOptions</span>,
@@ -613,7 +613,7 @@
 
 <span class="doccomment">/// Test runner options.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Default</span>, <span class="ident">Args</span>)]</span>
-<span class="attribute">#[<span class="ident">clap</span>(<span class="ident">help_heading</span> <span class="op">=</span> <span class="string">&quot;RUNNER OPTIONS&quot;</span>)]</span>
+<span class="attribute">#[<span class="ident">clap</span>(<span class="ident">next_help_heading</span> <span class="op">=</span> <span class="string">&quot;RUNNER OPTIONS&quot;</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">TestRunnerOpts</span> {
     <span class="doccomment">/// Number of tests to run simultaneously [default: logical CPU count]</span>
     <span class="attribute">#[<span class="ident">clap</span>(
@@ -659,7 +659,7 @@
 }
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Default</span>, <span class="ident">Args</span>)]</span>
-<span class="attribute">#[<span class="ident">clap</span>(<span class="ident">help_heading</span> <span class="op">=</span> <span class="string">&quot;REPORTER OPTIONS&quot;</span>)]</span>
+<span class="attribute">#[<span class="ident">clap</span>(<span class="ident">next_help_heading</span> <span class="op">=</span> <span class="string">&quot;REPORTER OPTIONS&quot;</span>)]</span>
 <span class="kw">struct</span> <span class="ident">TestReporterOpts</span> {
     <span class="doccomment">/// Output stdout and stderr on failure</span>
     <span class="attribute">#[<span class="ident">clap</span>(

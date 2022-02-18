@@ -303,7 +303,7 @@
 
 <span class="doccomment">/// Options passed down to cargo.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Args</span>)]</span>
-<span class="attribute">#[<span class="ident">clap</span>(<span class="ident">help_heading</span> <span class="op">=</span> <span class="string">&quot;CARGO OPTIONS&quot;</span>, <span class="ident">setting</span> <span class="op">=</span> <span class="ident">AppSettings::DeriveDisplayOrder</span>)]</span>
+<span class="attribute">#[<span class="ident">clap</span>(<span class="ident">next_help_heading</span> <span class="op">=</span> <span class="string">&quot;CARGO OPTIONS&quot;</span>, <span class="ident">setting</span> <span class="op">=</span> <span class="ident">AppSettings::DeriveDisplayOrder</span>)]</span>
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct</span> <span class="ident">CargoOptions</span> {
     <span class="doccomment">/// Test only this package&#39;s library unit tests</span>
     <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>)]</span>
