@@ -1,5 +1,6 @@
 https://nexte.st/CHANGELOG
 https://nexte.st/
+https://nexte.st/book/antivirus-gatekeeper
 https://nexte.st/book/benchmarks
 https://nexte.st/book/configuration
 https://nexte.st/book/custom-test-harnesses
