@@ -325,12 +325,12 @@ action to make your builds faster.</p>
 <pre><code>cargo install --git https://github.com/nextest-rs/nextest --bin cargo-nextest
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="windows-antivirus-and-macos-gatekeeper-1"><a class="header" href="#windows-antivirus-and-macos-gatekeeper-1">Windows antivirus and macOS Gatekeeper</a></h1>
-<p>This page covers common performance issues caused by anti-malware software on Windows and macOS. These performance issues are not unique to nextest, but <a href="book/how-it-works.html">its execution model</a> may exacerbate them.</p>
+<p>This page covers common performance issues caused by anti-malware protections on Windows and macOS. These performance issues are not unique to nextest, but <a href="book/how-it-works.html">its execution model</a> may exacerbate them.</p>
 <blockquote>
 <p>NOTE: If you'd like to contribute screenshots, they would be greatly appreciated!</p>
 </blockquote>
 <h2 id="windows"><a class="header" href="#windows">Windows</a></h2>
-<p>Your antivirus software—usually Windows Security, also known as Microsoft Defender—might interfere with process execution, making your test runs significantly slower. For optimal performance, exclude the following directories from checks:</p>
+<p>Your antivirus software—typically Windows Security, also known as Microsoft Defender—might interfere with process execution, making your test runs significantly slower. For optimal performance, exclude the following directories from checks:</p>
 <ul>
 <li>The directory with all your code in it</li>
 <li>Your <code>.cargo\bin</code> directory, typically within your home directory (see <a href="https://github.com/rust-lang/cargo/issues/5028">this Rust issue</a>).</li>
