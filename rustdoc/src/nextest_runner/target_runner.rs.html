@@ -272,10 +272,16 @@
 <span id="271">271</span>
 <span id="272">272</span>
 <span id="273">273</span>
-</pre><pre class="rust"><code><span class="doccomment">//! Adds support for [target runners](https://doc.rust-lang.org/cargo/reference/config.html#targettriplerunner)</span>
+<span id="274">274</span>
+<span id="275">275</span>
+</pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
+<span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
+
+<span class="doccomment">//! Adds support for [target runners](https://doc.rust-lang.org/cargo/reference/config.html#targettriplerunner)</span>
 
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::errors::TargetRunnerError</span>;
 <span class="kw">use</span> <span class="ident">camino::Utf8PathBuf</span>;
+<span class="kw">use</span> <span class="ident">target_spec::Platform</span>;
 
 <span class="doccomment">/// A [target runner](https://doc.rust-lang.org/cargo/reference/config.html#targettriplerunner)</span>
 <span class="doccomment">/// used to execute a test binary rather than the default of executing natively</span>
@@ -327,18 +333,9 @@
             }
         };
 
-        <span class="kw">let</span> <span class="ident">triple_str</span> <span class="op">=</span> <span class="ident">target</span>.<span class="ident">triple_str</span>().<span class="ident">to_ascii_uppercase</span>().<span class="ident">replace</span>(<span class="string">&#39;-&#39;</span>, <span class="string">&quot;_&quot;</span>);
-
-        <span class="comment">// Check for a nextest specific runner, this is highest precedence</span>
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">tr</span>) <span class="op">=</span> <span class="ident"><span class="self">Self</span>::from_env</span>(<span class="macro">format!</span>(<span class="string">&quot;NEXTEST_{}_RUNNER&quot;</span>, <span class="ident">triple_str</span>))<span class="question-mark">?</span> {
-            <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">tr</span>));
-        }
-
-        <span class="comment">// Next check for a config in the nextest.toml config</span>
-
-        <span class="comment">// Next check if have a CARGO_TARGET_{TRIPLE}_RUNNER environment variable</span>
+        <span class="comment">// Check if we have a CARGO_TARGET_{TRIPLE}_RUNNER environment variable</span>
         <span class="comment">// set, and if so use that, as it takes precedence over the static config(:?.toml)?</span>
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">tr</span>) <span class="op">=</span> <span class="ident"><span class="self">Self</span>::from_env</span>(<span class="macro">format!</span>(<span class="string">&quot;CARGO_TARGET_{}_RUNNER&quot;</span>, <span class="ident">triple_str</span>))<span class="question-mark">?</span> {
+        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">tr</span>) <span class="op">=</span> <span class="ident"><span class="self">Self</span>::from_env</span>(<span class="ident"><span class="self">Self</span>::runner_env_var</span>(<span class="kw-2">&amp;</span><span class="ident">target</span>))<span class="question-mark">?</span> {
             <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">tr</span>));
         }
 
@@ -368,6 +365,13 @@
         } <span class="kw">else</span> {
             <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>)
         }
+    }
+
+    <span class="comment">// Not part of the public API. Exposed for testing only.</span>
+    <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">runner_env_var</span>(<span class="ident">target</span>: <span class="kw-2">&amp;</span><span class="ident">Platform</span>) -&gt; <span class="ident">String</span> {
+        <span class="kw">let</span> <span class="ident">triple_str</span> <span class="op">=</span> <span class="ident">target</span>.<span class="ident">triple_str</span>().<span class="ident">to_ascii_uppercase</span>().<span class="ident">replace</span>(<span class="string">&#39;-&#39;</span>, <span class="string">&quot;_&quot;</span>);
+        <span class="macro">format!</span>(<span class="string">&quot;CARGO_TARGET_{}_RUNNER&quot;</span>, <span class="ident">triple_str</span>)
     }
 
     <span class="doccomment">/// Attempts to find a target runner for the specified target from a</span>
