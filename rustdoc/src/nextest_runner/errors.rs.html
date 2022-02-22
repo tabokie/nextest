@@ -406,6 +406,108 @@
 <span id="405">405</span>
 <span id="406">406</span>
 <span id="407">407</span>
+<span id="408">408</span>
+<span id="409">409</span>
+<span id="410">410</span>
+<span id="411">411</span>
+<span id="412">412</span>
+<span id="413">413</span>
+<span id="414">414</span>
+<span id="415">415</span>
+<span id="416">416</span>
+<span id="417">417</span>
+<span id="418">418</span>
+<span id="419">419</span>
+<span id="420">420</span>
+<span id="421">421</span>
+<span id="422">422</span>
+<span id="423">423</span>
+<span id="424">424</span>
+<span id="425">425</span>
+<span id="426">426</span>
+<span id="427">427</span>
+<span id="428">428</span>
+<span id="429">429</span>
+<span id="430">430</span>
+<span id="431">431</span>
+<span id="432">432</span>
+<span id="433">433</span>
+<span id="434">434</span>
+<span id="435">435</span>
+<span id="436">436</span>
+<span id="437">437</span>
+<span id="438">438</span>
+<span id="439">439</span>
+<span id="440">440</span>
+<span id="441">441</span>
+<span id="442">442</span>
+<span id="443">443</span>
+<span id="444">444</span>
+<span id="445">445</span>
+<span id="446">446</span>
+<span id="447">447</span>
+<span id="448">448</span>
+<span id="449">449</span>
+<span id="450">450</span>
+<span id="451">451</span>
+<span id="452">452</span>
+<span id="453">453</span>
+<span id="454">454</span>
+<span id="455">455</span>
+<span id="456">456</span>
+<span id="457">457</span>
+<span id="458">458</span>
+<span id="459">459</span>
+<span id="460">460</span>
+<span id="461">461</span>
+<span id="462">462</span>
+<span id="463">463</span>
+<span id="464">464</span>
+<span id="465">465</span>
+<span id="466">466</span>
+<span id="467">467</span>
+<span id="468">468</span>
+<span id="469">469</span>
+<span id="470">470</span>
+<span id="471">471</span>
+<span id="472">472</span>
+<span id="473">473</span>
+<span id="474">474</span>
+<span id="475">475</span>
+<span id="476">476</span>
+<span id="477">477</span>
+<span id="478">478</span>
+<span id="479">479</span>
+<span id="480">480</span>
+<span id="481">481</span>
+<span id="482">482</span>
+<span id="483">483</span>
+<span id="484">484</span>
+<span id="485">485</span>
+<span id="486">486</span>
+<span id="487">487</span>
+<span id="488">488</span>
+<span id="489">489</span>
+<span id="490">490</span>
+<span id="491">491</span>
+<span id="492">492</span>
+<span id="493">493</span>
+<span id="494">494</span>
+<span id="495">495</span>
+<span id="496">496</span>
+<span id="497">497</span>
+<span id="498">498</span>
+<span id="499">499</span>
+<span id="500">500</span>
+<span id="501">501</span>
+<span id="502">502</span>
+<span id="503">503</span>
+<span id="504">504</span>
+<span id="505">505</span>
+<span id="506">506</span>
+<span id="507">507</span>
+<span id="508">508</span>
+<span id="509">509</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -811,6 +913,108 @@
 <span class="kw">impl</span> <span class="ident">error::Error</span> <span class="kw">for</span> <span class="ident">JunitError</span> {
     <span class="kw">fn</span> <span class="ident">source</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>(<span class="kw">dyn</span> <span class="ident">error::Error</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>)<span class="op">&gt;</span> {
         <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">err</span>)
+    }
+}
+
+<span class="doccomment">/// An error occurred determining the target runner</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">TargetRunnerError</span> {
+    <span class="doccomment">/// Failed to determine the host triple, which is needed to determine the</span>
+    <span class="doccomment">/// default target triple when a target is not explicitly specified</span>
+    <span class="ident">UnknownHostPlatform</span>(<span class="ident">target_spec::Error</span>),
+    <span class="doccomment">/// An environment variable contained non-utf8 content</span>
+    <span class="ident">InvalidEnvironmentVar</span>(<span class="ident">String</span>),
+    <span class="doccomment">/// An environment variable or config key was found that matches the target</span>
+    <span class="doccomment">/// triple, but it didn&#39;t actually contain a binary</span>
+    <span class="ident">BinaryNotSpecified</span> {
+        <span class="doccomment">/// The environment variable or config key path</span>
+        <span class="ident">key</span>: <span class="ident">String</span>,
+        <span class="doccomment">/// The value that was read from the key</span>
+        <span class="ident">value</span>: <span class="ident">String</span>,
+    },
+    <span class="doccomment">/// Failed to retrieve a directory</span>
+    <span class="ident">UnableToReadDir</span>(<span class="ident">std::io::Error</span>),
+    <span class="doccomment">/// Failed to canonicalize a path</span>
+    <span class="ident">FailedPathCanonicalization</span> {
+        <span class="doccomment">/// The path that failed to canonicalize</span>
+        <span class="ident">path</span>: <span class="ident">Utf8PathBuf</span>,
+        <span class="doccomment">/// The error the occurred during canonicalization</span>
+        <span class="ident">error</span>: <span class="ident">std::io::Error</span>,
+    },
+    <span class="doccomment">/// A path was non-utf8</span>
+    <span class="ident">NonUtf8Path</span>(<span class="ident">std::path::PathBuf</span>),
+    <span class="doccomment">/// Failed to read config file</span>
+    <span class="ident">FailedToReadConfig</span> {
+        <span class="doccomment">/// The path of the config file</span>
+        <span class="ident">path</span>: <span class="ident">Utf8PathBuf</span>,
+        <span class="doccomment">/// The error that occurred trying to read the config file</span>
+        <span class="ident">error</span>: <span class="ident">std::io::Error</span>,
+    },
+    <span class="doccomment">/// Failed to deserialize config file</span>
+    <span class="ident">FailedToParseConfig</span> {
+        <span class="doccomment">/// The path of the config file</span>
+        <span class="ident">path</span>: <span class="ident">Utf8PathBuf</span>,
+        <span class="doccomment">/// The error that occurred trying to deserialize the config file</span>
+        <span class="ident">error</span>: <span class="ident">toml::de::Error</span>,
+    },
+    <span class="doccomment">/// Failed to parse the specified target triple</span>
+    <span class="ident">FailedToParseTargetTriple</span> {
+        <span class="doccomment">/// The triple that failed to parse</span>
+        <span class="ident">triple</span>: <span class="ident">String</span>,
+        <span class="doccomment">/// The error that occurred parsing the triple</span>
+        <span class="ident">error</span>: <span class="ident">target_spec::errors::TripleParseError</span>,
+    },
+}
+
+<span class="kw">impl</span> <span class="ident">fmt::Display</span> <span class="kw">for</span> <span class="ident">TargetRunnerError</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">fmt::Result</span> {
+        <span class="kw">match</span> <span class="self">self</span> {
+            <span class="ident"><span class="self">Self</span>::UnknownHostPlatform</span>(<span class="ident">error</span>) =&gt; {
+                <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;unable to determine host triple: {}&quot;</span>, <span class="ident">error</span>)
+            }
+            <span class="ident"><span class="self">Self</span>::InvalidEnvironmentVar</span>(<span class="ident">key</span>) =&gt; {
+                <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;environment variable &#39;{}&#39; contained non-utf8 data&quot;</span>, <span class="ident">key</span>)
+            }
+            <span class="ident"><span class="self">Self</span>::BinaryNotSpecified</span> { <span class="ident">key</span>, <span class="ident">value</span> } =&gt; {
+                <span class="macro">write!</span>(
+                    <span class="ident">f</span>,
+                    <span class="string">&quot;runner &#39;{}&#39; = &#39;{}&#39; did not contain a runner binary&quot;</span>,
+                    <span class="ident">key</span>, <span class="ident">value</span>
+                )
+            }
+            <span class="ident"><span class="self">Self</span>::UnableToReadDir</span>(<span class="ident">io</span>) =&gt; {
+                <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;unable to read directory: {}&quot;</span>, <span class="ident">io</span>)
+            }
+            <span class="ident"><span class="self">Self</span>::FailedPathCanonicalization</span> { <span class="ident">path</span>, <span class="ident">error</span> } =&gt; {
+                <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;failed to canonicalize path &#39;{}&#39;: {}&quot;</span>, <span class="ident">path</span>, <span class="ident">error</span>)
+            }
+            <span class="ident"><span class="self">Self</span>::NonUtf8Path</span>(<span class="ident">path</span>) =&gt; {
+                <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;path &#39;{}&#39; is non-utf8&quot;</span>, <span class="ident">path</span>.<span class="ident">display</span>())
+            }
+            <span class="ident"><span class="self">Self</span>::FailedToReadConfig</span> { <span class="ident">path</span>, <span class="ident">error</span> } =&gt; {
+                <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;failed to read &#39;{}&#39;: {}&quot;</span>, <span class="ident">path</span>, <span class="ident">error</span>)
+            }
+            <span class="ident"><span class="self">Self</span>::FailedToParseConfig</span> { <span class="ident">path</span>, <span class="ident">error</span> } =&gt; {
+                <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;failed to parse config &#39;{}&#39;: {}&quot;</span>, <span class="ident">path</span>, <span class="ident">error</span>)
+            }
+            <span class="ident"><span class="self">Self</span>::FailedToParseTargetTriple</span> { <span class="ident">triple</span>, <span class="ident">error</span> } =&gt; {
+                <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;failed to parse triple &#39;{}&#39;: {}&quot;</span>, <span class="ident">triple</span>, <span class="ident">error</span>)
+            }
+        }
+    }
+}
+
+<span class="kw">impl</span> <span class="ident">error::Error</span> <span class="kw">for</span> <span class="ident">TargetRunnerError</span> {
+    <span class="kw">fn</span> <span class="ident">source</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>(<span class="kw">dyn</span> <span class="ident">error::Error</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>)<span class="op">&gt;</span> {
+        <span class="kw">match</span> <span class="self">self</span> {
+            <span class="ident"><span class="self">Self</span>::UnknownHostPlatform</span>(<span class="ident">error</span>) =&gt; <span class="prelude-val">Some</span>(<span class="ident">error</span>),
+            <span class="ident"><span class="self">Self</span>::UnableToReadDir</span>(<span class="ident">io</span>) =&gt; <span class="prelude-val">Some</span>(<span class="ident">io</span>),
+            <span class="ident"><span class="self">Self</span>::FailedPathCanonicalization</span> { <span class="ident">error</span>, .. } =&gt; <span class="prelude-val">Some</span>(<span class="ident">error</span>),
+            <span class="ident"><span class="self">Self</span>::FailedToReadConfig</span> { <span class="ident">error</span>, .. } =&gt; <span class="prelude-val">Some</span>(<span class="ident">error</span>),
+            <span class="ident"><span class="self">Self</span>::FailedToParseConfig</span> { <span class="ident">error</span>, .. } =&gt; <span class="prelude-val">Some</span>(<span class="ident">error</span>),
+            <span class="ident"><span class="self">Self</span>::FailedToParseTargetTriple</span> { <span class="ident">error</span>, .. } =&gt; <span class="prelude-val">Some</span>(<span class="ident">error</span>),
+            <span class="kw">_</span> =&gt; <span class="prelude-val">None</span>,
+        }
     }
 }
 </code></pre></div>
