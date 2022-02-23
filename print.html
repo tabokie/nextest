@@ -87,7 +87,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Home</a></li><li class="spacer"></li><li class="chapter-item expanded "><a href="book/installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="book/pre-built-binaries.html"><strong aria-hidden="true">1.1.</strong> Pre-built binaries</a></li><li class="chapter-item expanded "><a href="book/installing-from-source.html"><strong aria-hidden="true">1.2.</strong> Installing from source</a></li><li class="chapter-item expanded "><a href="book/antivirus-gatekeeper.html"><strong aria-hidden="true">1.3.</strong> Windows antivirus and macOS Gatekeeper</a></li></ol></li><li class="chapter-item expanded "><a href="book/usage.html"><strong aria-hidden="true">2.</strong> Usage</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="book/running.html"><strong aria-hidden="true">2.1.</strong> Running tests</a></li><li class="chapter-item expanded "><a href="book/listing.html"><strong aria-hidden="true">2.2.</strong> Listing tests</a></li><li class="chapter-item expanded "><a href="book/retries.html"><strong aria-hidden="true">2.3.</strong> Retries and flaky tests</a></li><li class="chapter-item expanded "><a href="book/partitioning.html"><strong aria-hidden="true">2.4.</strong> Partitioning test runs in CI</a></li><li class="chapter-item expanded "><a href="book/other-options.html"><strong aria-hidden="true">2.5.</strong> Other options</a></li><li class="chapter-item expanded "><a href="book/env-vars.html"><strong aria-hidden="true">2.6.</strong> Environment variables</a></li><li class="chapter-item expanded "><a href="book/stability.html"><strong aria-hidden="true">2.7.</strong> Stability policy</a></li></ol></li><li class="chapter-item expanded "><a href="book/machine-readable.html"><strong aria-hidden="true">3.</strong> Machine-readable output</a></li><li class="chapter-item expanded "><a href="book/configuration.html"><strong aria-hidden="true">4.</strong> Configuration</a></li><li class="chapter-item expanded "><a href="book/junit.html"><strong aria-hidden="true">5.</strong> JUnit support</a></li><li class="chapter-item expanded "><a href="book/how-it-works.html"><strong aria-hidden="true">6.</strong> How nextest works</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="book/benchmarks.html"><strong aria-hidden="true">6.1.</strong> Benchmarks</a></li><li class="chapter-item expanded "><a href="book/custom-test-harnesses.html"><strong aria-hidden="true">6.2.</strong> Custom test harnesses</a></li><li class="spacer"></li></ol></li><li class="chapter-item expanded "><a href="CHANGELOG.html">Changelog</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Home</a></li><li class="spacer"></li><li class="chapter-item expanded "><a href="book/installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="book/pre-built-binaries.html"><strong aria-hidden="true">1.1.</strong> Pre-built binaries</a></li><li class="chapter-item expanded "><a href="book/installing-from-source.html"><strong aria-hidden="true">1.2.</strong> Installing from source</a></li><li class="chapter-item expanded "><a href="book/antivirus-gatekeeper.html"><strong aria-hidden="true">1.3.</strong> Windows antivirus and macOS Gatekeeper</a></li></ol></li><li class="chapter-item expanded "><a href="book/usage.html"><strong aria-hidden="true">2.</strong> Usage</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="book/running.html"><strong aria-hidden="true">2.1.</strong> Running tests</a></li><li class="chapter-item expanded "><a href="book/listing.html"><strong aria-hidden="true">2.2.</strong> Listing tests</a></li><li class="chapter-item expanded "><a href="book/retries.html"><strong aria-hidden="true">2.3.</strong> Retries and flaky tests</a></li><li class="chapter-item expanded "><a href="book/partitioning.html"><strong aria-hidden="true">2.4.</strong> Partitioning test runs in CI</a></li><li class="chapter-item expanded "><a href="book/target-runners.html"><strong aria-hidden="true">2.5.</strong> Target runners</a></li><li class="chapter-item expanded "><a href="book/other-options.html"><strong aria-hidden="true">2.6.</strong> Other options</a></li><li class="chapter-item expanded "><a href="book/env-vars.html"><strong aria-hidden="true">2.7.</strong> Environment variables</a></li><li class="chapter-item expanded "><a href="book/stability.html"><strong aria-hidden="true">2.8.</strong> Stability policy</a></li></ol></li><li class="chapter-item expanded "><a href="book/machine-readable.html"><strong aria-hidden="true">3.</strong> Machine-readable output</a></li><li class="chapter-item expanded "><a href="book/configuration.html"><strong aria-hidden="true">4.</strong> Configuration</a></li><li class="chapter-item expanded "><a href="book/junit.html"><strong aria-hidden="true">5.</strong> JUnit support</a></li><li class="chapter-item expanded "><a href="book/how-it-works.html"><strong aria-hidden="true">6.</strong> How nextest works</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="book/benchmarks.html"><strong aria-hidden="true">6.1.</strong> Benchmarks</a></li><li class="chapter-item expanded "><a href="book/custom-test-harnesses.html"><strong aria-hidden="true">6.2.</strong> Custom test harnesses</a></li><li class="spacer"></li></ol></li><li class="chapter-item expanded "><a href="CHANGELOG.html">Changelog</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -426,8 +426,8 @@ ARGS:
     &lt;FILTERS&gt;...    Test name filter
 
 OPTIONS:
-    -P, --profile &lt;PROFILE&gt;       Nextest profile to use
         --manifest-path &lt;PATH&gt;    Path to Cargo.toml
+    -P, --profile &lt;PROFILE&gt;       Nextest profile to use
     -v, --verbose                 Verbose output
         --color &lt;WHEN&gt;            Produce color output: auto, always, never [default: auto]
         --config-file &lt;PATH&gt;      Config file [default: workspace-root/.config/nextest.toml]
@@ -567,6 +567,24 @@ OUTPUT OPTIONS:
 <p>Tests not in the current bucket are marked skipped.</p>
 <p>Count-based partitioning is done <em>per test binary</em>. This means that the tests in one binary <em>do not</em> influence counting for other binaries.</p>
 <p>Hash-based partitioning is similar, except buckets are specified in the format <code>hash:m/n</code>, where <code>m</code> is the current bucket and <code>n</code> is the number of buckets. The hash is completely deterministic, and is based on a combination of the binary and test names. For sufficiently large test runs, hash-based partitioning produces roughly the same number of tests per bucket.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="target-runners"><a class="header" href="#target-runners">Target runners</a></h1>
+<p>If you're cross-compiling Rust code, you may wish to run tests through a wrapper executable or script. For this purpose, nextest supports <em>target runners</em>, using the same configuration options used by Cargo:</p>
+<ul>
+<li>The environment variable <code>CARGO_TARGET_&lt;triple&gt;_RUNNER</code>, if it matches the target platform, takes highest precedence.</li>
+<li>Otherwise, nextest reads <a href="https://doc.rust-lang.org/cargo/reference/config.html#targettriplerunner">the <code>target.&lt;triple&gt;.runner</code> and <code>target.&lt;cfg&gt;.runner</code> settings</a> from <code>.cargo/config.toml</code>.</li>
+</ul>
+<h2 id="example"><a class="header" href="#example">Example</a></h2>
+<p>If you're on Linux cross-compiling to Windows, you can choose to run tests through <a href="https://www.winehq.org/">Wine</a>.</p>
+<p>If you add the following to <code>.cargo/config.toml:</code></p>
+<pre><code class="language-toml">[target.x86_64-pc-windows-msvc]
+runner = &quot;wine&quot;
+</code></pre>
+<p>Or, in your shell:</p>
+<pre><code>export CARGO_TARGET_X86_64_PC_WINDOWS_MSVC_RUNNER=wine
+</code></pre>
+<p>Then, running this command will cause your tests to be run as <code>wine &lt;test-binary&gt;</code>:</p>
+<pre><code>cargo nextest run --target x86_64-pc-windows-msvc
+</code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="other-options"><a class="header" href="#other-options">Other options</a></h1>
 <p>Some other options accepted by <code>cargo nextest run</code>:</p>
 <h3 id="runner-options"><a class="header" href="#runner-options">Runner options</a></h3>
@@ -591,7 +609,12 @@ OUTPUT OPTIONS:
 <div style="break-before: page; page-break-before: always;"></div><h1 id="environment-variables"><a class="header" href="#environment-variables">Environment variables</a></h1>
 <p>This section contains information about the environment variables nextest reads and sets.</p>
 <h2 id="environment-variables-nextest-reads"><a class="header" href="#environment-variables-nextest-reads">Environment variables nextest reads</a></h2>
-<p>Currently, cargo-nextest does not read its configuration as environment variables. <a href="https://github.com/nextest-rs/nextest/issues/14">This will be supported in the future</a>.</p>
+<p>Nextest reads the following environment variables to emulate the behavior of Cargo:</p>
+<ul>
+<li><code>CARGO</code> — Path to the <code>cargo</code> binary to use for builds.</li>
+<li><code>CARGO_TARGET_&lt;triple&gt;_RUNNER</code> — Support for <a href="book/target-runners.html">target runners</a>.</li>
+</ul>
+<p>Currently, cargo-nextest does not read its own configuration as environment variables. <a href="https://github.com/nextest-rs/nextest/issues/14">This will be supported in the future</a>.</p>
 <h3 id="cargo-related-environment-variables-nextest-reads"><a class="header" href="#cargo-related-environment-variables-nextest-reads">Cargo-related environment variables nextest reads</a></h3>
 <p>cargo-nextest delegates to Cargo for the build, which recognizes a number of environment variables. See <a href="https://doc.rust-lang.org/cargo/reference/environment-variables.html#environment-variables-cargo-reads">Environment variables Cargo reads</a> for a full list.</p>
 <h2 id="environment-variables-nextest-sets"><a class="header" href="#environment-variables-nextest-sets">Environment variables nextest sets</a></h2>
@@ -793,7 +816,7 @@ path = &quot;junit.xml&quot;
 <ul>
 <li>CircleCI: <a href="https://github.com/conradludgate/circleci-junit-fix"><code>circleci-junit-fix</code></a></li>
 </ul>
-<h2 id="example"><a class="header" href="#example">Example</a></h2>
+<h2 id="example-1"><a class="header" href="#example-1">Example</a></h2>
 <p>Here's an example JUnit file generated by <code>cargo-nextest</code>.</p>
 <pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
 &lt;testsuites name=&quot;nextest-run&quot; tests=&quot;3&quot; failures=&quot;1&quot; errors=&quot;0&quot; timestamp=&quot;2022-02-10T20:09:34.393+00:00&quot; time=&quot;0.003&quot;&gt;
@@ -970,14 +993,19 @@ my-test-2: test
 <div style="break-before: page; page-break-before: always;"></div><h1 id="changelog"><a class="header" href="#changelog">Changelog</a></h1>
 <p>This page documents new features and bugfixes for cargo-nextest. Please see the <a href="book/stability.html">stability
 policy</a> for how versioning works with cargo-nextest.</p>
-<h2 id="095---2022-02-22"><a class="header" href="#095---2022-02-22"><a href="https://github.com/nextest-rs/nextest/releases/tag/cargo-nextest-0.9.5">0.9.5</a> - 2022-02-22</a></h2>
+<h2 id="096---2022-02-22"><a class="header" href="#096---2022-02-22"><a href="https://github.com/nextest-rs/nextest/releases/tag/cargo-nextest-0.9.6">0.9.6</a> - 2022-02-22</a></h2>
+<h3 id="added"><a class="header" href="#added">Added</a></h3>
+<ul>
+<li>Support Cargo configuration for <a href="https://nexte.st/book/target-runners">target runners</a>.</li>
+</ul>
+<h2 id="095---2022-02-20"><a class="header" href="#095---2022-02-20"><a href="https://github.com/nextest-rs/nextest/releases/tag/cargo-nextest-0.9.5">0.9.5</a> - 2022-02-20</a></h2>
 <h3 id="fixed"><a class="header" href="#fixed">Fixed</a></h3>
 <ul>
 <li>Updated nextest-runner to 0.1.2, fixing cyan coloring of module paths (<a href="https://github.com/nextest-rs/nextest/issues/52">#52</a>).</li>
 </ul>
 <h2 id="094---2022-02-16"><a class="header" href="#094---2022-02-16"><a href="https://github.com/nextest-rs/nextest/releases/tag/cargo-nextest-0.9.4">0.9.4</a> - 2022-02-16</a></h2>
 <p>The big new change is that release binaries are now available! Head over to <a href="https://nexte.st/book/pre-built-binaries">Pre-built binaries</a> for more.</p>
-<h3 id="added"><a class="header" href="#added">Added</a></h3>
+<h3 id="added-1"><a class="header" href="#added-1">Added</a></h3>
 <ul>
 <li>In test output, module paths are now colored cyan (<a href="https://github.com/nextest-rs/nextest/pull/42">#42</a>).</li>
 </ul>
@@ -1005,7 +1033,7 @@ for reporting this!</li>
 </ul>
 <h2 id="090---2022-02-14"><a class="header" href="#090---2022-02-14"><a href="https://github.com/nextest-rs/nextest/releases/tag/cargo-nextest-0.9.0">0.9.0</a> - 2022-02-14</a></h2>
 <p><strong>Initial release.</strong> Happy Valentine's day!</p>
-<h3 id="added-1"><a class="header" href="#added-1">Added</a></h3>
+<h3 id="added-2"><a class="header" href="#added-2">Added</a></h3>
 <p>Supported in this initial release:</p>
 <ul>
 <li><a href="book/listing.html">Listing tests</a></li>

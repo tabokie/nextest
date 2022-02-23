@@ -966,9 +966,9 @@
     }
 
     <span class="doccomment">/// Sets the target specific runner to use, instead of trying to execute</span>
-    <span class="doccomment">/// the binary natively</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_target_runner</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">target_runner</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">TargetRunner</span><span class="op">&gt;</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">target_runner</span> <span class="op">=</span> <span class="ident">target_runner</span>;
+    <span class="doccomment">/// the binary natively.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_target_runner</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">target_runner</span>: <span class="ident">TargetRunner</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
+        <span class="self">self</span>.<span class="ident">target_runner</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">target_runner</span>);
         <span class="self">self</span>
     }
 
