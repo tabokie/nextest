@@ -969,8 +969,8 @@
 <span class="kw">impl</span> <span class="ident">fmt::Display</span> <span class="kw">for</span> <span class="ident">TargetRunnerError</span> {
     <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">fmt::Result</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident"><span class="self">Self</span>::UnknownHostPlatform</span>(<span class="ident">error</span>) =&gt; {
-                <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;unable to determine host triple: {}&quot;</span>, <span class="ident">error</span>)
+            <span class="ident"><span class="self">Self</span>::UnknownHostPlatform</span>(<span class="kw">_</span>) =&gt; {
+                <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;unable to determine host platform&quot;</span>)
             }
             <span class="ident"><span class="self">Self</span>::InvalidEnvironmentVar</span>(<span class="ident">key</span>) =&gt; {
                 <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;environment variable &#39;{}&#39; contained non-utf8 data&quot;</span>, <span class="ident">key</span>)
@@ -985,20 +985,20 @@
             <span class="ident"><span class="self">Self</span>::UnableToReadDir</span>(<span class="ident">io</span>) =&gt; {
                 <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;unable to read directory: {}&quot;</span>, <span class="ident">io</span>)
             }
-            <span class="ident"><span class="self">Self</span>::FailedPathCanonicalization</span> { <span class="ident">path</span>, <span class="ident">error</span> } =&gt; {
-                <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;failed to canonicalize path &#39;{}&#39;: {}&quot;</span>, <span class="ident">path</span>, <span class="ident">error</span>)
+            <span class="ident"><span class="self">Self</span>::FailedPathCanonicalization</span> { <span class="ident">path</span>, .. } =&gt; {
+                <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;failed to canonicalize path: {}&quot;</span>, <span class="ident">path</span>)
             }
             <span class="ident"><span class="self">Self</span>::NonUtf8Path</span>(<span class="ident">path</span>) =&gt; {
                 <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;path &#39;{}&#39; is non-utf8&quot;</span>, <span class="ident">path</span>.<span class="ident">display</span>())
             }
-            <span class="ident"><span class="self">Self</span>::FailedToReadConfig</span> { <span class="ident">path</span>, <span class="ident">error</span> } =&gt; {
-                <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;failed to read &#39;{}&#39;: {}&quot;</span>, <span class="ident">path</span>, <span class="ident">error</span>)
+            <span class="ident"><span class="self">Self</span>::FailedToReadConfig</span> { <span class="ident">path</span>, .. } =&gt; {
+                <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;failed to read config at {}&quot;</span>, <span class="ident">path</span>)
             }
-            <span class="ident"><span class="self">Self</span>::FailedToParseConfig</span> { <span class="ident">path</span>, <span class="ident">error</span> } =&gt; {
-                <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;failed to parse config &#39;{}&#39;: {}&quot;</span>, <span class="ident">path</span>, <span class="ident">error</span>)
+            <span class="ident"><span class="self">Self</span>::FailedToParseConfig</span> { <span class="ident">path</span>, .. } =&gt; {
+                <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;failed to parse config at {}&quot;</span>, <span class="ident">path</span>)
             }
-            <span class="ident"><span class="self">Self</span>::FailedToParseTargetTriple</span> { <span class="ident">triple</span>, <span class="ident">error</span> } =&gt; {
-                <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;failed to parse triple &#39;{}&#39;: {}&quot;</span>, <span class="ident">triple</span>, <span class="ident">error</span>)
+            <span class="ident"><span class="self">Self</span>::FailedToParseTargetTriple</span> { <span class="ident">triple</span>, .. } =&gt; {
+                <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;failed to parse triple &#39;{}&#39;&quot;</span>, <span class="ident">triple</span>)
             }
         }
     }

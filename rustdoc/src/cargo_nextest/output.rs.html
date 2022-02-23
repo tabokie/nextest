@@ -140,13 +140,14 @@
 <span id="139">139</span>
 <span id="140">140</span>
 <span id="141">141</span>
+<span id="142">142</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// Copyright (c) The cargo-guppy Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
 <span class="kw">use</span> <span class="ident">clap</span>::{<span class="ident">ArgEnum</span>, <span class="ident">Args</span>};
 <span class="kw">use</span> <span class="ident">env_logger::fmt::Formatter</span>;
-<span class="kw">use</span> <span class="ident">log</span>::{<span class="ident">Level</span>, <span class="ident">Record</span>};
+<span class="kw">use</span> <span class="ident">log</span>::{<span class="ident">Level</span>, <span class="ident">LevelFilter</span>, <span class="ident">Record</span>};
 <span class="kw">use</span> <span class="ident">owo_colors</span>::{<span class="ident">OwoColorize</span>, <span class="ident">Style</span>};
 <span class="kw">use</span> <span class="ident">std::io::Write</span>;
 <span class="kw">use</span> <span class="ident">supports_color::Stream</span>;
@@ -210,6 +211,7 @@
         }
 
         <span class="ident">env_logger::Builder::from_env</span>(<span class="string">&quot;NEXTEST_LOG&quot;</span>)
+            .<span class="ident">filter_level</span>(<span class="ident">LevelFilter::Warn</span>)
             .<span class="ident">format</span>(<span class="ident">format_fn</span>)
             .<span class="ident">init</span>();
     }
