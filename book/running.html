@@ -168,7 +168,7 @@
 <p>The part of the test in purple is the <em>test binary</em>. A test binary is either:</p>
 <ul>
 <li>a <em>unit test binary</em> built from tests inline within <code>lib.rs</code>. These test binaries are shown by nextest as just the crate name, without a <code>::</code> separator inside them.</li>
-<li>an <em>integration test binary</em> built from tests in the <code>[[test]]</code> section of <code>Cargo.toml</code> (typically tests in the <code>tests</code> directory.) These tests are shown by nextest in the format <code>crate-name::bin-name</code>.</li>
+<li>an <em>integration test binary</em> built from tests in the <code>[[test]]</code> section of <code>Cargo.toml</code> (typically tests in the <code>tests</code> directory.) These tests are shown by nextest in the format <code>crate-name::bin-name</code><sup class="footnote-reference"><a href="#bin-example">2</a></sup>.</li>
 </ul>
 <p>For more about unit and integration tests, see <a href="https://doc.rust-lang.org/cargo/commands/cargo-test.html">the documentation for <code>cargo test</code></a>.</p>
 </li>
@@ -180,6 +180,9 @@
 <pre><code>cargo nextest run -p my-package
 </code></pre>
 <p>For a full list of options accepted by <code>cargo nextest run</code>, see <code>cargo nextest run --help</code>.</p>
+<div class="footnote-definition" id="bin-example"><sup class="footnote-definition-label">2</sup>
+<p><code>bin</code> and <code>example</code> targets can also contain tests. Those are represented as <code>crate-name::bin/bin-name</code> and <code>crate-name::example/example-name</code>, respectively.</p>
+</div>
 <h3 id="filtering-tests"><a class="header" href="#filtering-tests">Filtering tests</a></h3>
 <p>To only run tests that match certain names:</p>
 <pre><code>cargo nextest run &lt;test-name1&gt; &lt;test-name2&gt;...
