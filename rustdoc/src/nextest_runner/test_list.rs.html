@@ -769,6 +769,33 @@
 <span id="768">768</span>
 <span id="769">769</span>
 <span id="770">770</span>
+<span id="771">771</span>
+<span id="772">772</span>
+<span id="773">773</span>
+<span id="774">774</span>
+<span id="775">775</span>
+<span id="776">776</span>
+<span id="777">777</span>
+<span id="778">778</span>
+<span id="779">779</span>
+<span id="780">780</span>
+<span id="781">781</span>
+<span id="782">782</span>
+<span id="783">783</span>
+<span id="784">784</span>
+<span id="785">785</span>
+<span id="786">786</span>
+<span id="787">787</span>
+<span id="788">788</span>
+<span id="789">789</span>
+<span id="790">790</span>
+<span id="791">791</span>
+<span id="792">792</span>
+<span id="793">793</span>
+<span id="794">794</span>
+<span id="795">795</span>
+<span id="796">796</span>
+<span id="797">797</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -839,7 +866,6 @@
                         <span class="kw">let</span> <span class="ident">package</span> <span class="op">=</span> <span class="ident">graph</span>
                             .<span class="ident">metadata</span>(<span class="kw-2">&amp;</span><span class="ident">package_id</span>)
                             .<span class="ident">map_err</span>(<span class="ident">FromMessagesError::PackageGraph</span>)<span class="question-mark">?</span>;
-
                         <span class="comment">// Tests are run in the directory containing Cargo.toml</span>
                         <span class="kw">let</span> <span class="ident">cwd</span> <span class="op">=</span> <span class="ident">package</span>
                             .<span class="ident">manifest_path</span>()
@@ -854,16 +880,44 @@
 
                         <span class="comment">// Construct the binary ID from the package and build target.</span>
                         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">binary_id</span> <span class="op">=</span> <span class="ident">package</span>.<span class="ident">name</span>().<span class="ident">to_owned</span>();
-                        <span class="kw">if</span> <span class="ident">artifact</span>.<span class="ident">target</span>.<span class="ident">name</span> <span class="op">!</span><span class="op">=</span> <span class="ident">package</span>.<span class="ident">name</span>() {
+                        <span class="kw">let</span> <span class="ident">binary_name</span> <span class="op">=</span> <span class="ident">artifact</span>.<span class="ident">target</span>.<span class="ident">name</span>;
+
+                        <span class="comment">// To ensure unique binary IDs, we use the following scheme:</span>
+                        <span class="comment">// 1. If the target is a lib, use the package name.</span>
+                        <span class="comment">//      There can only be one lib per package, so this</span>
+                        <span class="comment">//      will always be unique.</span>
+                        <span class="kw">if</span> <span class="op">!</span><span class="ident">artifact</span>.<span class="ident">target</span>.<span class="ident">kind</span>.<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="string">&quot;lib&quot;</span>.<span class="ident">to_owned</span>()) {
                             <span class="ident">binary_id</span>.<span class="ident">push_str</span>(<span class="string">&quot;::&quot;</span>);
-                            <span class="ident">binary_id</span>.<span class="ident">push_str</span>(<span class="kw-2">&amp;</span><span class="ident">artifact</span>.<span class="ident">target</span>.<span class="ident">name</span>);
+
+                            <span class="kw">match</span> <span class="ident">artifact</span>.<span class="ident">target</span>.<span class="ident">kind</span>.<span class="ident">get</span>(<span class="number">0</span>) {
+                                <span class="comment">// 2. For integration tests, use the target name.</span>
+                                <span class="comment">//      Cargo enforces unique names for the same</span>
+                                <span class="comment">//      kind of targets in a package, so these</span>
+                                <span class="comment">//      will always be unique.</span>
+                                <span class="prelude-val">Some</span>(<span class="ident">kind</span>) <span class="kw">if</span> <span class="ident">kind</span> <span class="op">==</span> <span class="string">&quot;test&quot;</span> =&gt; {
+                                    <span class="ident">binary_id</span>.<span class="ident">push_str</span>(<span class="kw-2">&amp;</span><span class="ident">binary_name</span>);
+                                }
+                                <span class="comment">// 3. For all other target kinds, use a</span>
+                                <span class="comment">//      combination of the target kind and</span>
+                                <span class="comment">//      the target name. For the same reason</span>
+                                <span class="comment">//      as above, these will always be unique.</span>
+                                <span class="prelude-val">Some</span>(<span class="ident">kind</span>) =&gt; {
+                                    <span class="ident">binary_id</span>.<span class="ident">push_str</span>(<span class="kw-2">&amp;</span><span class="macro">format!</span>(<span class="string">&quot;{}/{}&quot;</span>, <span class="ident">kind</span>, <span class="ident">binary_name</span>));
+                                }
+                                <span class="prelude-val">None</span> =&gt; {
+                                    <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">FromMessagesError::MissingTargetKind</span> {
+                                        <span class="ident">package_name</span>: <span class="ident">package</span>.<span class="ident">name</span>().<span class="ident">to_owned</span>(),
+                                        <span class="ident">binary_name</span>: <span class="ident">binary_name</span>.<span class="ident">clone</span>(),
+                                    });
+                                }
+                            }
                         }
 
                         <span class="ident">binaries</span>.<span class="ident">push</span>(<span class="ident">RustTestArtifact</span> {
                             <span class="ident">binary_id</span>,
                             <span class="ident">package</span>,
                             <span class="ident">binary_path</span>: <span class="ident">binary</span>,
-                            <span class="ident">binary_name</span>: <span class="ident">artifact</span>.<span class="ident">target</span>.<span class="ident">name</span>,
+                            <span class="ident">binary_name</span>,
                             <span class="ident">cwd</span>,
                         })
                     }
