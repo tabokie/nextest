@@ -325,6 +325,13 @@
 <span id="323">323</span>
 <span id="324">324</span>
 <span id="325">325</span>
+<span id="326">326</span>
+<span id="327">327</span>
+<span id="328">328</span>
+<span id="329">329</span>
+<span id="330">330</span>
+<span id="331">331</span>
+<span id="332">332</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -475,37 +482,43 @@
 
     <span class="doccomment">/// Returns the retry count for this profile.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">retries</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">usize</span> {
-        <span class="self">self</span>.<span class="ident">custom_profile</span>.<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">profile</span><span class="op">|</span> <span class="ident">profile</span>.<span class="ident">retries</span>)
+        <span class="self">self</span>.<span class="ident">custom_profile</span>
+            .<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">profile</span><span class="op">|</span> <span class="ident">profile</span>.<span class="ident">retries</span>)
             .<span class="ident">unwrap_or</span>(<span class="self">self</span>.<span class="ident">default_profile</span>.<span class="ident">retries</span>)
     }
 
     <span class="doccomment">/// Returns the time after which tests are treated as slow for this profile.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">slow_timeout</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Duration</span> {
-        <span class="self">self</span>.<span class="ident">custom_profile</span>.<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">profile</span><span class="op">|</span> <span class="ident">profile</span>.<span class="ident">slow_timeout</span>)
+        <span class="self">self</span>.<span class="ident">custom_profile</span>
+            .<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">profile</span><span class="op">|</span> <span class="ident">profile</span>.<span class="ident">slow_timeout</span>)
             .<span class="ident">unwrap_or</span>(<span class="self">self</span>.<span class="ident">default_profile</span>.<span class="ident">slow_timeout</span>)
     }
 
     <span class="doccomment">/// Returns the test status level.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">status_level</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">StatusLevel</span> {
-        <span class="self">self</span>.<span class="ident">custom_profile</span>.<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">profile</span><span class="op">|</span> <span class="ident">profile</span>.<span class="ident">status_level</span>)
+        <span class="self">self</span>.<span class="ident">custom_profile</span>
+            .<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">profile</span><span class="op">|</span> <span class="ident">profile</span>.<span class="ident">status_level</span>)
             .<span class="ident">unwrap_or</span>(<span class="self">self</span>.<span class="ident">default_profile</span>.<span class="ident">status_level</span>)
     }
 
     <span class="doccomment">/// Returns the failure output config for this profile.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">failure_output</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">TestOutputDisplay</span> {
-        <span class="self">self</span>.<span class="ident">custom_profile</span>.<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">profile</span><span class="op">|</span> <span class="ident">profile</span>.<span class="ident">failure_output</span>)
+        <span class="self">self</span>.<span class="ident">custom_profile</span>
+            .<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">profile</span><span class="op">|</span> <span class="ident">profile</span>.<span class="ident">failure_output</span>)
             .<span class="ident">unwrap_or</span>(<span class="self">self</span>.<span class="ident">default_profile</span>.<span class="ident">failure_output</span>)
     }
 
     <span class="doccomment">/// Returns the failure output config for this profile.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">success_output</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">TestOutputDisplay</span> {
-        <span class="self">self</span>.<span class="ident">custom_profile</span>.<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">profile</span><span class="op">|</span> <span class="ident">profile</span>.<span class="ident">success_output</span>)
+        <span class="self">self</span>.<span class="ident">custom_profile</span>
+            .<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">profile</span><span class="op">|</span> <span class="ident">profile</span>.<span class="ident">success_output</span>)
             .<span class="ident">unwrap_or</span>(<span class="self">self</span>.<span class="ident">default_profile</span>.<span class="ident">success_output</span>)
     }
 
     <span class="doccomment">/// Returns the fail-fast config for this profile.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">fail_fast</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
-        <span class="self">self</span>.<span class="ident">custom_profile</span>.<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">profile</span><span class="op">|</span> <span class="ident">profile</span>.<span class="ident">fail_fast</span>)
+        <span class="self">self</span>.<span class="ident">custom_profile</span>
+            .<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">profile</span><span class="op">|</span> <span class="ident">profile</span>.<span class="ident">fail_fast</span>)
             .<span class="ident">unwrap_or</span>(<span class="self">self</span>.<span class="ident">default_profile</span>.<span class="ident">fail_fast</span>)
     }
 
@@ -520,7 +533,8 @@
         <span class="ident">path</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">path</span><span class="op">|</span> {
             <span class="kw">let</span> <span class="ident">path</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">store_dir</span>.<span class="ident">join</span>(<span class="ident">path</span>);
             <span class="kw">let</span> <span class="ident">report_name</span> <span class="op">=</span> <span class="self">self</span>
-                .<span class="ident">custom_profile</span>.<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">profile</span><span class="op">|</span> <span class="ident">profile</span>.<span class="ident">junit</span>.<span class="ident">report_name</span>.<span class="ident">as_deref</span>())
+                .<span class="ident">custom_profile</span>
+                .<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">profile</span><span class="op">|</span> <span class="ident">profile</span>.<span class="ident">junit</span>.<span class="ident">report_name</span>.<span class="ident">as_deref</span>())
                 .<span class="ident">unwrap_or</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">default_profile</span>.<span class="ident">junit</span>.<span class="ident">report_name</span>);
             <span class="ident">NextestJunitConfig</span> { <span class="ident">path</span>, <span class="ident">report_name</span> }
         })
