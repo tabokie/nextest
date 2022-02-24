@@ -868,7 +868,7 @@
 }
 
 <span class="kw">fn</span> <span class="ident">runner_for_target</span>(<span class="ident">triple</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">TargetRunner</span><span class="op">&gt;</span> {
-    <span class="kw">match</span> <span class="ident">TargetRunner::for_target</span>(<span class="ident">triple</span>, <span class="prelude-val">None</span>) {
+    <span class="kw">match</span> <span class="ident">TargetRunner::for_target</span>(<span class="ident">triple</span>) {
         <span class="prelude-val">Ok</span>(<span class="ident">runner</span>) =&gt; <span class="ident">runner</span>,
         <span class="prelude-val">Err</span>(<span class="ident">err</span>) =&gt; {
             <span class="ident">warn_on_target_runner_err</span>(<span class="kw-2">&amp;</span><span class="ident">err</span>).<span class="ident">expect</span>(<span class="string">&quot;writing to a string is infallible&quot;</span>);

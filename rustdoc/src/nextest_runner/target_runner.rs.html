@@ -304,13 +304,169 @@
 <span id="303">303</span>
 <span id="304">304</span>
 <span id="305">305</span>
+<span id="306">306</span>
+<span id="307">307</span>
+<span id="308">308</span>
+<span id="309">309</span>
+<span id="310">310</span>
+<span id="311">311</span>
+<span id="312">312</span>
+<span id="313">313</span>
+<span id="314">314</span>
+<span id="315">315</span>
+<span id="316">316</span>
+<span id="317">317</span>
+<span id="318">318</span>
+<span id="319">319</span>
+<span id="320">320</span>
+<span id="321">321</span>
+<span id="322">322</span>
+<span id="323">323</span>
+<span id="324">324</span>
+<span id="325">325</span>
+<span id="326">326</span>
+<span id="327">327</span>
+<span id="328">328</span>
+<span id="329">329</span>
+<span id="330">330</span>
+<span id="331">331</span>
+<span id="332">332</span>
+<span id="333">333</span>
+<span id="334">334</span>
+<span id="335">335</span>
+<span id="336">336</span>
+<span id="337">337</span>
+<span id="338">338</span>
+<span id="339">339</span>
+<span id="340">340</span>
+<span id="341">341</span>
+<span id="342">342</span>
+<span id="343">343</span>
+<span id="344">344</span>
+<span id="345">345</span>
+<span id="346">346</span>
+<span id="347">347</span>
+<span id="348">348</span>
+<span id="349">349</span>
+<span id="350">350</span>
+<span id="351">351</span>
+<span id="352">352</span>
+<span id="353">353</span>
+<span id="354">354</span>
+<span id="355">355</span>
+<span id="356">356</span>
+<span id="357">357</span>
+<span id="358">358</span>
+<span id="359">359</span>
+<span id="360">360</span>
+<span id="361">361</span>
+<span id="362">362</span>
+<span id="363">363</span>
+<span id="364">364</span>
+<span id="365">365</span>
+<span id="366">366</span>
+<span id="367">367</span>
+<span id="368">368</span>
+<span id="369">369</span>
+<span id="370">370</span>
+<span id="371">371</span>
+<span id="372">372</span>
+<span id="373">373</span>
+<span id="374">374</span>
+<span id="375">375</span>
+<span id="376">376</span>
+<span id="377">377</span>
+<span id="378">378</span>
+<span id="379">379</span>
+<span id="380">380</span>
+<span id="381">381</span>
+<span id="382">382</span>
+<span id="383">383</span>
+<span id="384">384</span>
+<span id="385">385</span>
+<span id="386">386</span>
+<span id="387">387</span>
+<span id="388">388</span>
+<span id="389">389</span>
+<span id="390">390</span>
+<span id="391">391</span>
+<span id="392">392</span>
+<span id="393">393</span>
+<span id="394">394</span>
+<span id="395">395</span>
+<span id="396">396</span>
+<span id="397">397</span>
+<span id="398">398</span>
+<span id="399">399</span>
+<span id="400">400</span>
+<span id="401">401</span>
+<span id="402">402</span>
+<span id="403">403</span>
+<span id="404">404</span>
+<span id="405">405</span>
+<span id="406">406</span>
+<span id="407">407</span>
+<span id="408">408</span>
+<span id="409">409</span>
+<span id="410">410</span>
+<span id="411">411</span>
+<span id="412">412</span>
+<span id="413">413</span>
+<span id="414">414</span>
+<span id="415">415</span>
+<span id="416">416</span>
+<span id="417">417</span>
+<span id="418">418</span>
+<span id="419">419</span>
+<span id="420">420</span>
+<span id="421">421</span>
+<span id="422">422</span>
+<span id="423">423</span>
+<span id="424">424</span>
+<span id="425">425</span>
+<span id="426">426</span>
+<span id="427">427</span>
+<span id="428">428</span>
+<span id="429">429</span>
+<span id="430">430</span>
+<span id="431">431</span>
+<span id="432">432</span>
+<span id="433">433</span>
+<span id="434">434</span>
+<span id="435">435</span>
+<span id="436">436</span>
+<span id="437">437</span>
+<span id="438">438</span>
+<span id="439">439</span>
+<span id="440">440</span>
+<span id="441">441</span>
+<span id="442">442</span>
+<span id="443">443</span>
+<span id="444">444</span>
+<span id="445">445</span>
+<span id="446">446</span>
+<span id="447">447</span>
+<span id="448">448</span>
+<span id="449">449</span>
+<span id="450">450</span>
+<span id="451">451</span>
+<span id="452">452</span>
+<span id="453">453</span>
+<span id="454">454</span>
+<span id="455">455</span>
+<span id="456">456</span>
+<span id="457">457</span>
+<span id="458">458</span>
+<span id="459">459</span>
+<span id="460">460</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
-<span class="doccomment">//! Adds support for [target runners](https://doc.rust-lang.org/cargo/reference/config.html#targettriplerunner)</span>
+<span class="doccomment">//! Support for [target runners](https://doc.rust-lang.org/cargo/reference/config.html#targettriplerunner)</span>
 
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::errors::TargetRunnerError</span>;
 <span class="kw">use</span> <span class="ident">camino</span>::{<span class="ident">Utf8Path</span>, <span class="ident">Utf8PathBuf</span>};
+<span class="kw">use</span> <span class="ident">std::borrow::Cow</span>;
 <span class="kw">use</span> <span class="ident">target_spec::Platform</span>;
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">serde::Deserialize</span>, <span class="ident">Debug</span>)]</span>
@@ -322,7 +478,7 @@
 
 <span class="doccomment">/// A [target runner](https://doc.rust-lang.org/cargo/reference/config.html#targettriplerunner)</span>
 <span class="doccomment">/// used to execute a test binary rather than the default of executing natively</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">TargetRunner</span> {
     <span class="doccomment">/// This is required</span>
     <span class="ident">runner_binary</span>: <span class="ident">Utf8PathBuf</span>,
@@ -334,28 +490,30 @@
     <span class="doccomment">/// Acquires the [target runner](https://doc.rust-lang.org/cargo/reference/config.html#targettriplerunner)</span>
     <span class="doccomment">/// which can be set in a [.cargo/config.toml](https://doc.rust-lang.org/cargo/reference/config.html#hierarchical-structure)</span>
     <span class="doccomment">/// or via a `CARGO_TARGET_{TRIPLE}_RUNNER` environment variable</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">for_target</span>(
-        <span class="ident">target_triple</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>,
-        <span class="ident">terminate_search_at</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">Utf8Path</span><span class="op">&gt;</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">TargetRunnerError</span><span class="op">&gt;</span> {
-        <span class="ident"><span class="self">Self</span>::get_runner_by_precedence</span>(<span class="ident">target_triple</span>, <span class="prelude-val">None</span>, <span class="ident">terminate_search_at</span>)
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">for_target</span>(<span class="ident">target_triple</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">TargetRunnerError</span><span class="op">&gt;</span> {
+        <span class="ident"><span class="self">Self</span>::get_runner_by_precedence</span>(<span class="ident">target_triple</span>, <span class="prelude-val">None</span>, <span class="prelude-val">None</span>)
     }
 
-    <span class="doccomment">/// Configures the root directory that starts the search for cargo configs.</span>
+    <span class="doccomment">/// Configures the start and terminate search the search for cargo configs.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// The default is normally the current working directory, but this method</span>
-    <span class="doccomment">/// is made available for testing purposes.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_root</span>(
+    <span class="doccomment">/// The default is normally the current working directory. Not part of the public API, for</span>
+    <span class="doccomment">/// testing only.</span>
+    <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_isolation</span>(
         <span class="ident">target_triple</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>,
-        <span class="ident">root</span>: <span class="ident">Utf8PathBuf</span>,
-        <span class="ident">terminate_search_at</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">Utf8Path</span><span class="op">&gt;</span>,
+        <span class="ident">start_search_at</span>: <span class="kw-2">&amp;</span><span class="ident">Utf8Path</span>,
+        <span class="ident">terminate_search_at</span>: <span class="kw-2">&amp;</span><span class="ident">Utf8Path</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">TargetRunnerError</span><span class="op">&gt;</span> {
-        <span class="ident"><span class="self">Self</span>::get_runner_by_precedence</span>(<span class="ident">target_triple</span>, <span class="prelude-val">Some</span>(<span class="ident">root</span>), <span class="ident">terminate_search_at</span>)
+        <span class="ident"><span class="self">Self</span>::get_runner_by_precedence</span>(
+            <span class="ident">target_triple</span>,
+            <span class="prelude-val">Some</span>(<span class="ident">start_search_at</span>),
+            <span class="prelude-val">Some</span>(<span class="ident">terminate_search_at</span>),
+        )
     }
 
     <span class="kw">fn</span> <span class="ident">get_runner_by_precedence</span>(
         <span class="ident">target_triple</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>,
-        <span class="ident">root</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Utf8PathBuf</span><span class="op">&gt;</span>,
+        <span class="ident">root</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">Utf8Path</span><span class="op">&gt;</span>,
         <span class="ident">terminate_search_at</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">Utf8Path</span><span class="op">&gt;</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">TargetRunnerError</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">target</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">target_triple</span> {
@@ -379,21 +537,22 @@
             <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">tr</span>));
         }
 
-        <span class="kw">let</span> <span class="ident">root</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">root</span> {
-            <span class="prelude-val">Some</span>(<span class="ident">rp</span>) =&gt; <span class="ident">rp</span>,
+        <span class="kw">let</span> <span class="ident">start_search_at</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">root</span> {
+            <span class="prelude-val">Some</span>(<span class="ident">rp</span>) =&gt; <span class="ident">Cow::Borrowed</span>(<span class="ident">rp</span>),
             <span class="prelude-val">None</span> =&gt; {
                 <span class="comment">// This is a bit non-intuitive, but the .cargo/config.toml hierarchy is actually</span>
                 <span class="comment">// based on the current working directory, _not_ the manifest path, this bug</span>
                 <span class="comment">// has existed for a while https://github.com/rust-lang/cargo/issues/2930</span>
-                <span class="ident">std::env::current_dir</span>()
+                <span class="kw">let</span> <span class="ident">dir</span> <span class="op">=</span> <span class="ident">std::env::current_dir</span>()
                     .<span class="ident">map_err</span>(<span class="ident">TargetRunnerError::UnableToReadDir</span>)
                     .<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">cwd</span><span class="op">|</span> {
                         <span class="ident">Utf8PathBuf::from_path_buf</span>(<span class="ident">cwd</span>).<span class="ident">map_err</span>(<span class="ident">TargetRunnerError::NonUtf8Path</span>)
-                    })<span class="question-mark">?</span>
+                    })<span class="question-mark">?</span>;
+                <span class="ident">Cow::Owned</span>(<span class="ident">dir</span>)
             }
         };
 
-        <span class="ident"><span class="self">Self</span>::find_config</span>(<span class="ident">target</span>, <span class="ident">root</span>, <span class="ident">terminate_search_at</span>)
+        <span class="ident"><span class="self">Self</span>::find_config</span>(<span class="ident">target</span>, <span class="kw-2">&amp;</span><span class="ident">start_search_at</span>, <span class="ident">terminate_search_at</span>)
     }
 
     <span class="kw">fn</span> <span class="ident">from_env</span>(<span class="ident">env_key</span>: <span class="ident">String</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">TargetRunnerError</span><span class="op">&gt;</span> {
@@ -416,9 +575,12 @@
 
     <span class="doccomment">/// Attempts to find a target runner for the specified target from a</span>
     <span class="doccomment">/// [cargo config](https://doc.rust-lang.org/cargo/reference/config.html#hierarchical-structure)</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Not part of the public API. For testing only.</span>
+    <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">find_config</span>(
         <span class="ident">target</span>: <span class="ident">target_spec::Platform</span>,
-        <span class="ident">root</span>: <span class="ident">Utf8PathBuf</span>,
+        <span class="ident">start_search_at</span>: <span class="kw-2">&amp;</span><span class="ident">Utf8Path</span>,
         <span class="ident">terminate_search_at</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">Utf8Path</span><span class="op">&gt;</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">TargetRunnerError</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">configs</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
@@ -441,10 +603,10 @@
             <span class="ident">ret</span>
         }
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">dir</span> <span class="op">=</span> <span class="ident">root</span>
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">dir</span> <span class="op">=</span> <span class="ident">start_search_at</span>
             .<span class="ident">canonicalize</span>()
             .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">error</span><span class="op">|</span> <span class="ident">TargetRunnerError::FailedPathCanonicalization</span> {
-                <span class="ident">path</span>: <span class="ident">root</span>.<span class="ident">clone</span>(),
+                <span class="ident">path</span>: <span class="ident">start_search_at</span>.<span class="ident">to_owned</span>(),
                 <span class="ident">error</span>,
             })
             .<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">canon</span><span class="op">|</span> {
@@ -474,7 +636,7 @@
         <span class="kw">if</span> <span class="ident">terminate_search_at</span>.<span class="ident">is_none</span>() {
             <span class="comment">// Attempt lookup the $CARGO_HOME directory from the cwd, as that can</span>
             <span class="comment">// contain a default config.toml</span>
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">cargo_home_path</span> <span class="op">=</span> <span class="ident">home::cargo_home_with_cwd</span>(<span class="ident">root</span>.<span class="ident">as_std_path</span>())
+            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">cargo_home_path</span> <span class="op">=</span> <span class="ident">home::cargo_home_with_cwd</span>(<span class="ident">start_search_at</span>.<span class="ident">as_std_path</span>())
                 .<span class="ident">map_err</span>(<span class="ident">TargetRunnerError::UnableToReadDir</span>)
                 .<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">home</span><span class="op">|</span> {
                     <span class="ident">Utf8PathBuf::from_path_buf</span>(<span class="ident">home</span>).<span class="ident">map_err</span>(<span class="ident">TargetRunnerError::NonUtf8Path</span>)
@@ -608,6 +770,154 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">args</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl</span> <span class="ident">Iterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">args</span>.<span class="ident">iter</span>().<span class="ident">map</span>(<span class="ident">AsRef::as_ref</span>)
     }
+}
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
+<span class="kw">mod</span> <span class="ident">tests</span> {
+    <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+    <span class="kw">use</span> <span class="ident">color_eyre::eyre</span>::{<span class="ident">Context</span>, <span class="prelude-ty">Result</span>};
+    <span class="kw">use</span> <span class="ident">std::convert::TryFrom</span>;
+    <span class="kw">use</span> <span class="ident">target_spec::TargetFeatures</span>;
+    <span class="kw">use</span> <span class="ident">tempfile::TempDir</span>;
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_find_config</span>() {
+        <span class="kw">let</span> <span class="ident">dir</span> <span class="op">=</span> <span class="ident">setup_temp_dir</span>().<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">dir_path</span> <span class="op">=</span> <span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">Utf8Path</span><span class="op">&gt;</span><span class="ident">::try_from</span>(<span class="ident">dir</span>.<span class="ident">path</span>()).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">dir_foo_path</span> <span class="op">=</span> <span class="ident">Utf8PathBuf::try_from</span>(<span class="ident">dir</span>.<span class="ident">path</span>().<span class="ident">join</span>(<span class="string">&quot;foo&quot;</span>)).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">dir_foo_bar_path</span> <span class="op">=</span> <span class="ident">Utf8PathBuf::try_from</span>(<span class="ident">dir</span>.<span class="ident">path</span>().<span class="ident">join</span>(<span class="string">&quot;foo/bar&quot;</span>)).<span class="ident">unwrap</span>();
+
+        <span class="comment">// ---</span>
+        <span class="comment">// Searches through the full directory tree</span>
+        <span class="comment">// ---</span>
+        <span class="macro">assert_eq!</span>(
+            <span class="ident">TargetRunner::find_config</span>(
+                <span class="ident">Platform::new</span>(<span class="string">&quot;x86_64-pc-windows-msvc&quot;</span>, <span class="ident">TargetFeatures::Unknown</span>).<span class="ident">unwrap</span>(),
+                <span class="kw-2">&amp;</span><span class="ident">dir_foo_bar_path</span>,
+                <span class="prelude-val">Some</span>(<span class="ident">dir_path</span>),
+            )
+            .<span class="ident">unwrap</span>(),
+            <span class="prelude-val">Some</span>(<span class="ident">TargetRunner</span> {
+                <span class="ident">runner_binary</span>: <span class="string">&quot;wine&quot;</span>.<span class="ident">into</span>(),
+                <span class="ident">args</span>: <span class="macro">vec!</span>[<span class="string">&quot;--test-arg&quot;</span>.<span class="ident">into</span>()],
+            }),
+        );
+
+        <span class="macro">assert_eq!</span>(
+            <span class="ident">TargetRunner::find_config</span>(
+                <span class="ident">Platform::new</span>(<span class="string">&quot;x86_64-pc-windows-gnu&quot;</span>, <span class="ident">TargetFeatures::Unknown</span>).<span class="ident">unwrap</span>(),
+                <span class="kw-2">&amp;</span><span class="ident">dir_foo_bar_path</span>,
+                <span class="prelude-val">Some</span>(<span class="ident">dir_path</span>),
+            )
+            .<span class="ident">unwrap</span>(),
+            <span class="prelude-val">Some</span>(<span class="ident">TargetRunner</span> {
+                <span class="ident">runner_binary</span>: <span class="string">&quot;wine2&quot;</span>.<span class="ident">into</span>(),
+                <span class="ident">args</span>: <span class="macro">vec!</span>[],
+            }),
+        );
+
+        <span class="macro">assert_eq!</span>(
+            <span class="ident">TargetRunner::find_config</span>(
+                <span class="ident">Platform::new</span>(<span class="string">&quot;x86_64-unknown-linux-gnu&quot;</span>, <span class="ident">TargetFeatures::Unknown</span>).<span class="ident">unwrap</span>(),
+                <span class="kw-2">&amp;</span><span class="ident">dir_foo_bar_path</span>,
+                <span class="prelude-val">Some</span>(<span class="ident">dir_path</span>),
+            )
+            .<span class="ident">unwrap</span>(),
+            <span class="prelude-val">Some</span>(<span class="ident">TargetRunner</span> {
+                <span class="ident">runner_binary</span>: <span class="string">&quot;unix-runner&quot;</span>.<span class="ident">into</span>(),
+                <span class="ident">args</span>: <span class="macro">vec!</span>[],
+            }),
+        );
+
+        <span class="comment">// ---</span>
+        <span class="comment">// Searches starting from the &quot;foo&quot; directory which has no .cargo/config in it</span>
+        <span class="comment">// ---</span>
+        <span class="macro">assert_eq!</span>(
+            <span class="ident">TargetRunner::find_config</span>(
+                <span class="ident">Platform::new</span>(<span class="string">&quot;x86_64-pc-windows-msvc&quot;</span>, <span class="ident">TargetFeatures::Unknown</span>).<span class="ident">unwrap</span>(),
+                <span class="kw-2">&amp;</span><span class="ident">dir_foo_path</span>,
+                <span class="prelude-val">Some</span>(<span class="ident">dir_path</span>),
+            )
+            .<span class="ident">unwrap</span>(),
+            <span class="prelude-val">Some</span>(<span class="ident">TargetRunner</span> {
+                <span class="ident">runner_binary</span>: <span class="string">&quot;parent-wine&quot;</span>.<span class="ident">into</span>(),
+                <span class="ident">args</span>: <span class="macro">vec!</span>[],
+            }),
+        );
+
+        <span class="macro">assert_eq!</span>(
+            <span class="ident">TargetRunner::find_config</span>(
+                <span class="ident">Platform::new</span>(<span class="string">&quot;x86_64-pc-windows-gnu&quot;</span>, <span class="ident">TargetFeatures::Unknown</span>).<span class="ident">unwrap</span>(),
+                <span class="kw-2">&amp;</span><span class="ident">dir_foo_path</span>,
+                <span class="prelude-val">Some</span>(<span class="ident">dir_path</span>),
+            )
+            .<span class="ident">unwrap</span>(),
+            <span class="prelude-val">None</span>,
+        );
+
+        <span class="comment">// ---</span>
+        <span class="comment">// Searches starting and ending at the root directory.</span>
+        <span class="comment">// ---</span>
+        <span class="macro">assert_eq!</span>(
+            <span class="ident">TargetRunner::find_config</span>(
+                <span class="ident">Platform::new</span>(<span class="string">&quot;x86_64-pc-windows-msvc&quot;</span>, <span class="ident">TargetFeatures::Unknown</span>).<span class="ident">unwrap</span>(),
+                <span class="ident">dir_path</span>,
+                <span class="prelude-val">Some</span>(<span class="ident">dir_path</span>),
+            )
+            .<span class="ident">unwrap</span>(),
+            <span class="prelude-val">Some</span>(<span class="ident">TargetRunner</span> {
+                <span class="ident">runner_binary</span>: <span class="string">&quot;parent-wine&quot;</span>.<span class="ident">into</span>(),
+                <span class="ident">args</span>: <span class="macro">vec!</span>[],
+            }),
+        );
+
+        <span class="macro">assert_eq!</span>(
+            <span class="ident">TargetRunner::find_config</span>(
+                <span class="ident">Platform::new</span>(<span class="string">&quot;x86_64-pc-windows-gnu&quot;</span>, <span class="ident">TargetFeatures::Unknown</span>).<span class="ident">unwrap</span>(),
+                <span class="ident">dir_path</span>,
+                <span class="prelude-val">Some</span>(<span class="ident">dir_path</span>),
+            )
+            .<span class="ident">unwrap</span>(),
+            <span class="prelude-val">None</span>,
+        );
+    }
+
+    <span class="kw">fn</span> <span class="ident">setup_temp_dir</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TempDir</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">dir</span> <span class="op">=</span> <span class="ident">tempfile::Builder::new</span>()
+            .<span class="ident">tempdir</span>()
+            .<span class="ident">wrap_err</span>(<span class="string">&quot;error creating tempdir&quot;</span>)<span class="question-mark">?</span>;
+
+        <span class="ident">std::fs::create_dir_all</span>(<span class="ident">dir</span>.<span class="ident">path</span>().<span class="ident">join</span>(<span class="string">&quot;.cargo&quot;</span>))
+            .<span class="ident">wrap_err</span>(<span class="string">&quot;error creating .cargo subdir&quot;</span>)<span class="question-mark">?</span>;
+        <span class="ident">std::fs::create_dir_all</span>(<span class="ident">dir</span>.<span class="ident">path</span>().<span class="ident">join</span>(<span class="string">&quot;foo/bar/.cargo&quot;</span>))
+            .<span class="ident">wrap_err</span>(<span class="string">&quot;error creating foo/bar/.cargo subdir&quot;</span>)<span class="question-mark">?</span>;
+
+        <span class="ident">std::fs::write</span>(<span class="ident">dir</span>.<span class="ident">path</span>().<span class="ident">join</span>(<span class="string">&quot;.cargo/config&quot;</span>), <span class="ident">CARGO_CONFIG_CONTENTS</span>)
+            .<span class="ident">wrap_err</span>(<span class="string">&quot;error writing .cargo/config&quot;</span>)<span class="question-mark">?</span>;
+        <span class="ident">std::fs::write</span>(
+            <span class="ident">dir</span>.<span class="ident">path</span>().<span class="ident">join</span>(<span class="string">&quot;foo/bar/.cargo/config.toml&quot;</span>),
+            <span class="ident">FOO_BAR_CARGO_CONFIG_CONTENTS</span>,
+        )
+        .<span class="ident">wrap_err</span>(<span class="string">&quot;error writing foo/bar/.cargo/config.toml&quot;</span>)<span class="question-mark">?</span>;
+
+        <span class="prelude-val">Ok</span>(<span class="ident">dir</span>)
+    }
+
+    <span class="kw">static</span> <span class="ident">CARGO_CONFIG_CONTENTS</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">r#&quot;
+    [target.x86_64-pc-windows-msvc]
+    runner = &quot;parent-wine&quot;
+
+    [target.&#39;cfg(unix)&#39;]
+    runner = &quot;unix-runner&quot;
+    &quot;#</span>;
+
+    <span class="kw">static</span> <span class="ident">FOO_BAR_CARGO_CONFIG_CONTENTS</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">r#&quot;
+    [target.x86_64-pc-windows-msvc]
+    runner = [&quot;wine&quot;, &quot;--test-arg&quot;]
+
+    [target.&#39;cfg(windows)&#39;]
+    runner = &quot;wine2&quot;
+    &quot;#</span>;
 }
 </code></pre></div>
 </section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="nextest_runner" data-search-index-js="../../search-index.js" data-search-js="../../search.js"></div>
