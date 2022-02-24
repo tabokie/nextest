@@ -247,12 +247,20 @@
 <span id="245">245</span>
 <span id="246">246</span>
 <span id="247">247</span>
+<span id="248">248</span>
+<span id="249">249</span>
+<span id="250">250</span>
+<span id="251">251</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
 <span class="doccomment">//! Filtering tests based on user-specified parameters.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! The main structure in this module is [`TestFilter`], which is created by a [`TestFilterBuilder`].</span>
+
+<span class="attribute">#![<span class="ident">allow</span>(<span class="ident">clippy::nonminimal_bool</span>)]</span>
+<span class="comment">// nonminimal_bool fires on one of the conditions below and appears to suggest an incorrect</span>
+<span class="comment">// result</span>
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">errors::RunIgnoredParseError</span>,
