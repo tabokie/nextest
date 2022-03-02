@@ -63,6 +63,7 @@ sourcesIndex["once_cell"] = {"name":"","files":["imp_std.rs","lib.rs","race.rs"]
 sourcesIndex["os_pipe"] = {"name":"","files":["lib.rs","unix.rs"]};
 sourcesIndex["os_str_bytes"] = {"name":"","dirs":[{"name":"common","files":["mod.rs","raw.rs"]}],"files":["iter.rs","lib.rs","pattern.rs","raw_str.rs","util.rs"]};
 sourcesIndex["owo_colors"] = {"name":"","dirs":[{"name":"colors","files":["css.rs","custom.rs","dynamic.rs","xterm.rs"]}],"files":["colors.rs","combo.rs","dyn_colors.rs","dyn_styles.rs","lib.rs","overrides.rs","styles.rs","supports_colors.rs"]};
+sourcesIndex["passthrough"] = {"name":"","files":["passthrough.rs"]};
 sourcesIndex["pathdiff"] = {"name":"","files":["lib.rs"]};
 sourcesIndex["petgraph"] = {"name":"","dirs":[{"name":"algo","files":["astar.rs","bellman_ford.rs","dijkstra.rs","dominators.rs","feedback_arc_set.rs","floyd_warshall.rs","isomorphism.rs","k_shortest_path.rs","matching.rs","mod.rs","simple_paths.rs","tred.rs"]},{"name":"graph_impl","files":["frozen.rs","mod.rs"]},{"name":"visit","files":["dfsvisit.rs","filter.rs","macros.rs","mod.rs","reversed.rs","traversal.rs"]}],"files":["adj.rs","csr.rs","data.rs","dot.rs","iter_format.rs","iter_utils.rs","lib.rs","macros.rs","operator.rs","prelude.rs","scored.rs","traits_graph.rs","unionfind.rs","util.rs"]};
 sourcesIndex["proc_macro2"] = {"name":"","files":["detection.rs","fallback.rs","lib.rs","marker.rs","parse.rs","wrapper.rs"]};
