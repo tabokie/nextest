@@ -357,7 +357,7 @@
 
     <span class="comment">// jobs is handled by test runner</span>
     <span class="doccomment">/// Build artifacts in release mode, with optimizations</span>
-    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>)]</span>
+    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">short</span> <span class="op">=</span> <span class="string">&#39;r&#39;</span>)]</span>
     <span class="ident">release</span>: <span class="ident">bool</span>,
 
     <span class="doccomment">/// Build artifacts with the specified Cargo profile</span>
@@ -396,7 +396,7 @@
     <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>)]</span>
     <span class="ident">unit_graph</span>: <span class="ident">bool</span>,
 
-    <span class="doccomment">/// Outputs a future incompatibility report at the end of the build (unstable)</span>
+    <span class="doccomment">/// Outputs a future incompatibility report at the end of the build</span>
     <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>)]</span>
     <span class="ident">future_incompat_report</span>: <span class="ident">bool</span>,
 
