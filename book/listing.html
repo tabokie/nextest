@@ -192,7 +192,7 @@ CARGO OPTIONS:
         --workspace                 Build all packages in the workspace
         --exclude &lt;EXCLUDE&gt;         Exclude packages from the test
         --all                       Alias for workspace (deprecated)
-        --release                   Build artifacts in release mode, with optimizations
+    -r, --release                   Build artifacts in release mode, with optimizations
         --cargo-profile &lt;NAME&gt;      Build artifacts with the specified Cargo profile
         --build-jobs &lt;JOBS&gt;         Number of build jobs to run
         --features &lt;FEATURES&gt;       Space or comma separated list of features to activate
@@ -203,7 +203,6 @@ CARGO OPTIONS:
         --ignore-rust-version       Ignore `rust-version` specification in packages
         --unit-graph                Output build graph in JSON (unstable)
         --future-incompat-report    Outputs a future incompatibility report at the end of the build
-                                    (unstable)
         --frozen                    Require Cargo.lock and cache are up to date
         --locked                    Require Cargo.lock is up to date
         --offline                   Run without accessing the network
