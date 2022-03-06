@@ -171,6 +171,10 @@ runner = &quot;wine&quot;
 <p>Then, running this command will cause your tests to be run as <code>wine &lt;test-binary&gt;</code>:</p>
 <pre><code>cargo nextest run --target x86_64-pc-windows-msvc
 </code></pre>
+<blockquote>
+<p><strong>Note:</strong> If your target runner is a shell script, it might malfunction on macOS due to System Integrity Protection's environment sanitization. This is a system limitation with macOS and not a bug in nextest.</p>
+<p>See the discussion in <a href="https://github.com/nextest-rs/nextest/pull/84">PR #84</a> for more.</p>
+</blockquote>
 
                     </main>
 
