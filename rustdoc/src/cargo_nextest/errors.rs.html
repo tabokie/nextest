@@ -137,6 +137,28 @@
 <span id="135">135</span>
 <span id="136">136</span>
 <span id="137">137</span>
+<span id="138">138</span>
+<span id="139">139</span>
+<span id="140">140</span>
+<span id="141">141</span>
+<span id="142">142</span>
+<span id="143">143</span>
+<span id="144">144</span>
+<span id="145">145</span>
+<span id="146">146</span>
+<span id="147">147</span>
+<span id="148">148</span>
+<span id="149">149</span>
+<span id="150">150</span>
+<span id="151">151</span>
+<span id="152">152</span>
+<span id="153">153</span>
+<span id="154">154</span>
+<span id="155">155</span>
+<span id="156">156</span>
+<span id="157">157</span>
+<span id="158">158</span>
+<span id="159">159</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -164,6 +186,10 @@
         <span class="ident">exit_code</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>,
     },
     <span class="ident">TestRunFailed</span>,
+    <span class="ident">ExperimentalFeatureNotEnabled</span> {
+        <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>,
+        <span class="ident">var_name</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>,
+    },
 }
 
 <span class="kw">impl</span> <span class="ident">ExpectedError</span> {
@@ -177,6 +203,10 @@
 
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">config_parse_error</span>(<span class="ident">err</span>: <span class="ident">ConfigParseError</span>) -&gt; <span class="self">Self</span> {
         <span class="ident"><span class="self">Self</span>::ConfigParseError</span> { <span class="ident">err</span> }
+    }
+
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">experimental_feature_error</span>(<span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>, <span class="ident">var_name</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>) -&gt; <span class="self">Self</span> {
+        <span class="ident"><span class="self">Self</span>::ExperimentalFeatureNotEnabled</span> { <span class="ident">name</span>, <span class="ident">var_name</span> }
     }
 
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">build_failed</span>(
@@ -205,6 +235,9 @@
             }
             <span class="ident"><span class="self">Self</span>::BuildFailed</span> { .. } =&gt; <span class="ident">NextestExitCode::BUILD_FAILED</span>,
             <span class="ident"><span class="self">Self</span>::TestRunFailed</span> =&gt; <span class="ident">NextestExitCode::TEST_RUN_FAILED</span>,
+            <span class="ident"><span class="self">Self</span>::ExperimentalFeatureNotEnabled</span> { .. } =&gt; {
+                <span class="ident">NextestExitCode::EXPERIMENTAL_FEATURE_NOT_ENABLED</span>
+            }
         }
     }
 
@@ -251,6 +284,14 @@
                 <span class="macro">log::error!</span>(<span class="string">&quot;test run failed&quot;</span>);
                 <span class="prelude-val">None</span>
             }
+            <span class="ident"><span class="self">Self</span>::ExperimentalFeatureNotEnabled</span> { <span class="ident">name</span>, <span class="ident">var_name</span> } =&gt; {
+                <span class="macro">log::error!</span>(
+                    <span class="string">&quot;&#39;{}&#39; is an experimental feature and must be enabled with {}=1&quot;</span>,
+                    <span class="ident">name</span>,
+                    <span class="ident">var_name</span>
+                );
+                <span class="prelude-val">None</span>
+            }
         };
 
         <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">err</span>) <span class="op">=</span> <span class="ident">next_error</span> {
@@ -269,6 +310,9 @@
             <span class="ident"><span class="self">Self</span>::ConfigParseError</span> { .. } =&gt; <span class="macro">writeln!</span>(<span class="ident">f</span>, <span class="string">&quot;config read error&quot;</span>),
             <span class="ident"><span class="self">Self</span>::BuildFailed</span> { .. } =&gt; <span class="macro">writeln!</span>(<span class="ident">f</span>, <span class="string">&quot;build failed&quot;</span>),
             <span class="ident"><span class="self">Self</span>::TestRunFailed</span> =&gt; <span class="macro">writeln!</span>(<span class="ident">f</span>, <span class="string">&quot;test run failed&quot;</span>),
+            <span class="ident"><span class="self">Self</span>::ExperimentalFeatureNotEnabled</span> { .. } =&gt; {
+                <span class="macro">writeln!</span>(<span class="ident">f</span>, <span class="string">&quot;experimental feature not enabled&quot;</span>)
+            }
         }
     }
 }
