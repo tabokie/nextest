@@ -460,6 +460,66 @@
 <span id="458">458</span>
 <span id="459">459</span>
 <span id="460">460</span>
+<span id="461">461</span>
+<span id="462">462</span>
+<span id="463">463</span>
+<span id="464">464</span>
+<span id="465">465</span>
+<span id="466">466</span>
+<span id="467">467</span>
+<span id="468">468</span>
+<span id="469">469</span>
+<span id="470">470</span>
+<span id="471">471</span>
+<span id="472">472</span>
+<span id="473">473</span>
+<span id="474">474</span>
+<span id="475">475</span>
+<span id="476">476</span>
+<span id="477">477</span>
+<span id="478">478</span>
+<span id="479">479</span>
+<span id="480">480</span>
+<span id="481">481</span>
+<span id="482">482</span>
+<span id="483">483</span>
+<span id="484">484</span>
+<span id="485">485</span>
+<span id="486">486</span>
+<span id="487">487</span>
+<span id="488">488</span>
+<span id="489">489</span>
+<span id="490">490</span>
+<span id="491">491</span>
+<span id="492">492</span>
+<span id="493">493</span>
+<span id="494">494</span>
+<span id="495">495</span>
+<span id="496">496</span>
+<span id="497">497</span>
+<span id="498">498</span>
+<span id="499">499</span>
+<span id="500">500</span>
+<span id="501">501</span>
+<span id="502">502</span>
+<span id="503">503</span>
+<span id="504">504</span>
+<span id="505">505</span>
+<span id="506">506</span>
+<span id="507">507</span>
+<span id="508">508</span>
+<span id="509">509</span>
+<span id="510">510</span>
+<span id="511">511</span>
+<span id="512">512</span>
+<span id="513">513</span>
+<span id="514">514</span>
+<span id="515">515</span>
+<span id="516">516</span>
+<span id="517">517</span>
+<span id="518">518</span>
+<span id="519">519</span>
+<span id="520">520</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -467,6 +527,7 @@
 
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::errors::TargetRunnerError</span>;
 <span class="kw">use</span> <span class="ident">camino</span>::{<span class="ident">Utf8Path</span>, <span class="ident">Utf8PathBuf</span>};
+<span class="kw">use</span> <span class="ident">nextest_metadata::BuildPlatform</span>;
 <span class="kw">use</span> <span class="ident">std::borrow::Cow</span>;
 <span class="kw">use</span> <span class="ident">target_spec::Platform</span>;
 
@@ -478,21 +539,26 @@
 }
 
 <span class="doccomment">/// A [target runner](https://doc.rust-lang.org/cargo/reference/config.html#targettriplerunner)</span>
-<span class="doccomment">/// used to execute a test binary rather than the default of executing natively</span>
+<span class="doccomment">/// used to execute a test binary rather than the default of executing natively.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">TargetRunner</span> {
-    <span class="doccomment">/// This is required</span>
-    <span class="ident">runner_binary</span>: <span class="ident">Utf8PathBuf</span>,
-    <span class="doccomment">/// These are optional</span>
-    <span class="ident">args</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="ident">host</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PlatformRunner</span><span class="op">&gt;</span>,
+    <span class="ident">target</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PlatformRunner</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">TargetRunner</span> {
     <span class="doccomment">/// Acquires the [target runner](https://doc.rust-lang.org/cargo/reference/config.html#targettriplerunner)</span>
     <span class="doccomment">/// which can be set in a [.cargo/config.toml](https://doc.rust-lang.org/cargo/reference/config.html#hierarchical-structure)</span>
     <span class="doccomment">/// or via a `CARGO_TARGET_{TRIPLE}_RUNNER` environment variable</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">for_target</span>(<span class="ident">target_triple</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">TargetRunnerError</span><span class="op">&gt;</span> {
-        <span class="ident"><span class="self">Self</span>::get_runner_by_precedence</span>(<span class="ident">target_triple</span>, <span class="prelude-val">None</span>, <span class="prelude-val">None</span>)
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">target_triple</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">TargetRunnerError</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">host</span> <span class="op">=</span> <span class="ident">PlatformRunner::by_precedence</span>(<span class="prelude-val">None</span>, <span class="prelude-val">None</span>, <span class="prelude-val">None</span>)<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">target</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">target_triple</span>.<span class="ident">is_some</span>() {
+            <span class="ident">PlatformRunner::by_precedence</span>(<span class="ident">target_triple</span>, <span class="prelude-val">None</span>, <span class="prelude-val">None</span>)<span class="question-mark">?</span>
+        } <span class="kw">else</span> {
+            <span class="ident">host</span>.<span class="ident">clone</span>()
+        };
+
+        <span class="prelude-val">Ok</span>(<span class="self">Self</span> { <span class="ident">host</span>, <span class="ident">target</span> })
     }
 
     <span class="doccomment">/// Configures the start and terminate search the search for cargo configs.</span>
@@ -504,21 +570,77 @@
         <span class="ident">target_triple</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>,
         <span class="ident">start_search_at</span>: <span class="kw-2">&amp;</span><span class="ident">Utf8Path</span>,
         <span class="ident">terminate_search_at</span>: <span class="kw-2">&amp;</span><span class="ident">Utf8Path</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">TargetRunnerError</span><span class="op">&gt;</span> {
-        <span class="ident"><span class="self">Self</span>::get_runner_by_precedence</span>(
-            <span class="ident">target_triple</span>,
-            <span class="prelude-val">Some</span>(<span class="ident">start_search_at</span>),
-            <span class="prelude-val">Some</span>(<span class="ident">terminate_search_at</span>),
-        )
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">TargetRunnerError</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">host</span> <span class="op">=</span>
+            <span class="ident">PlatformRunner::by_precedence</span>(<span class="prelude-val">None</span>, <span class="prelude-val">Some</span>(<span class="ident">start_search_at</span>), <span class="prelude-val">Some</span>(<span class="ident">terminate_search_at</span>))<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">target</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">target_triple</span>.<span class="ident">is_some</span>() {
+            <span class="ident">PlatformRunner::by_precedence</span>(
+                <span class="ident">target_triple</span>,
+                <span class="prelude-val">Some</span>(<span class="ident">start_search_at</span>),
+                <span class="prelude-val">Some</span>(<span class="ident">terminate_search_at</span>),
+            )<span class="question-mark">?</span>
+        } <span class="kw">else</span> {
+            <span class="ident">host</span>.<span class="ident">clone</span>()
+        };
+        <span class="prelude-val">Ok</span>(<span class="self">Self</span> { <span class="ident">host</span>, <span class="ident">target</span> })
     }
 
-    <span class="kw">fn</span> <span class="ident">get_runner_by_precedence</span>(
+    <span class="doccomment">/// Creates an empty target runner that does not delegate to any runner binaries.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">empty</span>() -&gt; <span class="self">Self</span> {
+        <span class="self">Self</span> {
+            <span class="ident">host</span>: <span class="prelude-val">None</span>,
+            <span class="ident">target</span>: <span class="prelude-val">None</span>,
+        }
+    }
+
+    <span class="doccomment">/// Returns the target [`PlatformRunner`].</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">target</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">PlatformRunner</span><span class="op">&gt;</span> {
+        <span class="self">self</span>.<span class="ident">target</span>.<span class="ident">as_ref</span>()
+    }
+
+    <span class="doccomment">/// Returns the host [`PlatformRunner`].</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">host</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">PlatformRunner</span><span class="op">&gt;</span> {
+        <span class="self">self</span>.<span class="ident">host</span>.<span class="ident">as_ref</span>()
+    }
+
+    <span class="doccomment">/// Returns the [`PlatformRunner`] for the given build platform (host or target).</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">for_build_platform</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">build_platform</span>: <span class="ident">BuildPlatform</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">PlatformRunner</span><span class="op">&gt;</span> {
+        <span class="kw">match</span> <span class="ident">build_platform</span> {
+            <span class="ident">BuildPlatform::Target</span> =&gt; <span class="self">self</span>.<span class="ident">target</span>(),
+            <span class="ident">BuildPlatform::Host</span> =&gt; <span class="self">self</span>.<span class="ident">host</span>(),
+        }
+    }
+
+    <span class="doccomment">/// Returns the platform runners for all build platforms.</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">all_build_platforms</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; [(<span class="ident">BuildPlatform</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">PlatformRunner</span><span class="op">&gt;</span>); <span class="number">2</span>] {
+        [
+            (<span class="ident">BuildPlatform::Target</span>, <span class="self">self</span>.<span class="ident">target</span>()),
+            (<span class="ident">BuildPlatform::Host</span>, <span class="self">self</span>.<span class="ident">host</span>()),
+        ]
+    }
+}
+
+<span class="doccomment">/// A target runner scoped to a specific platform (host or target).</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// This forms part of [`TargetRunner`].</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>)]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PlatformRunner</span> {
+    <span class="ident">runner_binary</span>: <span class="ident">Utf8PathBuf</span>,
+    <span class="ident">args</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+}
+
+<span class="kw">impl</span> <span class="ident">PlatformRunner</span> {
+    <span class="kw">fn</span> <span class="ident">by_precedence</span>(
         <span class="ident">target_triple</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>,
         <span class="ident">root</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">Utf8Path</span><span class="op">&gt;</span>,
         <span class="ident">terminate_search_at</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">Utf8Path</span><span class="op">&gt;</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">TargetRunnerError</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">target</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">target_triple</span> {
-            <span class="prelude-val">Some</span>(<span class="ident">target</span>) =&gt; <span class="ident">target_spec::Platform::from_triple</span>(
+            <span class="prelude-val">Some</span>(<span class="ident">target</span>) =&gt; <span class="ident">Platform::from_triple</span>(
                 <span class="ident">target_spec::Triple::new</span>(<span class="ident">target</span>.<span class="ident">to_owned</span>()).<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">error</span><span class="op">|</span> {
                     <span class="ident">TargetRunnerError::FailedToParseTargetTriple</span> {
                         <span class="ident">triple</span>: <span class="ident">target</span>.<span class="ident">to_owned</span>(),
@@ -527,9 +649,7 @@
                 })<span class="question-mark">?</span>,
                 <span class="ident">target_spec::TargetFeatures::Unknown</span>,
             ),
-            <span class="prelude-val">None</span> =&gt; {
-                <span class="ident">target_spec::Platform::current</span>().<span class="ident">map_err</span>(<span class="ident">TargetRunnerError::UnknownHostPlatform</span>)<span class="question-mark">?</span>
-            }
+            <span class="prelude-val">None</span> =&gt; <span class="ident">Platform::current</span>().<span class="ident">map_err</span>(<span class="ident">TargetRunnerError::UnknownHostPlatform</span>)<span class="question-mark">?</span>,
         };
 
         <span class="comment">// Check if we have a CARGO_TARGET_{TRIPLE}_RUNNER environment variable</span>
@@ -792,39 +912,39 @@
         <span class="comment">// Searches through the full directory tree</span>
         <span class="comment">// ---</span>
         <span class="macro">assert_eq!</span>(
-            <span class="ident">TargetRunner::find_config</span>(
+            <span class="ident">PlatformRunner::find_config</span>(
                 <span class="ident">Platform::new</span>(<span class="string">&quot;x86_64-pc-windows-msvc&quot;</span>, <span class="ident">TargetFeatures::Unknown</span>).<span class="ident">unwrap</span>(),
                 <span class="kw-2">&amp;</span><span class="ident">dir_foo_bar_path</span>,
                 <span class="prelude-val">Some</span>(<span class="ident">dir_path</span>),
             )
             .<span class="ident">unwrap</span>(),
-            <span class="prelude-val">Some</span>(<span class="ident">TargetRunner</span> {
+            <span class="prelude-val">Some</span>(<span class="ident">PlatformRunner</span> {
                 <span class="ident">runner_binary</span>: <span class="string">&quot;wine&quot;</span>.<span class="ident">into</span>(),
                 <span class="ident">args</span>: <span class="macro">vec!</span>[<span class="string">&quot;--test-arg&quot;</span>.<span class="ident">into</span>()],
             }),
         );
 
         <span class="macro">assert_eq!</span>(
-            <span class="ident">TargetRunner::find_config</span>(
+            <span class="ident">PlatformRunner::find_config</span>(
                 <span class="ident">Platform::new</span>(<span class="string">&quot;x86_64-pc-windows-gnu&quot;</span>, <span class="ident">TargetFeatures::Unknown</span>).<span class="ident">unwrap</span>(),
                 <span class="kw-2">&amp;</span><span class="ident">dir_foo_bar_path</span>,
                 <span class="prelude-val">Some</span>(<span class="ident">dir_path</span>),
             )
             .<span class="ident">unwrap</span>(),
-            <span class="prelude-val">Some</span>(<span class="ident">TargetRunner</span> {
+            <span class="prelude-val">Some</span>(<span class="ident">PlatformRunner</span> {
                 <span class="ident">runner_binary</span>: <span class="string">&quot;wine2&quot;</span>.<span class="ident">into</span>(),
                 <span class="ident">args</span>: <span class="macro">vec!</span>[],
             }),
         );
 
         <span class="macro">assert_eq!</span>(
-            <span class="ident">TargetRunner::find_config</span>(
+            <span class="ident">PlatformRunner::find_config</span>(
                 <span class="ident">Platform::new</span>(<span class="string">&quot;x86_64-unknown-linux-gnu&quot;</span>, <span class="ident">TargetFeatures::Unknown</span>).<span class="ident">unwrap</span>(),
                 <span class="kw-2">&amp;</span><span class="ident">dir_foo_bar_path</span>,
                 <span class="prelude-val">Some</span>(<span class="ident">dir_path</span>),
             )
             .<span class="ident">unwrap</span>(),
-            <span class="prelude-val">Some</span>(<span class="ident">TargetRunner</span> {
+            <span class="prelude-val">Some</span>(<span class="ident">PlatformRunner</span> {
                 <span class="ident">runner_binary</span>: <span class="string">&quot;unix-runner&quot;</span>.<span class="ident">into</span>(),
                 <span class="ident">args</span>: <span class="macro">vec!</span>[],
             }),
@@ -834,20 +954,20 @@
         <span class="comment">// Searches starting from the &quot;foo&quot; directory which has no .cargo/config in it</span>
         <span class="comment">// ---</span>
         <span class="macro">assert_eq!</span>(
-            <span class="ident">TargetRunner::find_config</span>(
+            <span class="ident">PlatformRunner::find_config</span>(
                 <span class="ident">Platform::new</span>(<span class="string">&quot;x86_64-pc-windows-msvc&quot;</span>, <span class="ident">TargetFeatures::Unknown</span>).<span class="ident">unwrap</span>(),
                 <span class="kw-2">&amp;</span><span class="ident">dir_foo_path</span>,
                 <span class="prelude-val">Some</span>(<span class="ident">dir_path</span>),
             )
             .<span class="ident">unwrap</span>(),
-            <span class="prelude-val">Some</span>(<span class="ident">TargetRunner</span> {
+            <span class="prelude-val">Some</span>(<span class="ident">PlatformRunner</span> {
                 <span class="ident">runner_binary</span>: <span class="string">&quot;parent-wine&quot;</span>.<span class="ident">into</span>(),
                 <span class="ident">args</span>: <span class="macro">vec!</span>[],
             }),
         );
 
         <span class="macro">assert_eq!</span>(
-            <span class="ident">TargetRunner::find_config</span>(
+            <span class="ident">PlatformRunner::find_config</span>(
                 <span class="ident">Platform::new</span>(<span class="string">&quot;x86_64-pc-windows-gnu&quot;</span>, <span class="ident">TargetFeatures::Unknown</span>).<span class="ident">unwrap</span>(),
                 <span class="kw-2">&amp;</span><span class="ident">dir_foo_path</span>,
                 <span class="prelude-val">Some</span>(<span class="ident">dir_path</span>),
@@ -860,20 +980,20 @@
         <span class="comment">// Searches starting and ending at the root directory.</span>
         <span class="comment">// ---</span>
         <span class="macro">assert_eq!</span>(
-            <span class="ident">TargetRunner::find_config</span>(
+            <span class="ident">PlatformRunner::find_config</span>(
                 <span class="ident">Platform::new</span>(<span class="string">&quot;x86_64-pc-windows-msvc&quot;</span>, <span class="ident">TargetFeatures::Unknown</span>).<span class="ident">unwrap</span>(),
                 <span class="ident">dir_path</span>,
                 <span class="prelude-val">Some</span>(<span class="ident">dir_path</span>),
             )
             .<span class="ident">unwrap</span>(),
-            <span class="prelude-val">Some</span>(<span class="ident">TargetRunner</span> {
+            <span class="prelude-val">Some</span>(<span class="ident">PlatformRunner</span> {
                 <span class="ident">runner_binary</span>: <span class="string">&quot;parent-wine&quot;</span>.<span class="ident">into</span>(),
                 <span class="ident">args</span>: <span class="macro">vec!</span>[],
             }),
         );
 
         <span class="macro">assert_eq!</span>(
-            <span class="ident">TargetRunner::find_config</span>(
+            <span class="ident">PlatformRunner::find_config</span>(
                 <span class="ident">Platform::new</span>(<span class="string">&quot;x86_64-pc-windows-gnu&quot;</span>, <span class="ident">TargetFeatures::Unknown</span>).<span class="ident">unwrap</span>(),
                 <span class="ident">dir_path</span>,
                 <span class="prelude-val">Some</span>(<span class="ident">dir_path</span>),

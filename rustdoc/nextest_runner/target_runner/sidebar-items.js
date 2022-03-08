@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["TargetRunner","A target runner used to execute a test binary rather than the default of executing natively"]]});
+initSidebarItems({"struct":[["PlatformRunner","A target runner scoped to a specific platform (host or target)."],["TargetRunner","A target runner used to execute a test binary rather than the default of executing natively."]]});
