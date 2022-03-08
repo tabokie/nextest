@@ -1106,6 +1106,8 @@
 <span id="1104">1104</span>
 <span id="1105">1105</span>
 <span id="1106">1106</span>
+<span id="1107">1107</span>
+<span id="1108">1108</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -1898,6 +1900,8 @@
             .<span class="ident">dir</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">bin_info</span>.<span class="ident">cwd</span>)
             <span class="comment">// This environment variable is set to indicate that tests are being run under nextest.</span>
             .<span class="ident">env</span>(<span class="string">&quot;NEXTEST&quot;</span>, <span class="string">&quot;1&quot;</span>)
+            <span class="comment">// This environment variable is set to indicate that each test is being run in its own process.</span>
+            .<span class="ident">env</span>(<span class="string">&quot;NEXTEST_EXECUTION_MODE&quot;</span>, <span class="string">&quot;process-per-test&quot;</span>)
             <span class="comment">// These environment variables are set at runtime by cargo test:</span>
             <span class="comment">// https://doc.rust-lang.org/cargo/reference/environment-variables.html#environment-variables-cargo-sets-for-crates</span>
             .<span class="ident">env</span>(
