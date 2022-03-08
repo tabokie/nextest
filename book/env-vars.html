@@ -168,6 +168,7 @@
 <p>cargo-nextest exposes these environment variables to your tests <em>at runtime only</em>. They are not set at build time because cargo-nextest may reuse builds done outside of the nextest environment.</p>
 <ul>
 <li><code>NEXTEST</code> — always set to <code>&quot;1&quot;</code>.</li>
+<li><code>NEXTEST_EXECUTION_MODE</code> — currently, always set to <code>process-per-test</code>. More options may be added in the future if nextest gains the ability to run all tests within the same process (<a href="https://github.com/nextest-rs/nextest/issues/27">#27</a>).</li>
 </ul>
 <h3 id="cargo-related-environment-variables-nextest-sets"><a class="header" href="#cargo-related-environment-variables-nextest-sets">Cargo-related environment variables nextest sets</a></h3>
 <p>cargo-nextest delegates to Cargo for the build, which controls the environment variables that are set. See <a href="https://doc.rust-lang.org/cargo/reference/environment-variables.html#environment-variables-cargo-sets-for-crates">Environment variables Cargo sets for crates</a> for a full list.</p>
