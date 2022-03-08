@@ -86,7 +86,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../index.html">Home</a></li><li class="spacer"></li><li class="chapter-item expanded "><a href="../book/installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../book/pre-built-binaries.html"><strong aria-hidden="true">1.1.</strong> Pre-built binaries</a></li><li class="chapter-item expanded "><a href="../book/installing-from-source.html"><strong aria-hidden="true">1.2.</strong> Installing from source</a></li><li class="chapter-item expanded "><a href="../book/antivirus-gatekeeper.html"><strong aria-hidden="true">1.3.</strong> Windows antivirus and macOS Gatekeeper</a></li></ol></li><li class="chapter-item expanded "><a href="../book/usage.html"><strong aria-hidden="true">2.</strong> Usage</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../book/running.html" class="active"><strong aria-hidden="true">2.1.</strong> Running tests</a></li><li class="chapter-item expanded "><a href="../book/listing.html"><strong aria-hidden="true">2.2.</strong> Listing tests</a></li><li class="chapter-item expanded "><a href="../book/retries.html"><strong aria-hidden="true">2.3.</strong> Retries and flaky tests</a></li><li class="chapter-item expanded "><a href="../book/partitioning.html"><strong aria-hidden="true">2.4.</strong> Partitioning test runs in CI</a></li><li class="chapter-item expanded "><a href="../book/target-runners.html"><strong aria-hidden="true">2.5.</strong> Target runners</a></li><li class="chapter-item expanded "><a href="../book/other-options.html"><strong aria-hidden="true">2.6.</strong> Other options</a></li><li class="chapter-item expanded "><a href="../book/env-vars.html"><strong aria-hidden="true">2.7.</strong> Environment variables</a></li><li class="chapter-item expanded "><a href="../book/stability.html"><strong aria-hidden="true">2.8.</strong> Stability policy</a></li></ol></li><li class="chapter-item expanded "><a href="../book/machine-readable.html"><strong aria-hidden="true">3.</strong> Machine-readable output</a></li><li class="chapter-item expanded "><a href="../book/configuration.html"><strong aria-hidden="true">4.</strong> Configuration</a></li><li class="chapter-item expanded "><a href="../book/junit.html"><strong aria-hidden="true">5.</strong> JUnit support</a></li><li class="chapter-item expanded "><a href="../book/how-it-works.html"><strong aria-hidden="true">6.</strong> How nextest works</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../book/benchmarks.html"><strong aria-hidden="true">6.1.</strong> Benchmarks</a></li><li class="chapter-item expanded "><a href="../book/custom-test-harnesses.html"><strong aria-hidden="true">6.2.</strong> Custom test harnesses</a></li><li class="spacer"></li></ol></li><li class="chapter-item expanded "><a href="../CHANGELOG.html">Changelog</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../index.html">Home</a></li><li class="spacer"></li><li class="chapter-item expanded "><a href="../book/installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../book/pre-built-binaries.html"><strong aria-hidden="true">1.1.</strong> Pre-built binaries</a></li><li class="chapter-item expanded "><a href="../book/installing-from-source.html"><strong aria-hidden="true">1.2.</strong> Installing from source</a></li><li class="chapter-item expanded "><a href="../book/antivirus-gatekeeper.html"><strong aria-hidden="true">1.3.</strong> Windows antivirus and macOS Gatekeeper</a></li></ol></li><li class="chapter-item expanded "><a href="../book/usage.html"><strong aria-hidden="true">2.</strong> Usage</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../book/running.html" class="active"><strong aria-hidden="true">2.1.</strong> Running tests</a></li><li class="chapter-item expanded "><a href="../book/listing.html"><strong aria-hidden="true">2.2.</strong> Listing tests</a></li><li class="chapter-item expanded "><a href="../book/retries.html"><strong aria-hidden="true">2.3.</strong> Retries and flaky tests</a></li><li class="chapter-item expanded "><a href="../book/partitioning.html"><strong aria-hidden="true">2.4.</strong> Partitioning test runs in CI</a></li><li class="chapter-item expanded "><a href="../book/target-runners.html"><strong aria-hidden="true">2.5.</strong> Target runners</a></li><li class="chapter-item expanded "><a href="../book/other-options.html"><strong aria-hidden="true">2.6.</strong> Other options</a></li><li class="chapter-item expanded "><a href="../book/env-vars.html"><strong aria-hidden="true">2.7.</strong> Environment variables</a></li></ol></li><li class="chapter-item expanded "><a href="../book/machine-readable.html"><strong aria-hidden="true">3.</strong> Machine-readable output</a></li><li class="chapter-item expanded "><a href="../book/configuration.html"><strong aria-hidden="true">4.</strong> Configuration</a></li><li class="chapter-item expanded "><a href="../book/junit.html"><strong aria-hidden="true">5.</strong> JUnit support</a></li><li class="spacer"></li><li class="chapter-item expanded "><a href="../book/stability.html"><strong aria-hidden="true">6.</strong> Stability policy</a></li><li class="chapter-item expanded "><a href="../book/experimental-features.html"><strong aria-hidden="true">7.</strong> Experimental features</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../book/reusing-builds.html"><strong aria-hidden="true">7.1.</strong> Reusing builds</a></li><li class="spacer"></li></ol></li><li class="chapter-item expanded "><a href="../book/how-it-works.html"><strong aria-hidden="true">8.</strong> How nextest works</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../book/benchmarks.html"><strong aria-hidden="true">8.1.</strong> Benchmarks</a></li><li class="chapter-item expanded "><a href="../book/custom-test-harnesses.html"><strong aria-hidden="true">8.2.</strong> Custom test harnesses</a></li><li class="spacer"></li></ol></li><li class="chapter-item expanded "><a href="../CHANGELOG.html">Changelog</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -183,12 +183,17 @@
 <div class="footnote-definition" id="bin-example"><sup class="footnote-definition-label">2</sup>
 <p><code>bin</code> and <code>example</code> targets can also contain tests. Those are represented as <code>crate-name::bin/bin-name</code> and <code>crate-name::example/example-name</code>, respectively.</p>
 </div>
-<h3 id="filtering-tests"><a class="header" href="#filtering-tests">Filtering tests</a></h3>
+<h2 id="filtering-tests"><a class="header" href="#filtering-tests">Filtering tests</a></h2>
 <p>To only run tests that match certain names:</p>
 <pre><code>cargo nextest run &lt;test-name1&gt; &lt;test-name2&gt;...
 </code></pre>
 <p>This is different from <code>cargo test</code>, where you have to specify a <code>--</code>, for example: <code>cargo test -- &lt;test-name1&gt; &lt;test-name2&gt;...</code>.</p>
-<h3 id="displaying-live-test-output"><a class="header" href="#displaying-live-test-output">Displaying live test output</a></h3>
+<h3 id="filtering-by-build-platform"><a class="header" href="#filtering-by-build-platform">Filtering by build platform</a></h3>
+<p>While cross-compiling code, some tests (e.g. proc-macro tests) may need to be run on the host platform. To filter tests based on the build platform they're for, nextest accepts the <code>--filter-platform</code> option with values <code>target</code>, <code>host</code> or <code>any</code> (default).</p>
+<p>For example, to only run tests for the host platform:</p>
+<pre><code>cargo nextest run --filter-platform host
+</code></pre>
+<h2 id="displaying-live-test-output"><a class="header" href="#displaying-live-test-output">Displaying live test output</a></h2>
 <p>By default, <code>cargo nextest run</code> will capture test output and only display it on failure. If you do <em>not</em> want to capture test output:</p>
 <pre><code>cargo nextest run --no-capture
 </code></pre>
@@ -254,9 +259,11 @@ CARGO OPTIONS:
                                     details
 
 FILTER OPTIONS:
-        --run-ignored &lt;WHICH&gt;      Run ignored tests [default: default] [possible values: default,
-                                   ignored-only, all]
-        --partition &lt;PARTITION&gt;    Test partition, e.g. hash:1/2 or count:2/3
+        --run-ignored &lt;WHICH&gt;           Run ignored tests [default: default] [possible values:
+                                        default, ignored-only, all]
+        --partition &lt;PARTITION&gt;         Test partition, e.g. hash:1/2 or count:2/3
+        --platform-filter &lt;PLATFORM&gt;    Filter test binaries by build platform [default: any]
+                                        [possible values: target, host, any]
 
 REPORTER OPTIONS:
         --failure-output &lt;WHEN&gt;    Output stdout and stderr on failure [possible values: immediate,
@@ -265,6 +272,12 @@ REPORTER OPTIONS:
                                    immediate-final, final, never]
         --status-level &lt;LEVEL&gt;     Test statuses to output [possible values: none, fail, retry,
                                    slow, pass, skip, all]
+
+REUSE BUILD OPTIONS (EXPERIMENTAL):
+        --binaries-metadata &lt;PATH&gt;     Path to binaries-metadata JSON
+        --binaries-dir-remap &lt;PATH&gt;    Remapping for the test binaries directory
+        --cargo-metadata &lt;PATH&gt;        Path to cargo metadata JSON
+        --workspace-remap &lt;PATH&gt;       Remapping for the workspace root
 </code></pre>
 
                     </main>

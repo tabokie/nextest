@@ -87,7 +87,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Home</a></li><li class="spacer"></li><li class="chapter-item expanded "><a href="book/installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="book/pre-built-binaries.html"><strong aria-hidden="true">1.1.</strong> Pre-built binaries</a></li><li class="chapter-item expanded "><a href="book/installing-from-source.html"><strong aria-hidden="true">1.2.</strong> Installing from source</a></li><li class="chapter-item expanded "><a href="book/antivirus-gatekeeper.html"><strong aria-hidden="true">1.3.</strong> Windows antivirus and macOS Gatekeeper</a></li></ol></li><li class="chapter-item expanded "><a href="book/usage.html"><strong aria-hidden="true">2.</strong> Usage</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="book/running.html"><strong aria-hidden="true">2.1.</strong> Running tests</a></li><li class="chapter-item expanded "><a href="book/listing.html"><strong aria-hidden="true">2.2.</strong> Listing tests</a></li><li class="chapter-item expanded "><a href="book/retries.html"><strong aria-hidden="true">2.3.</strong> Retries and flaky tests</a></li><li class="chapter-item expanded "><a href="book/partitioning.html"><strong aria-hidden="true">2.4.</strong> Partitioning test runs in CI</a></li><li class="chapter-item expanded "><a href="book/target-runners.html"><strong aria-hidden="true">2.5.</strong> Target runners</a></li><li class="chapter-item expanded "><a href="book/other-options.html"><strong aria-hidden="true">2.6.</strong> Other options</a></li><li class="chapter-item expanded "><a href="book/env-vars.html"><strong aria-hidden="true">2.7.</strong> Environment variables</a></li><li class="chapter-item expanded "><a href="book/stability.html"><strong aria-hidden="true">2.8.</strong> Stability policy</a></li></ol></li><li class="chapter-item expanded "><a href="book/machine-readable.html"><strong aria-hidden="true">3.</strong> Machine-readable output</a></li><li class="chapter-item expanded "><a href="book/configuration.html"><strong aria-hidden="true">4.</strong> Configuration</a></li><li class="chapter-item expanded "><a href="book/junit.html"><strong aria-hidden="true">5.</strong> JUnit support</a></li><li class="chapter-item expanded "><a href="book/how-it-works.html"><strong aria-hidden="true">6.</strong> How nextest works</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="book/benchmarks.html"><strong aria-hidden="true">6.1.</strong> Benchmarks</a></li><li class="chapter-item expanded "><a href="book/custom-test-harnesses.html"><strong aria-hidden="true">6.2.</strong> Custom test harnesses</a></li><li class="spacer"></li></ol></li><li class="chapter-item expanded "><a href="CHANGELOG.html">Changelog</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Home</a></li><li class="spacer"></li><li class="chapter-item expanded "><a href="book/installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="book/pre-built-binaries.html"><strong aria-hidden="true">1.1.</strong> Pre-built binaries</a></li><li class="chapter-item expanded "><a href="book/installing-from-source.html"><strong aria-hidden="true">1.2.</strong> Installing from source</a></li><li class="chapter-item expanded "><a href="book/antivirus-gatekeeper.html"><strong aria-hidden="true">1.3.</strong> Windows antivirus and macOS Gatekeeper</a></li></ol></li><li class="chapter-item expanded "><a href="book/usage.html"><strong aria-hidden="true">2.</strong> Usage</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="book/running.html"><strong aria-hidden="true">2.1.</strong> Running tests</a></li><li class="chapter-item expanded "><a href="book/listing.html"><strong aria-hidden="true">2.2.</strong> Listing tests</a></li><li class="chapter-item expanded "><a href="book/retries.html"><strong aria-hidden="true">2.3.</strong> Retries and flaky tests</a></li><li class="chapter-item expanded "><a href="book/partitioning.html"><strong aria-hidden="true">2.4.</strong> Partitioning test runs in CI</a></li><li class="chapter-item expanded "><a href="book/target-runners.html"><strong aria-hidden="true">2.5.</strong> Target runners</a></li><li class="chapter-item expanded "><a href="book/other-options.html"><strong aria-hidden="true">2.6.</strong> Other options</a></li><li class="chapter-item expanded "><a href="book/env-vars.html"><strong aria-hidden="true">2.7.</strong> Environment variables</a></li></ol></li><li class="chapter-item expanded "><a href="book/machine-readable.html"><strong aria-hidden="true">3.</strong> Machine-readable output</a></li><li class="chapter-item expanded "><a href="book/configuration.html"><strong aria-hidden="true">4.</strong> Configuration</a></li><li class="chapter-item expanded "><a href="book/junit.html"><strong aria-hidden="true">5.</strong> JUnit support</a></li><li class="spacer"></li><li class="chapter-item expanded "><a href="book/stability.html"><strong aria-hidden="true">6.</strong> Stability policy</a></li><li class="chapter-item expanded "><a href="book/experimental-features.html"><strong aria-hidden="true">7.</strong> Experimental features</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="book/reusing-builds.html"><strong aria-hidden="true">7.1.</strong> Reusing builds</a></li><li class="spacer"></li></ol></li><li class="chapter-item expanded "><a href="book/how-it-works.html"><strong aria-hidden="true">8.</strong> How nextest works</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="book/benchmarks.html"><strong aria-hidden="true">8.1.</strong> Benchmarks</a></li><li class="chapter-item expanded "><a href="book/custom-test-harnesses.html"><strong aria-hidden="true">8.2.</strong> Custom test harnesses</a></li><li class="spacer"></li></ol></li><li class="chapter-item expanded "><a href="CHANGELOG.html">Changelog</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -405,12 +405,17 @@ unit, or excluding those tests from nextest.</p>
 <div class="footnote-definition" id="bin-example"><sup class="footnote-definition-label">2</sup>
 <p><code>bin</code> and <code>example</code> targets can also contain tests. Those are represented as <code>crate-name::bin/bin-name</code> and <code>crate-name::example/example-name</code>, respectively.</p>
 </div>
-<h3 id="filtering-tests"><a class="header" href="#filtering-tests">Filtering tests</a></h3>
+<h2 id="filtering-tests"><a class="header" href="#filtering-tests">Filtering tests</a></h2>
 <p>To only run tests that match certain names:</p>
 <pre><code>cargo nextest run &lt;test-name1&gt; &lt;test-name2&gt;...
 </code></pre>
 <p>This is different from <code>cargo test</code>, where you have to specify a <code>--</code>, for example: <code>cargo test -- &lt;test-name1&gt; &lt;test-name2&gt;...</code>.</p>
-<h3 id="displaying-live-test-output"><a class="header" href="#displaying-live-test-output">Displaying live test output</a></h3>
+<h3 id="filtering-by-build-platform"><a class="header" href="#filtering-by-build-platform">Filtering by build platform</a></h3>
+<p>While cross-compiling code, some tests (e.g. proc-macro tests) may need to be run on the host platform. To filter tests based on the build platform they're for, nextest accepts the <code>--filter-platform</code> option with values <code>target</code>, <code>host</code> or <code>any</code> (default).</p>
+<p>For example, to only run tests for the host platform:</p>
+<pre><code>cargo nextest run --filter-platform host
+</code></pre>
+<h2 id="displaying-live-test-output"><a class="header" href="#displaying-live-test-output">Displaying live test output</a></h2>
 <p>By default, <code>cargo nextest run</code> will capture test output and only display it on failure. If you do <em>not</em> want to capture test output:</p>
 <pre><code>cargo nextest run --no-capture
 </code></pre>
@@ -476,9 +481,11 @@ CARGO OPTIONS:
                                     details
 
 FILTER OPTIONS:
-        --run-ignored &lt;WHICH&gt;      Run ignored tests [default: default] [possible values: default,
-                                   ignored-only, all]
-        --partition &lt;PARTITION&gt;    Test partition, e.g. hash:1/2 or count:2/3
+        --run-ignored &lt;WHICH&gt;           Run ignored tests [default: default] [possible values:
+                                        default, ignored-only, all]
+        --partition &lt;PARTITION&gt;         Test partition, e.g. hash:1/2 or count:2/3
+        --platform-filter &lt;PLATFORM&gt;    Filter test binaries by build platform [default: any]
+                                        [possible values: target, host, any]
 
 REPORTER OPTIONS:
         --failure-output &lt;WHEN&gt;    Output stdout and stderr on failure [possible values: immediate,
@@ -487,6 +494,12 @@ REPORTER OPTIONS:
                                    immediate-final, final, never]
         --status-level &lt;LEVEL&gt;     Test statuses to output [possible values: none, fail, retry,
                                    slow, pass, skip, all]
+
+REUSE BUILD OPTIONS (EXPERIMENTAL):
+        --binaries-metadata &lt;PATH&gt;     Path to binaries-metadata JSON
+        --binaries-dir-remap &lt;PATH&gt;    Remapping for the test binaries directory
+        --cargo-metadata &lt;PATH&gt;        Path to cargo metadata JSON
+        --workspace-remap &lt;PATH&gt;       Remapping for the workspace root
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="listing-tests"><a class="header" href="#listing-tests">Listing tests</a></h1>
 <p>To build and list all tests in a workspace<sup class="footnote-reference"><a href="#doctest">1</a></sup>, cd into the workspace and run:</p>
@@ -546,13 +559,23 @@ CARGO OPTIONS:
                                     details
 
 FILTER OPTIONS:
-        --run-ignored &lt;WHICH&gt;      Run ignored tests [default: default] [possible values: default,
-                                   ignored-only, all]
-        --partition &lt;PARTITION&gt;    Test partition, e.g. hash:1/2 or count:2/3
+        --run-ignored &lt;WHICH&gt;           Run ignored tests [default: default] [possible values:
+                                        default, ignored-only, all]
+        --partition &lt;PARTITION&gt;         Test partition, e.g. hash:1/2 or count:2/3
+        --platform-filter &lt;PLATFORM&gt;    Filter test binaries by build platform [default: any]
+                                        [possible values: target, host, any]
 
 OUTPUT OPTIONS:
     -T, --message-format &lt;FMT&gt;    Output format [default: human] [possible values: human, json,
                                   json-pretty]
+        --list-type &lt;TYPE&gt;        Type of listing [default: full] [possible values: full, binaries-
+                                  only]
+
+REUSE BUILD OPTIONS (EXPERIMENTAL):
+        --binaries-metadata &lt;PATH&gt;     Path to binaries-metadata JSON
+        --binaries-dir-remap &lt;PATH&gt;    Remapping for the test binaries directory
+        --cargo-metadata &lt;PATH&gt;        Path to cargo metadata JSON
+        --workspace-remap &lt;PATH&gt;       Remapping for the workspace root
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="retries-and-flaky-tests"><a class="header" href="#retries-and-flaky-tests">Retries and flaky tests</a></h1>
 <p>Sometimes, tests fail nondeterministically, which can be quite annoying to developers locally and in CI. cargo-nextest supports <em>retrying</em> failed tests with the <code>--retries</code> option. If a test succeeds during a retry, the test is marked <em>flaky</em>. Here's an example:</p>
@@ -590,6 +613,9 @@ runner = &quot;wine&quot;
 <p><strong>Note:</strong> If your target runner is a shell script, it might malfunction on macOS due to System Integrity Protection's environment sanitization. This is a system limitation with macOS and not a bug in nextest.</p>
 <p>See the discussion in <a href="https://github.com/nextest-rs/nextest/pull/84">PR #84</a> for more.</p>
 </blockquote>
+<h2 id="cross-compiling"><a class="header" href="#cross-compiling">Cross-compiling</a></h2>
+<p>While cross-compiling code, some tests may need to be run on the host platform. (See the note about <a href="book/running.html#filtering-by-build-platform">Filtering by build platform</a> for more.)</p>
+<p>For tests that run on the host platform, nextest uses the target runner defined for the host. For example, if cross-compiling from <code>x86_64-unknown-linux-gnu</code> to <code>x86_64-pc-windows-msvc</code>, nextest will use the <code>CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_RUNNER</code> for proc-macro and other host-only tests, and <code>CARGO_TARGET_X86_64_PC_WINDOWS_MSVC_RUNNER</code> for other tests.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="other-options"><a class="header" href="#other-options">Other options</a></h1>
 <p>Some other options accepted by <code>cargo nextest run</code>:</p>
 <h3 id="runner-options"><a class="header" href="#runner-options">Runner options</a></h3>
@@ -646,21 +672,6 @@ runner = &quot;wine&quot;
 <li><code>CARGO_PKG_LICENSE</code> — The license from the manifest of your package.</li>
 <li><code>CARGO_PKG_LICENSE_FILE</code> — The license file from the manifest of your package.</li>
 </ul>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="stability-policy"><a class="header" href="#stability-policy">Stability policy</a></h1>
-<p>This section contains information on how cargo-nextest will evolve in a backwards-compatible way over time.</p>
-<h2 id="the-cargo-nextest-binary"><a class="header" href="#the-cargo-nextest-binary">The cargo-nextest binary</a></h2>
-<p>The cargo-nextest binary follows <a href="https://semver.org/">semantic versioning</a>, where the <a href="https://semver.org/#spec-item-1">public API</a> consists of exactly the following:</p>
-<ol>
-<li>command-line arguments, options and flags</li>
-<li><a href="book/machine-readable.html">machine-readable output</a></li>
-<li>the <a href="book/configuration.html">configuration file format</a></li>
-</ol>
-<p>Within a version series, the public API will be append-only. New options or keys may be added, but existing keys will continue to be as they were. Existing options may be deprecated but will not be removed within a version series.</p>
-<p>The public API does <em>not</em> include human-readable output generated by nextest, or in general anything printed to stderr.</p>
-<h2 id="libraries"><a class="header" href="#libraries">Libraries</a></h2>
-<p>The libraries used by cargo-nextest, <a href="https://crates.io/crates/nextest-metadata">nextest-metadata</a> and <a href="https://crates.io/crates/nextest-runner">nextest-runner</a>, follow the standard Rust library versioning policy. Breaking changes to <code>nextest-runner</code> in particular will happen more rapidly than changes to <code>cargo-nextest</code>.</p>
-<h2 id="minimum-supported-rust-version-msrv"><a class="header" href="#minimum-supported-rust-version-msrv">Minimum supported Rust version (MSRV)</a></h2>
-<p>The MSRV of cargo-nextest or dependent crates may be changed in a patch release. At least the last 3 versions of Rust will be supported at any time.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="machine-readable-output"><a class="header" href="#machine-readable-output">Machine-readable output</a></h1>
 <p>cargo-nextest can be configured to produce machine-readable JSON output, readable by other programs. The <a href="https://crates.io/crates/nextest-metadata">nextest-metadata crate</a> provides a Rust interface to deserialize the output to. (The same crate is used by nextest to generate the output.)</p>
 <h2 id="listing-tests-1"><a class="header" href="#listing-tests-1">Listing tests</a></h2>
@@ -675,6 +686,7 @@ runner = &quot;wine&quot;
       &quot;package-id&quot;: &quot;tokio-util 0.7.0 (path+file:///home/me/dev/tokio/tokio-util)&quot;,
       &quot;binary-path&quot;: &quot;/home/me/dev/tokio/target/debug/deps/tokio_util-def0ee51cb418fe8&quot;,
       &quot;cwd&quot;: &quot;/home/rain/dev/tokio/tokio-util&quot;,
+      &quot;build-platform&quot;: &quot;target&quot;,
       &quot;testcases&quot;: {
         &quot;either::tests::either_is_async_read&quot;: {
           &quot;ignored&quot;: false,
@@ -908,6 +920,127 @@ note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
     &lt;/testsuite&gt;
 &lt;/testsuites&gt;
 </code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="stability-policy"><a class="header" href="#stability-policy">Stability policy</a></h1>
+<p>This section contains information on how cargo-nextest will evolve in a backwards-compatible way over time.</p>
+<h2 id="the-cargo-nextest-binary"><a class="header" href="#the-cargo-nextest-binary">The cargo-nextest binary</a></h2>
+<p>The cargo-nextest binary follows <a href="https://semver.org/">semantic versioning</a>, where the <a href="https://semver.org/#spec-item-1">public API</a> consists of exactly the following:</p>
+<ol>
+<li>command-line arguments, options and flags</li>
+<li><a href="book/machine-readable.html">machine-readable output</a></li>
+<li>the <a href="book/configuration.html">configuration file format</a></li>
+</ol>
+<p><a href="book/experimental-features.html">Experimental features</a> are not part of the public API. They may change or be removed in a patch release.</p>
+<p>Within a version series, the public API will be append-only. New options or keys may be added, but existing keys will continue to be as they were. Existing options may be deprecated but will not be removed within a version series.</p>
+<p>The public API does <em>not</em> include human-readable output generated by nextest, or in general anything printed to stderr.</p>
+<h2 id="libraries"><a class="header" href="#libraries">Libraries</a></h2>
+<p>The libraries used by cargo-nextest, <a href="https://crates.io/crates/nextest-metadata">nextest-metadata</a> and <a href="https://crates.io/crates/nextest-runner">nextest-runner</a>, follow the standard Rust library versioning policy.</p>
+<h3 id="nextest-metadata-and-cargo-nextest"><a class="header" href="#nextest-metadata-and-cargo-nextest">nextest-metadata and cargo-nextest</a></h3>
+<p>nextest-metadata contains data structures for deserializing cargo-nextest's <a href="book/machine-readable.html">machine-readable output</a>.</p>
+<p><strong>nextest-metadata is forward-compatible with cargo-nextest</strong>. A given version nextest-metadata will continue to work with all future versions of cargo-nextest within the same version series.</p>
+<p>However, <strong>nextest-metadata is not backwards-compatible</strong>: a new version of nextest-metadata may not be able to parse metadata generated by older versions of cargo-nextest.</p>
+<h3 id="nextest-runner"><a class="header" href="#nextest-runner">nextest-runner</a></h3>
+<p>nextest-runner is built to serve the needs of cargo-nextest. Breaking changes to nextest-runner will be documented in <a href="https://github.com/nextest-rs/nextest/blob/main/nextest-runner/CHANGELOG.md">its CHANGELOG</a>, but you should expect them to happen more rapidly than changes to <code>cargo-nextest</code>.</p>
+<h2 id="minimum-supported-rust-version-msrv"><a class="header" href="#minimum-supported-rust-version-msrv">Minimum supported Rust version (MSRV)</a></h2>
+<p>The MSRV of cargo-nextest or dependent crates may be changed in a patch release. At least the last 3 versions of Rust will be supported at any time.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="experimental-features"><a class="header" href="#experimental-features">Experimental features</a></h1>
+<p>This section documents new features in nextest that aren't stable yet. These features
+may be changed or removed at any time, and must be accessed through an environment variable.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="reusing-builds"><a class="header" href="#reusing-builds">Reusing builds</a></h1>
+<ul>
+<li><strong>Introduced in:</strong> cargo-nextest 0.9.10</li>
+<li><strong>Environment variable</strong>: <code>NEXTEST_EXPERIMENTAL_REUSE_BUILD=1</code></li>
+<li><strong>Tracking issue</strong>: <a href="https://github.com/nextest-rs/nextest/issues/98">#98</a></li>
+</ul>
+<p>In some cases, it can be useful to separate out building tests and running them. Nextest has experimental support for serializing metadata on one machine, and then using that to run tests on another machine.</p>
+<h2 id="terms"><a class="header" href="#terms">Terms</a></h2>
+<ul>
+<li><strong>Build machine:</strong> The computer that builds tests.</li>
+<li><strong>Target machine:</strong> The computer that runs tests.</li>
+</ul>
+<h2 id="use-cases"><a class="header" href="#use-cases">Use cases</a></h2>
+<ul>
+<li><strong>Cross-compilation.</strong> The build machine has a different architecture or operating system from the target machine.</li>
+<li><strong>Partitioned execution.</strong> Build once on the build machine, then <a href="book/partitioning.html">partition test execution</a> across multiple target machines.</li>
+<li><strong>Saving execution time on more valuable machines.</strong> For example, do not build on a GPU machine.</li>
+</ul>
+<h2 id="requirements"><a class="header" href="#requirements">Requirements</a></h2>
+<ul>
+<li><strong>The project source must be checked out to the same revision on the target machine.</strong> This might be needed for test fixtures and other assets, and nextest applies the right working directory relative to the workspace root when executing tests.</li>
+<li><strong>It is your responsibility to transfer over build artifacts.</strong> Use the examples below as a template.</li>
+</ul>
+<h3 id="non-requirements"><a class="header" href="#non-requirements">Non-requirements</a></h3>
+<ul>
+<li><strong>Cargo does not need to be installed on the target machine.</strong> In this case, replace <code>cargo nextest</code> with <code>cargo-nextest nextest</code> in the following examples.</li>
+</ul>
+<h2 id="new-options"><a class="header" href="#new-options">New options</a></h2>
+<p>Both <code>cargo nextest list</code> and <code>cargo nextest run</code> accept the following options:</p>
+<ul>
+<li><code>--binaries-metadata</code>: The path to JSON metadata generated by <code>cargo nextest list --list-binaries --message-format json</code>.</li>
+<li><code>--binaries-dir-remap</code>: A possible new location for the directory test binaries are present in. Requires <code>--binaries-metadata</code>.</li>
+<li><code>--cargo-metadata</code>: The path to JSON metadata generated by <code>cargo metadata --format-version 1</code>.</li>
+<li><code>--workspace-remap</code>: A possible new location for the root of the workspace. requires <code>--cargo-metadata</code>.</li>
+</ul>
+<h2 id="example-simple-buildrun-split"><a class="header" href="#example-simple-buildrun-split">Example: Simple build/run split</a></h2>
+<ol>
+<li>Build the tests and save the binaries metadata:
+<pre><code>cargo nextest list --list-type binaries-only --message-format json \
+  &gt; target/binaries-metadata.json
+</code></pre>
+</li>
+<li>List the tests:
+<pre><code>cargo nextest list --binaries-metadata target/binaries-metadata.json
+</code></pre>
+</li>
+<li>Run the tests:
+<pre><code>cargo nextest run --binaries-metadata target/binaries-metadata.json
+</code></pre>
+</li>
+</ol>
+<h2 id="example-cross-compilation"><a class="header" href="#example-cross-compilation">Example: Cross-compilation</a></h2>
+<p>While cross-compiling code, some tests may need to be run on the host platform. (See the note about <a href="book/running.html#filtering-by-build-platform">Filtering by build platform</a> for more.)</p>
+<h3 id="on-the-build-machine"><a class="header" href="#on-the-build-machine">On the build machine</a></h3>
+<ol>
+<li>Save the project's cargo metadata:
+<pre><code>cargo metadata --format-version=1 --all-features --no-deps \
+  &gt; target/cargo-metadata.json
+</code></pre>
+</li>
+<li>Build the tests and save the binaries metadata:
+<pre><code>cargo nextest list --target &lt;TARGET&gt; --list-type binaries-only \
+  --message-format json &gt; target/binaries-metadata.json
+</code></pre>
+</li>
+<li>Run host-only tests:
+<pre><code>cargo nextest run --platform-filter host
+</code></pre>
+</li>
+<li>Archive artifacts: <code>target/cargo-metadata.json</code>, <code>target/binaries-metadata.json</code>, and test binaries.
+<ul>
+<li>With <a href="https://stedolan.github.io/jq/"><code>jq</code></a>, this can be done through <code>cat target/binaries-metadata.json | jq '.&quot;rust-binaries&quot; | .[] . &quot;binary-path&quot;</code>).</li>
+</ul>
+</li>
+</ol>
+<h3 id="on-the-target-machine"><a class="header" href="#on-the-target-machine">On the target machine</a></h3>
+<ol>
+<li>Check out the project repository to the same revision as the build machine.</li>
+<li>Extract the artifacts archived on the build machine.</li>
+<li>List target-only tests:
+<pre><code>cargo nextest list --platform-filter target \
+    --binaries-metadata &lt;PATH&gt;/binaries-metadata.json \
+    --cargo-metadata &lt;PATH&gt;/cargo-metadata.json \
+    --workspace-remap &lt;REPO-PATH&gt; \
+    --binaries-dir-remap &lt;TESTS-FOLDER-PATH&gt;
+</code></pre>
+</li>
+<li>Run target-only tests:
+<pre><code>cargo nextest run --platform-filter target \
+    --binaries-metadata &lt;PATH&gt;/binaries-metadata.json \
+    --cargo-metadata &lt;PATH&gt;/cargo-metadata.json \
+    --workspace-remap &lt;REPO-PATH&gt; \
+    --binaries-dir-remap &lt;TESTS-FOLDER-PATH&gt;
+</code></pre>
+</li>
+</ol>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="how-nextest-works"><a class="header" href="#how-nextest-works">How nextest works</a></h1>
 <p>To understand how nextest works, it is useful to first look at the execution model used by cargo test.</p>
 <h2 id="the-cargo-test-execution-model"><a class="header" href="#the-cargo-test-execution-model">The cargo test execution model</a></h2>
@@ -998,7 +1131,7 @@ my-test-2: test
 <div style="break-before: page; page-break-before: always;"></div><h1 id="changelog"><a class="header" href="#changelog">Changelog</a></h1>
 <p>This page documents new features and bugfixes for cargo-nextest. Please see the <a href="book/stability.html">stability
 policy</a> for how versioning works with cargo-nextest.</p>
-<h2 id="unreleased"><a class="header" href="#unreleased">Unreleased</a></h2>
+<h2 id="0910---2022-03-07"><a class="header" href="#0910---2022-03-07"><a href="https://github.com/nextest-rs/nextest/releases/tag/cargo-nextest-0.9.10">0.9.10</a> - 2022-03-07</a></h2>
 <p>Thanks to <a href="https://github.com/Guiguiprim">Guiguiprim</a> for their contributions to this release!</p>
 <h3 id="added"><a class="header" href="#added">Added</a></h3>
 <ul>
