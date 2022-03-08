@@ -189,9 +189,9 @@
 </code></pre>
 <p>This is different from <code>cargo test</code>, where you have to specify a <code>--</code>, for example: <code>cargo test -- &lt;test-name1&gt; &lt;test-name2&gt;...</code>.</p>
 <h3 id="filtering-by-build-platform"><a class="header" href="#filtering-by-build-platform">Filtering by build platform</a></h3>
-<p>While cross-compiling code, some tests (e.g. proc-macro tests) may need to be run on the host platform. To filter tests based on the build platform they're for, nextest accepts the <code>--filter-platform</code> option with values <code>target</code>, <code>host</code> or <code>any</code> (default).</p>
+<p>While cross-compiling code, some tests (e.g. proc-macro tests) may need to be run on the host platform. To filter tests based on the build platform they're for, nextest accepts the <code>--platform-filter</code> option with values <code>target</code>, <code>host</code> or <code>any</code> (default).</p>
 <p>For example, to only run tests for the host platform:</p>
-<pre><code>cargo nextest run --filter-platform host
+<pre><code>cargo nextest run --platform-filter host
 </code></pre>
 <h2 id="displaying-live-test-output"><a class="header" href="#displaying-live-test-output">Displaying live test output</a></h2>
 <p>By default, <code>cargo nextest run</code> will capture test output and only display it on failure. If you do <em>not</em> want to capture test output:</p>
