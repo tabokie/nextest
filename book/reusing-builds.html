@@ -167,18 +167,18 @@
 </ul>
 <h2 id="use-cases"><a class="header" href="#use-cases">Use cases</a></h2>
 <ul>
-<li><strong>Cross-compilation.</strong> The build machine has a different architecture or operating system from the target machine.</li>
-<li><strong>Partitioned execution.</strong> Build once on the build machine, then <a href="partitioning.html">partition test execution</a> across multiple target machines.</li>
-<li><strong>Saving execution time on more valuable machines.</strong> For example, build on a regular machine, then run them on a GPU machine.</li>
+<li><strong>Cross-compilation.</strong> The build machine has a different architecture, or runs a different operating system, from the target machine.</li>
+<li><strong>Test partitioning.</strong> Build once on the build machine, then <a href="partitioning.html">partition test execution</a> across multiple target machines.</li>
+<li><strong>Saving execution time on more valuable machines.</strong> For example, build tests on a regular machine, then run them on a machine with a GPU attached to it.</li>
 </ul>
 <h2 id="requirements"><a class="header" href="#requirements">Requirements</a></h2>
 <ul>
-<li><strong>The project source must be checked out to the same revision on the target machine.</strong> This might be needed for test fixtures and other assets, and nextest applies the right working directory relative to the workspace root when executing tests.</li>
+<li><strong>The project source must be checked out to the same revision on the target machine.</strong> This might be needed for test fixtures and other assets, and nextest sets the right working directory relative to the workspace root when executing tests.</li>
 <li><strong>It is your responsibility to transfer over build artifacts.</strong> Use the examples below as a template.</li>
 </ul>
 <h3 id="non-requirements"><a class="header" href="#non-requirements">Non-requirements</a></h3>
 <ul>
-<li><strong>Cargo does not need to be installed on the target machine.</strong> In this case, replace <code>cargo nextest</code> with <code>cargo-nextest nextest</code> in the following examples.</li>
+<li><strong>Cargo does not need to be installed on the target machine.</strong> If <code>cargo</code> is unavailable, replace <code>cargo nextest</code> with <code>cargo-nextest nextest</code> in the following examples.</li>
 </ul>
 <h2 id="new-options"><a class="header" href="#new-options">New options</a></h2>
 <p>Both <code>cargo nextest list</code> and <code>cargo nextest run</code> accept the following options:</p>
