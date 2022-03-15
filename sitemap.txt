@@ -1,5 +1,5 @@
-https://nexte.st/CHANGELOG
 https://nexte.st/
+https://nexte.st/CHANGELOG
 https://nexte.st/book/antivirus-gatekeeper
 https://nexte.st/book/benchmarks
 https://nexte.st/book/configuration
