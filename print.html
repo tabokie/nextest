@@ -921,10 +921,21 @@ note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 cargo llvm-cov nextest
 </code></pre>
 <h3 id="using-llvm-cov-in-github-actions"><a class="header" href="#using-llvm-cov-in-github-actions">Using llvm-cov in GitHub Actions</a></h3>
-<p>Install both nextest and llvm-cov in GitHub Actions, then run <code>cargo llvm-cov nextest</code>.</p>
-<pre><code class="language-yaml">- uses: taiki-e/install-action@cargo-llvm-cov
+<p>Install nightly Rust with the <code>llvm-tools-preview</code> component, nextest, and llvm-cov in GitHub Actions. Then, run <code>cargo llvm-cov nextest</code>.</p>
+<pre><code class="language-yaml">- uses: actions-rs/toolchain@v1
+  with:
+    toolchain: nightly
+    override: true
+    components: llvm-tools-preview
+- uses: taiki-e/install-action@cargo-llvm-cov
 - uses: taiki-e/install-action@nextest
+
+- name: Collect coverage data
+  run: cargo llvm-cov nextest
 </code></pre>
+<blockquote>
+<p>TODO: provide instructions for other report forms like HTML, and for reporting to an external code coverage service</p>
+</blockquote>
 <h2 id="integrating-nextest-into-coverage-tools"><a class="header" href="#integrating-nextest-into-coverage-tools">Integrating nextest into coverage tools</a></h2>
 <p>Most coverage tools work by setting a few environment variables such as <code>RUSTFLAGS</code> or <code>RUSTC_WRAPPER</code>. Nextest runs Cargo for the build, which will read those environment variables as usual. This means that it should generally be quite straightforward to integrate nextest into other coverage tools.</p>
 <blockquote>
