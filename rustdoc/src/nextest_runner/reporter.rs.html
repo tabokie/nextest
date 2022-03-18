@@ -874,9 +874,9 @@
     <span class="ident">config::NextestProfile</span>,
     <span class="ident">errors</span>::{<span class="ident">StatusLevelParseError</span>, <span class="ident">TestOutputDisplayParseError</span>, <span class="ident">WriteEventError</span>},
     <span class="ident">helpers::write_test_name</span>,
+    <span class="ident">list</span>::{<span class="ident">TestInstance</span>, <span class="ident">TestList</span>},
     <span class="ident">reporter::aggregator::EventAggregator</span>,
     <span class="ident">runner</span>::{<span class="ident">ExecuteStatus</span>, <span class="ident">ExecutionDescription</span>, <span class="ident">ExecutionResult</span>, <span class="ident">ExecutionStatuses</span>, <span class="ident">RunStats</span>},
-    <span class="ident">test_list</span>::{<span class="ident">TestInstance</span>, <span class="ident">TestList</span>},
 };
 <span class="kw">use</span> <span class="ident">debug_ignore::DebugIgnore</span>;
 <span class="kw">use</span> <span class="ident">nextest_metadata::MismatchReason</span>;
@@ -1442,11 +1442,11 @@
             <span class="ident">instance</span>
                 .<span class="ident">bin_info</span>
                 .<span class="ident">binary_id</span>
-                .<span class="ident">style</span>(<span class="self">self</span>.<span class="ident">styles</span>.<span class="ident">test_list</span>.<span class="ident">binary_id</span>),
+                .<span class="ident">style</span>(<span class="self">self</span>.<span class="ident">styles</span>.<span class="ident">list_styles</span>.<span class="ident">binary_id</span>),
             <span class="ident">width</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">binary_id_width</span>
         )<span class="question-mark">?</span>;
 
-        <span class="ident">write_test_name</span>(<span class="ident">instance</span>.<span class="ident">name</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">styles</span>.<span class="ident">test_list</span>, <span class="ident">writer</span>)
+        <span class="ident">write_test_name</span>(<span class="ident">instance</span>.<span class="ident">name</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">styles</span>.<span class="ident">list_styles</span>, <span class="ident">writer</span>)
     }
 
     <span class="kw">fn</span> <span class="ident">write_duration</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">duration</span>: <span class="ident">Duration</span>, <span class="kw-2">mut</span> <span class="ident">writer</span>: <span class="kw">impl</span> <span class="ident">Write</span>) -&gt; <span class="ident">io::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
@@ -1669,7 +1669,7 @@
     <span class="ident">retry_output</span>: <span class="ident">Style</span>,
     <span class="ident">fail_output</span>: <span class="ident">Style</span>,
     <span class="ident">skip</span>: <span class="ident">Style</span>,
-    <span class="ident">test_list</span>: <span class="ident"><span class="kw">crate</span>::test_list::Styles</span>,
+    <span class="ident">list_styles</span>: <span class="ident"><span class="kw">crate</span>::list::Styles</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">Styles</span> {
@@ -1682,7 +1682,7 @@
         <span class="self">self</span>.<span class="ident">retry_output</span> <span class="op">=</span> <span class="ident">Style::new</span>().<span class="ident">magenta</span>();
         <span class="self">self</span>.<span class="ident">fail_output</span> <span class="op">=</span> <span class="ident">Style::new</span>().<span class="ident">magenta</span>();
         <span class="self">self</span>.<span class="ident">skip</span> <span class="op">=</span> <span class="ident">Style::new</span>().<span class="ident">yellow</span>().<span class="ident">bold</span>();
-        <span class="self">self</span>.<span class="ident">test_list</span>.<span class="ident">colorize</span>();
+        <span class="self">self</span>.<span class="ident">list_styles</span>.<span class="ident">colorize</span>();
     }
 }
 

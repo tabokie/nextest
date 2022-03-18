@@ -902,11 +902,11 @@
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">config::NextestProfile</span>,
+    <span class="ident">list</span>::{<span class="ident">TestInstance</span>, <span class="ident">TestList</span>},
     <span class="ident">reporter</span>::{<span class="ident">CancelReason</span>, <span class="ident">StatusLevel</span>, <span class="ident">TestEvent</span>},
     <span class="ident">signal</span>::{<span class="ident">SignalEvent</span>, <span class="ident">SignalHandler</span>},
     <span class="ident">stopwatch</span>::{<span class="ident">StopwatchEnd</span>, <span class="ident">StopwatchStart</span>},
     <span class="ident">target_runner::TargetRunner</span>,
-    <span class="ident">test_list</span>::{<span class="ident">TestInstance</span>, <span class="ident">TestList</span>},
 };
 <span class="kw">use</span> <span class="ident">crossbeam_channel</span>::{<span class="ident">RecvTimeoutError</span>, <span class="ident">Sender</span>};
 <span class="kw">use</span> <span class="ident">nextest_metadata</span>::{<span class="ident">FilterMatch</span>, <span class="ident">MismatchReason</span>};
