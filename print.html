@@ -933,8 +933,9 @@ cargo llvm-cov nextest
 - name: Collect coverage data
   run: cargo llvm-cov nextest
 </code></pre>
+<p><a href="https://github.com/nextest-rs/nextest/blob/main/.github/workflows/coverage.yml">See this in practice with nextest's own CI.</a></p>
 <blockquote>
-<p>TODO: provide instructions for other report forms like HTML, and for reporting to an external code coverage service</p>
+<p>TODO: provide instructions for other report forms like HTML, and for reporting to an external code coverage service.</p>
 </blockquote>
 <h2 id="integrating-nextest-into-coverage-tools"><a class="header" href="#integrating-nextest-into-coverage-tools">Integrating nextest into coverage tools</a></h2>
 <p>Most coverage tools work by setting a few environment variables such as <code>RUSTFLAGS</code> or <code>RUSTC_WRAPPER</code>. Nextest runs Cargo for the build, which will read those environment variables as usual. This means that it should generally be quite straightforward to integrate nextest into other coverage tools.</p>
