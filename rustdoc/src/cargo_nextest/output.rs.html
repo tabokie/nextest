@@ -280,6 +280,7 @@
 <span id="278">278</span>
 <span id="279">279</span>
 <span id="280">280</span>
+<span id="281">281</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// Copyright (c) The cargo-guppy Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
@@ -298,7 +299,7 @@
 <span class="attribute">#[<span class="ident">must_use</span>]</span>
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct</span> <span class="ident">OutputOpts</span> {
     <span class="doccomment">/// Verbose output</span>
-    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">short</span>, <span class="ident">global</span> <span class="op">=</span> <span class="bool-val">true</span>)]</span>
+    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">short</span>, <span class="ident">global</span> <span class="op">=</span> <span class="bool-val">true</span>, <span class="ident">env</span> <span class="op">=</span> <span class="string">&quot;NEXTEST_VERBOSE&quot;</span>)]</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">verbose</span>: <span class="ident">bool</span>,
     <span class="comment">// TODO: quiet?</span>
     <span class="doccomment">/// Produce color output: auto, always, never</span>
@@ -308,7 +309,8 @@
         <span class="ident">default_value_t</span>,
         <span class="ident">hide_possible_values</span> <span class="op">=</span> <span class="bool-val">true</span>,
         <span class="ident">global</span> <span class="op">=</span> <span class="bool-val">true</span>,
-        <span class="ident">value_name</span> <span class="op">=</span> <span class="string">&quot;WHEN&quot;</span>
+        <span class="ident">value_name</span> <span class="op">=</span> <span class="string">&quot;WHEN&quot;</span>,
+        <span class="ident">env</span> <span class="op">=</span> <span class="string">&quot;NEXTEST_COLOR&quot;</span>
     )]</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">color</span>: <span class="ident">Color</span>,
 }
