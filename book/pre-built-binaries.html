@@ -202,8 +202,10 @@ $tmp | Remove-Item
 <pre><code class="language-yml">- uses: taiki-e/install-action@v1
 - with:
     tool: nextest
-    # &quot;version&quot; (defaults to latest) can be a range like 0.9, or a specific version like 0.9.11.
+    ## version (defaults to latest) can be a range like 0.9:
     # version: 0.9
+    ## version can also be a specific version like 0.9.11:
+    # version: 0.9.11
 </code></pre>
 <h3 id="other-ci-systems"><a class="header" href="#other-ci-systems">Other CI systems</a></h3>
 <p>Install pre-built binaries on other CI systems by downloading and extracting the respective archives, using the commands above as a guide. See <a href="release-urls.html">Release URLs</a> for more about how to specify nextest versions and platforms.</p>
