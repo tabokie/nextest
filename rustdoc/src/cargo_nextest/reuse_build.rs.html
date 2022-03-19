@@ -153,7 +153,7 @@
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">graph</span>: <span class="kw-2">&amp;</span><span class="ident">PackageGraph</span>,
         <span class="ident">orig_target_dir</span>: <span class="kw-2">&amp;</span><span class="ident">Utf8Path</span>,
-    ) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PathMapper</span><span class="op">&gt;</span> {
+    ) -&gt; <span class="ident">PathMapper</span> {
         <span class="ident">PathMapper::new</span>(
             <span class="ident">graph</span>,
             <span class="self">self</span>.<span class="ident">workspace_remap</span>.<span class="ident">clone</span>(),
