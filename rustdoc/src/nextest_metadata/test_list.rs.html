@@ -270,6 +270,9 @@
 <span id="268">268</span>
 <span id="269">269</span>
 <span id="270">270</span>
+<span id="271">271</span>
+<span id="272">272</span>
+<span id="273">273</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -454,6 +457,9 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Deserialize</span>, <span class="ident">Serialize</span>)]</span>
 <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename_all</span> <span class="op">=</span> <span class="string">&quot;kebab-case&quot;</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">BinaryListSummary</span> {
+    <span class="doccomment">/// The target directory for Rust artifacts.</span>
+    <span class="kw">pub</span> <span class="ident">rust_target_directory</span>: <span class="ident">Utf8PathBuf</span>,
+
     <span class="doccomment">/// The list of Rust test binaries (indexed by binary-id).</span>
     <span class="kw">pub</span> <span class="ident">rust_binaries</span>: <span class="ident">BTreeMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">RustTestBinarySummary</span><span class="op">&gt;</span>,
 }

@@ -76,11 +76,16 @@
 <span id="74">74</span>
 <span id="75">75</span>
 <span id="76">76</span>
+<span id="77">77</span>
+<span id="78">78</span>
+<span id="79">79</span>
+<span id="80">80</span>
+<span id="81">81</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
 <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">output::OutputContext</span>, <span class="ident">ExpectedError</span>};
-<span class="kw">use</span> <span class="ident">camino::Utf8PathBuf</span>;
+<span class="kw">use</span> <span class="ident">camino</span>::{<span class="ident">Utf8Path</span>, <span class="ident">Utf8PathBuf</span>};
 <span class="kw">use</span> <span class="ident">clap::Args</span>;
 <span class="kw">use</span> <span class="ident">color_eyre::eyre</span>::{<span class="ident">Report</span>, <span class="prelude-ty">Result</span>};
 <span class="kw">use</span> <span class="ident">guppy::graph::PackageGraph</span>;
@@ -93,14 +98,14 @@
     <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">value_name</span> <span class="op">=</span> <span class="string">&quot;PATH&quot;</span>, <span class="ident">env</span> <span class="op">=</span> <span class="string">&quot;NEXTEST_BINARIES_METADATA&quot;</span>)]</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">binaries_metadata</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Utf8PathBuf</span><span class="op">&gt;</span>,
 
-    <span class="doccomment">/// Remapping for the test binaries directory</span>
+    <span class="doccomment">/// Remapping for the target directory</span>
     <span class="attribute">#[<span class="ident">clap</span>(
         <span class="ident">long</span>,
         <span class="ident">requires</span>(<span class="string">&quot;binaries-metadata&quot;</span>),
         <span class="ident">value_name</span> <span class="op">=</span> <span class="string">&quot;PATH&quot;</span>,
-        <span class="ident">env</span> <span class="op">=</span> <span class="string">&quot;NEXTEST_BINARIES_DIR_REMAP&quot;</span>
+        <span class="ident">env</span> <span class="op">=</span> <span class="string">&quot;NEXTEST_TARGET_DIR_REMAP&quot;</span>
     )]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">binaries_dir_remap</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Utf8PathBuf</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">target_dir_remap</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Utf8PathBuf</span><span class="op">&gt;</span>,
 
     <span class="doccomment">/// Path to cargo metadata JSON</span>
     <span class="attribute">#[<span class="ident">clap</span>(
@@ -128,7 +133,7 @@
     <span class="comment">// before calling this method)</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">check_experimental</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_output</span>: <span class="ident">OutputContext</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">used</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">binaries_metadata</span>.<span class="ident">is_some</span>()
-            <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">binaries_dir_remap</span>.<span class="ident">is_some</span>()
+            <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">target_dir_remap</span>.<span class="ident">is_some</span>()
             <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">cargo_metadata</span>.<span class="ident">is_some</span>()
             <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">workspace_remap</span>.<span class="ident">is_some</span>();
 
@@ -144,11 +149,16 @@
         }
     }
 
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">make_path_mapper</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">graph</span>: <span class="kw-2">&amp;</span><span class="ident">PackageGraph</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PathMapper</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">make_path_mapper</span>(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        <span class="ident">graph</span>: <span class="kw-2">&amp;</span><span class="ident">PackageGraph</span>,
+        <span class="ident">orig_target_dir</span>: <span class="kw-2">&amp;</span><span class="ident">Utf8Path</span>,
+    ) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PathMapper</span><span class="op">&gt;</span> {
         <span class="ident">PathMapper::new</span>(
             <span class="ident">graph</span>,
             <span class="self">self</span>.<span class="ident">workspace_remap</span>.<span class="ident">clone</span>(),
-            <span class="self">self</span>.<span class="ident">binaries_dir_remap</span>.<span class="ident">clone</span>(),
+            <span class="ident">orig_target_dir</span>,
+            <span class="self">self</span>.<span class="ident">target_dir_remap</span>.<span class="ident">clone</span>(),
         )
     }
 }
