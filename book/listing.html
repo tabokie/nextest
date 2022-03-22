@@ -174,8 +174,9 @@ ARGS:
 
 OPTIONS:
         --manifest-path &lt;PATH&gt;    Path to Cargo.toml
-    -v, --verbose                 Verbose output
-        --color &lt;WHEN&gt;            Produce color output: auto, always, never [default: auto]
+    -v, --verbose                 Verbose output [env: NEXTEST_VERBOSE=]
+        --color &lt;WHEN&gt;            Produce color output: auto, always, never [env: CARGO_TERM_COLOR=]
+                                  [default: auto]
         --config-file &lt;PATH&gt;      Config file [default: workspace-root/.config/nextest.toml]
     -h, --help                    Print help information
 
@@ -224,10 +225,10 @@ OUTPUT OPTIONS:
                                   only]
 
 REUSE BUILD OPTIONS (EXPERIMENTAL):
-        --binaries-metadata &lt;PATH&gt;     Path to binaries-metadata JSON
-        --binaries-dir-remap &lt;PATH&gt;    Remapping for the test binaries directory
-        --cargo-metadata &lt;PATH&gt;        Path to cargo metadata JSON
-        --workspace-remap &lt;PATH&gt;       Remapping for the workspace root
+        --binaries-metadata &lt;PATH&gt;    Path to binaries-metadata JSON
+        --target-dir-remap &lt;PATH&gt;     Remapping for the target directory
+        --cargo-metadata &lt;PATH&gt;       Path to cargo metadata JSON
+        --workspace-remap &lt;PATH&gt;      Remapping for the workspace root
 </code></pre>
 
                     </main>

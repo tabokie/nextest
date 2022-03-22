@@ -156,12 +156,21 @@
                         <h1 id="environment-variables"><a class="header" href="#environment-variables">Environment variables</a></h1>
 <p>This section contains information about the environment variables nextest reads and sets.</p>
 <h2 id="environment-variables-nextest-reads"><a class="header" href="#environment-variables-nextest-reads">Environment variables nextest reads</a></h2>
-<p>Nextest reads the following environment variables to emulate the behavior of Cargo:</p>
+<p>Nextest reads some of its command-line options as environment variables. In all cases, passing in a command-line option overrides the respective environment variable.</p>
+<ul>
+<li><code>NEXTEST_PROFILE</code> — <a href="configuration.html#profiles">Nextest profile</a> to use while running tests.</li>
+<li><code>NEXTEST_TEST_THREADS</code> — Number of tests to run simultaneously.</li>
+<li><code>NEXTEST_FAILURE_OUTPUT</code> and <code>NEXTEST_SUCCESS_OUTPUT</code> — When standard output and standard error are displayed for failing and passing tests, respectively. See <a href="other-options.html#reporter-options">Reporter options</a> for possible values.</li>
+<li><code>NEXTEST_STATUS_LEVEL</code> — Which test statuses (<strong>PASS</strong>, <strong>FAIL</strong> etc) to display. See <a href="other-options.html#reporter-options">Reporter options</a> for possible values.</li>
+<li><code>NEXTEST_VERBOSE</code> — Verbose output.</li>
+</ul>
+<p>Nextest also reads the following environment variables to emulate Cargo's behavior.</p>
 <ul>
 <li><code>CARGO</code> — Path to the <code>cargo</code> binary to use for builds.</li>
+<li><code>CARGO_TARGET_DIR</code> — Location of where to place all generated artifacts, relative to the current working directory.</li>
 <li><code>CARGO_TARGET_&lt;triple&gt;_RUNNER</code> — Support for <a href="target-runners.html">target runners</a>.</li>
+<li><code>CARGO_TERM_COLOR</code> — The default color mode: <code>always</code>, <code>auto</code> or <code>never</code>.</li>
 </ul>
-<p>Currently, cargo-nextest does not read its own configuration as environment variables. <a href="https://github.com/nextest-rs/nextest/issues/14">This will be supported in the future</a>.</p>
 <h3 id="cargo-related-environment-variables-nextest-reads"><a class="header" href="#cargo-related-environment-variables-nextest-reads">Cargo-related environment variables nextest reads</a></h3>
 <p>cargo-nextest delegates to Cargo for the build, which recognizes a number of environment variables. See <a href="https://doc.rust-lang.org/cargo/reference/environment-variables.html#environment-variables-cargo-reads">Environment variables Cargo reads</a> for a full list.</p>
 <h2 id="environment-variables-nextest-sets"><a class="header" href="#environment-variables-nextest-sets">Environment variables nextest sets</a></h2>
@@ -189,6 +198,19 @@
 <li><code>CARGO_PKG_LICENSE</code> — The license from the manifest of your package.</li>
 <li><code>CARGO_PKG_LICENSE_FILE</code> — The license file from the manifest of your package.</li>
 </ul>
+<h3 id="dynamic-library-paths"><a class="header" href="#dynamic-library-paths">Dynamic library paths</a></h3>
+<p>Nextest sets the dynamic library path at runtime, similar to <a href="https://doc.rust-lang.org/cargo/reference/environment-variables.html#dynamic-library-paths">what Cargo does</a>. This helps with locating shared libraries that are part of the build process. The variable name depends on the platform:</p>
+<ul>
+<li>Windows: <code>PATH</code></li>
+<li>macOS: <code>DYLD_FALLBACK_LIBRARY_PATH</code></li>
+<li>Unix: <code>LD_LIBRARY_PATH</code></li>
+</ul>
+<p>Nextest includes the following paths:</p>
+<ul>
+<li>Search paths included from any build script with the <a href="https://doc.rust-lang.org/cargo/reference/build-scripts.html#rustc-link-search"><code>rustc-link-search</code> instruction</a>. Paths outside of the target directory are removed. It is the responsibility of the user running nextest to properly set the environment if additional libraries on the system are needed in the search path.</li>
+<li>The base output directory, such as <code>target/debug</code>, and the &quot;deps&quot; directory. This enables support for <code>dylib</code> dependencies and rustc compiler plugins.</li>
+</ul>
+<p>Nextest currently relies on being invoked as a Cargo subcommand to set the rustc sysroot library path.</p>
 
                     </main>
 

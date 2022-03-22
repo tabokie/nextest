@@ -427,7 +427,7 @@
 <span class="attribute">#[<span class="ident">non_exhaustive</span>]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">TestListSummary</span> {
     <span class="doccomment">/// Rust metadata used for builds and test runs.</span>
-    <span class="kw">pub</span> <span class="ident">rust_metadata</span>: <span class="ident">RustMetadataSummary</span>,
+    <span class="kw">pub</span> <span class="ident">rust_build_meta</span>: <span class="ident">RustBuildMetaSummary</span>,
 
     <span class="doccomment">/// Number of tests (including skipped and ignored) across all binaries.</span>
     <span class="kw">pub</span> <span class="ident">test_count</span>: <span class="ident">usize</span>,
@@ -439,9 +439,9 @@
 
 <span class="kw">impl</span> <span class="ident">TestListSummary</span> {
     <span class="doccomment">/// Creates a new `TestListSummary` with the given Rust metadata.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">rust_metadata</span>: <span class="ident">RustMetadataSummary</span>) -&gt; <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">rust_build_meta</span>: <span class="ident">RustBuildMetaSummary</span>) -&gt; <span class="self">Self</span> {
         <span class="self">Self</span> {
-            <span class="ident">rust_metadata</span>,
+            <span class="ident">rust_build_meta</span>,
             <span class="ident">test_count</span>: <span class="number">0</span>,
             <span class="ident">rust_suites</span>: <span class="ident">BTreeMap::new</span>(),
         }
@@ -502,7 +502,7 @@
 <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename_all</span> <span class="op">=</span> <span class="string">&quot;kebab-case&quot;</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">BinaryListSummary</span> {
     <span class="doccomment">/// Rust metadata used for builds and test runs.</span>
-    <span class="kw">pub</span> <span class="ident">rust_metadata</span>: <span class="ident">RustMetadataSummary</span>,
+    <span class="kw">pub</span> <span class="ident">rust_build_meta</span>: <span class="ident">RustBuildMetaSummary</span>,
 
     <span class="doccomment">/// The list of Rust test binaries (indexed by binary-id).</span>
     <span class="kw">pub</span> <span class="ident">rust_binaries</span>: <span class="ident">BTreeMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">RustTestBinarySummary</span><span class="op">&gt;</span>,
@@ -511,7 +511,7 @@
 <span class="doccomment">/// Rust metadata used for builds and test runs.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Deserialize</span>, <span class="ident">Serialize</span>)]</span>
 <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename_all</span> <span class="op">=</span> <span class="string">&quot;kebab-case&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">RustMetadataSummary</span> {
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">RustBuildMetaSummary</span> {
     <span class="doccomment">/// The target directory for Rust artifacts.</span>
     <span class="kw">pub</span> <span class="ident">target_directory</span>: <span class="ident">Utf8PathBuf</span>,
 

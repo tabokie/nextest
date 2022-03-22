@@ -66,21 +66,6 @@
 <span id="64">64</span>
 <span id="65">65</span>
 <span id="66">66</span>
-<span id="67">67</span>
-<span id="68">68</span>
-<span id="69">69</span>
-<span id="70">70</span>
-<span id="71">71</span>
-<span id="72">72</span>
-<span id="73">73</span>
-<span id="74">74</span>
-<span id="75">75</span>
-<span id="76">76</span>
-<span id="77">77</span>
-<span id="78">78</span>
-<span id="79">79</span>
-<span id="80">80</span>
-<span id="81">81</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -95,34 +80,19 @@
 <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">next_help_heading</span> <span class="op">=</span> <span class="string">&quot;REUSE BUILD OPTIONS (EXPERIMENTAL)&quot;</span>)]</span>
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct</span> <span class="ident">ReuseBuildOpts</span> {
     <span class="doccomment">/// Path to binaries-metadata JSON</span>
-    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">value_name</span> <span class="op">=</span> <span class="string">&quot;PATH&quot;</span>, <span class="ident">env</span> <span class="op">=</span> <span class="string">&quot;NEXTEST_BINARIES_METADATA&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">value_name</span> <span class="op">=</span> <span class="string">&quot;PATH&quot;</span>)]</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">binaries_metadata</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Utf8PathBuf</span><span class="op">&gt;</span>,
 
     <span class="doccomment">/// Remapping for the target directory</span>
-    <span class="attribute">#[<span class="ident">clap</span>(
-        <span class="ident">long</span>,
-        <span class="ident">requires</span>(<span class="string">&quot;binaries-metadata&quot;</span>),
-        <span class="ident">value_name</span> <span class="op">=</span> <span class="string">&quot;PATH&quot;</span>,
-        <span class="ident">env</span> <span class="op">=</span> <span class="string">&quot;NEXTEST_TARGET_DIR_REMAP&quot;</span>
-    )]</span>
+    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">requires</span>(<span class="string">&quot;binaries-metadata&quot;</span>), <span class="ident">value_name</span> <span class="op">=</span> <span class="string">&quot;PATH&quot;</span>)]</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">target_dir_remap</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Utf8PathBuf</span><span class="op">&gt;</span>,
 
     <span class="doccomment">/// Path to cargo metadata JSON</span>
-    <span class="attribute">#[<span class="ident">clap</span>(
-        <span class="ident">long</span>,
-        <span class="ident">conflicts_with</span>(<span class="string">&quot;manifest-path&quot;</span>),
-        <span class="ident">value_name</span> <span class="op">=</span> <span class="string">&quot;PATH&quot;</span>,
-        <span class="ident">env</span> <span class="op">=</span> <span class="string">&quot;NEXTEST_CARGO_METADATA&quot;</span>
-    )]</span>
+    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">conflicts_with</span>(<span class="string">&quot;manifest-path&quot;</span>), <span class="ident">value_name</span> <span class="op">=</span> <span class="string">&quot;PATH&quot;</span>)]</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">cargo_metadata</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Utf8PathBuf</span><span class="op">&gt;</span>,
 
     <span class="doccomment">/// Remapping for the workspace root</span>
-    <span class="attribute">#[<span class="ident">clap</span>(
-        <span class="ident">long</span>,
-        <span class="ident">requires</span>(<span class="string">&quot;cargo-metadata&quot;</span>),
-        <span class="ident">value_name</span> <span class="op">=</span> <span class="string">&quot;PATH&quot;</span>,
-        <span class="ident">env</span> <span class="op">=</span> <span class="string">&quot;NEXTEST_WORKSPACE_REMAP&quot;</span>
-    )]</span>
+    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">requires</span>(<span class="string">&quot;cargo-metadata&quot;</span>), <span class="ident">value_name</span> <span class="op">=</span> <span class="string">&quot;PATH&quot;</span>)]</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">workspace_remap</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Utf8PathBuf</span><span class="op">&gt;</span>,
 }
 

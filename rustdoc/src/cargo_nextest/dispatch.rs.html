@@ -689,21 +689,6 @@
 <span id="687">687</span>
 <span id="688">688</span>
 <span id="689">689</span>
-<span id="690">690</span>
-<span id="691">691</span>
-<span id="692">692</span>
-<span id="693">693</span>
-<span id="694">694</span>
-<span id="695">695</span>
-<span id="696">696</span>
-<span id="697">697</span>
-<span id="698">698</span>
-<span id="699">699</span>
-<span id="700">700</span>
-<span id="701">701</span>
-<span id="702">702</span>
-<span id="703">703</span>
-<span id="704">704</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -766,12 +751,7 @@
 <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">version</span>)]</span>
 <span class="kw">struct</span> <span class="ident">AppOpts</span> {
     <span class="doccomment">/// Path to Cargo.toml</span>
-    <span class="attribute">#[<span class="ident">clap</span>(
-        <span class="ident">long</span>,
-        <span class="ident">global</span> <span class="op">=</span> <span class="bool-val">true</span>,
-        <span class="ident">value_name</span> <span class="op">=</span> <span class="string">&quot;PATH&quot;</span>,
-        <span class="ident">env</span> <span class="op">=</span> <span class="string">&quot;NEXTEST_MANIFEST_PATH&quot;</span>
-    )]</span>
+    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">global</span> <span class="op">=</span> <span class="bool-val">true</span>, <span class="ident">value_name</span> <span class="op">=</span> <span class="string">&quot;PATH&quot;</span>)]</span>
     <span class="ident">manifest_path</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Utf8PathBuf</span><span class="op">&gt;</span>,
 
     <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">flatten</span>)]</span>
@@ -833,7 +813,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Args</span>)]</span>
 <span class="kw">struct</span> <span class="ident">ConfigOpts</span> {
     <span class="doccomment">/// Config file [default: workspace-root/.config/nextest.toml]</span>
-    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">global</span> <span class="op">=</span> <span class="bool-val">true</span>, <span class="ident">value_name</span> <span class="op">=</span> <span class="string">&quot;PATH&quot;</span>, <span class="ident">env</span> <span class="op">=</span> <span class="string">&quot;NEXTEST_CONFIG_FILE&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">global</span> <span class="op">=</span> <span class="bool-val">true</span>, <span class="ident">value_name</span> <span class="op">=</span> <span class="string">&quot;PATH&quot;</span>)]</span>
     <span class="kw">pub</span> <span class="ident">config_file</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Utf8PathBuf</span><span class="op">&gt;</span>,
 }
 
@@ -864,8 +844,7 @@
             <span class="ident">arg_enum</span>,
             <span class="ident">default_value_t</span>,
             <span class="ident">help_heading</span> <span class="op">=</span> <span class="string">&quot;OUTPUT OPTIONS&quot;</span>,
-            <span class="ident">value_name</span> <span class="op">=</span> <span class="string">&quot;FMT&quot;</span>,
-            <span class="ident">env</span> <span class="op">=</span> <span class="string">&quot;NEXTEST_MESSAGE_FORMAT&quot;</span>
+            <span class="ident">value_name</span> <span class="op">=</span> <span class="string">&quot;FMT&quot;</span>
         )]</span>
         <span class="ident">message_format</span>: <span class="ident">MessageFormatOpts</span>,
 
@@ -875,8 +854,7 @@
             <span class="ident">arg_enum</span>,
             <span class="ident">default_value_t</span>,
             <span class="ident">help_heading</span> <span class="op">=</span> <span class="string">&quot;OUTPUT OPTIONS&quot;</span>,
-            <span class="ident">value_name</span> <span class="op">=</span> <span class="string">&quot;TYPE&quot;</span>,
-            <span class="ident">env</span> <span class="op">=</span> <span class="string">&quot;NEXTEST_LIST_TYPE&quot;</span>
+            <span class="ident">value_name</span> <span class="op">=</span> <span class="string">&quot;TYPE&quot;</span>
         )]</span>
         <span class="ident">list_type</span>: <span class="ident">ListType</span>,
 
@@ -899,8 +877,7 @@
             <span class="ident">long</span>,
             <span class="ident">alias</span> <span class="op">=</span> <span class="string">&quot;nocapture&quot;</span>,
             <span class="ident">help_heading</span> <span class="op">=</span> <span class="string">&quot;RUNNER OPTIONS&quot;</span>,
-            <span class="ident">display_order</span> <span class="op">=</span> <span class="number">100</span>,
-            <span class="ident">env</span> <span class="op">=</span> <span class="string">&quot;NEXTEST_NO_CAPTURE&quot;</span>
+            <span class="ident">display_order</span> <span class="op">=</span> <span class="number">100</span>
         )]</span>
         <span class="ident">no_capture</span>: <span class="ident">bool</span>,
 
@@ -988,22 +965,15 @@
         <span class="ident">possible_values</span> <span class="op">=</span> <span class="ident">RunIgnored::variants</span>(),
         <span class="ident">default_value_t</span>,
         <span class="ident">value_name</span> <span class="op">=</span> <span class="string">&quot;WHICH&quot;</span>,
-        <span class="ident">env</span> <span class="op">=</span> <span class="string">&quot;NEXTEST_RUN_IGNORED&quot;</span>,
     )]</span>
     <span class="ident">run_ignored</span>: <span class="ident">RunIgnored</span>,
 
     <span class="doccomment">/// Test partition, e.g. hash:1/2 or count:2/3</span>
-    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">env</span> <span class="op">=</span> <span class="string">&quot;NEXTEST_PARTITION&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>)]</span>
     <span class="ident">partition</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PartitionerBuilder</span><span class="op">&gt;</span>,
 
     <span class="doccomment">/// Filter test binaries by build platform</span>
-    <span class="attribute">#[<span class="ident">clap</span>(
-        <span class="ident">long</span>,
-        <span class="ident">arg_enum</span>,
-        <span class="ident">value_name</span> <span class="op">=</span> <span class="string">&quot;PLATFORM&quot;</span>,
-        <span class="ident">default_value_t</span>,
-        <span class="ident">env</span> <span class="op">=</span> <span class="string">&quot;NEXTEST_PLATFORM_FILTER&quot;</span>
-    )]</span>
+    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">arg_enum</span>, <span class="ident">value_name</span> <span class="op">=</span> <span class="string">&quot;PLATFORM&quot;</span>, <span class="ident">default_value_t</span>)]</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">platform_filter</span>: <span class="ident">PlatformFilterOpts</span>,
 
     <span class="comment">// TODO: add regex-based filtering in the future?</span>
@@ -1021,8 +991,8 @@
         <span class="ident">reuse_build</span>: <span class="kw-2">&amp;</span><span class="ident">ReuseBuildOpts</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TestList</span><span class="op">&lt;</span><span class="lifetime">&#39;g</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">path_mapper</span> <span class="op">=</span>
-            <span class="ident">reuse_build</span>.<span class="ident">make_path_mapper</span>(<span class="ident">graph</span>, <span class="kw-2">&amp;</span><span class="ident">binary_list</span>.<span class="ident">rust_metadata</span>.<span class="ident">target_directory</span>);
-        <span class="kw">let</span> <span class="ident">rust_metadata</span> <span class="op">=</span> <span class="ident">binary_list</span>.<span class="ident">rust_metadata</span>.<span class="ident">clone</span>();
+            <span class="ident">reuse_build</span>.<span class="ident">make_path_mapper</span>(<span class="ident">graph</span>, <span class="kw-2">&amp;</span><span class="ident">binary_list</span>.<span class="ident">rust_build_meta</span>.<span class="ident">target_directory</span>);
+        <span class="kw">let</span> <span class="ident">rust_build_meta</span> <span class="op">=</span> <span class="ident">binary_list</span>.<span class="ident">rust_build_meta</span>.<span class="ident">clone</span>();
         <span class="kw">let</span> <span class="ident">test_artifacts</span> <span class="op">=</span> <span class="ident">RustTestArtifact::from_binary_list</span>(
             <span class="ident">graph</span>,
             <span class="ident">binary_list</span>,
@@ -1033,7 +1003,7 @@
             <span class="ident">TestFilterBuilder::new</span>(<span class="self">self</span>.<span class="ident">run_ignored</span>, <span class="self">self</span>.<span class="ident">partition</span>.<span class="ident">clone</span>(), <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">filter</span>);
         <span class="ident">TestList::new</span>(
             <span class="ident">test_artifacts</span>,
-            <span class="kw-2">&amp;</span><span class="ident">rust_metadata</span>,
+            <span class="kw-2">&amp;</span><span class="ident">rust_build_meta</span>,
             <span class="kw-2">&amp;</span><span class="ident">path_mapper</span>,
             <span class="kw-2">&amp;</span><span class="ident">test_filter</span>,
             <span class="ident">runner</span>,
@@ -1089,15 +1059,15 @@
     <span class="ident">test_threads</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>,
 
     <span class="doccomment">/// Number of retries for failing tests [default: from profile]</span>
-    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">env</span> <span class="op">=</span> <span class="string">&quot;NEXTEST_RETRIES&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>)]</span>
     <span class="ident">retries</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>,
 
     <span class="doccomment">/// Cancel test run on the first failure</span>
-    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">env</span> <span class="op">=</span> <span class="string">&quot;NEXTEST_FAIL_FAST&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>)]</span>
     <span class="ident">fail_fast</span>: <span class="ident">bool</span>,
 
     <span class="doccomment">/// Run all tests regardless of failure</span>
-    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">overrides_with</span> <span class="op">=</span> <span class="string">&quot;fail-fast&quot;</span>, <span class="ident">env</span> <span class="op">=</span> <span class="string">&quot;NEXTEST_NO_FAIL_FAST&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">overrides_with</span> <span class="op">=</span> <span class="string">&quot;fail-fast&quot;</span>)]</span>
     <span class="ident">no_fail_fast</span>: <span class="ident">bool</span>,
 }
 

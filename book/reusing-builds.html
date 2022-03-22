@@ -209,8 +209,7 @@
 <h3 id="on-the-build-machine"><a class="header" href="#on-the-build-machine">On the build machine</a></h3>
 <ol>
 <li>Save the project's cargo metadata:
-<pre><code>cargo metadata --format-version=1 --all-features --no-deps \
-  &gt; target/cargo-metadata.json
+<pre><code>cargo metadata --format-version=1 --all-features &gt; target/cargo-metadata.json
 </code></pre>
 </li>
 <li>Build the tests and save the binaries metadata:
@@ -222,30 +221,26 @@
 <pre><code>cargo nextest run --target &lt;TARGET&gt; --platform-filter host
 </code></pre>
 </li>
-<li>Archive artifacts: <code>target/cargo-metadata.json</code>, <code>target/binaries-metadata.json</code>, and test binaries.
-<ul>
-<li>With <a href="https://stedolan.github.io/jq/"><code>jq</code></a>, this can be done through <code>cat target/binaries-metadata.json | jq '.&quot;rust-binaries&quot; | .[] . &quot;binary-path&quot;</code>).</li>
-</ul>
-</li>
+<li>Archive the <code>target/</code> directory.</li>
 </ol>
 <h3 id="on-the-target-machine"><a class="header" href="#on-the-target-machine">On the target machine</a></h3>
 <ol>
-<li>Check out the project repository to the same revision as the build machine.</li>
-<li>Extract the artifacts archived on the build machine.</li>
+<li>Check out the project repository to a path <code>&lt;REPO-PATH&gt;</code>, to the same revision as the build machine.</li>
+<li>Extract the archive of the <code>target/</code> directory created on the build machine to, for example, <code>&lt;REPO-PATH&gt;/target/</code>. (This doesn't have to be located here. It can be any directory on the filesystem).</li>
 <li>List target-only tests:
 <pre><code>cargo nextest list --platform-filter target \
-    --binaries-metadata &lt;PATH&gt;/binaries-metadata.json \
-    --cargo-metadata &lt;PATH&gt;/cargo-metadata.json \
+    --binaries-metadata &lt;REPO-PATH&gt;/target/binaries-metadata.json \
+    --cargo-metadata &lt;REPO-PATH&gt;/target/cargo-metadata.json \
     --workspace-remap &lt;REPO-PATH&gt; \
-    --binaries-dir-remap &lt;TESTS-FOLDER-PATH&gt;
+    --target-dir-remap &lt;REPO-PATH&gt;/target
 </code></pre>
 </li>
 <li>Run target-only tests:
 <pre><code>cargo nextest run --platform-filter target \
-    --binaries-metadata &lt;PATH&gt;/binaries-metadata.json \
-    --cargo-metadata &lt;PATH&gt;/cargo-metadata.json \
+    --binaries-metadata &lt;REPO-PATH&gt;/target/binaries-metadata.json \
+    --cargo-metadata &lt;REPO-PATH&gt;/target/cargo-metadata.json \
     --workspace-remap &lt;REPO-PATH&gt; \
-    --binaries-dir-remap &lt;TESTS-FOLDER-PATH&gt;
+    --target-dir-remap &lt;REPO-PATH&gt;/target
 </code></pre>
 </li>
 </ol>

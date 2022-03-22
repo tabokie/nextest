@@ -157,9 +157,16 @@
 <p>cargo-nextest can be configured to produce machine-readable JSON output, readable by other programs. The <a href="https://crates.io/crates/nextest-metadata">nextest-metadata crate</a> provides a Rust interface to deserialize the output to. (The same crate is used by nextest to generate the output.)</p>
 <h2 id="listing-tests"><a class="header" href="#listing-tests">Listing tests</a></h2>
 <p>To produce a list of tests in the JSON output format <code>cargo nextest list --message-format json</code> (or <code>json-pretty</code> for nicely formatted output). Here's some example output for the <a href="https://github.com/tokio-rs/tokio">tokio repository</a>:</p>
-<pre><code class="language-json">% cargo nextest list -p tokio-util --features full --lib --format json-pretty
+<pre><code class="language-json">% cargo nextest list -p tokio-util --features full --lib --message-format json-pretty
 {
   &quot;test-count&quot;: 4,
+  &quot;rust-build-meta&quot;: {
+    &quot;target-directory&quot;: &quot;/home/rain/dev/tokio/target&quot;,
+    &quot;base-output-directories&quot;: [
+      &quot;debug&quot;
+    ],
+    &quot;linked-paths&quot;: []
+  },
   &quot;rust-suites&quot;: {
     &quot;tokio-util&quot;: {
       &quot;package-name&quot;: &quot;tokio-util&quot;,
