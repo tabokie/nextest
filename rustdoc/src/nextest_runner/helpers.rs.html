@@ -28,12 +28,79 @@
 <span id="26">26</span>
 <span id="27">27</span>
 <span id="28">28</span>
+<span id="29">29</span>
+<span id="30">30</span>
+<span id="31">31</span>
+<span id="32">32</span>
+<span id="33">33</span>
+<span id="34">34</span>
+<span id="35">35</span>
+<span id="36">36</span>
+<span id="37">37</span>
+<span id="38">38</span>
+<span id="39">39</span>
+<span id="40">40</span>
+<span id="41">41</span>
+<span id="42">42</span>
+<span id="43">43</span>
+<span id="44">44</span>
+<span id="45">45</span>
+<span id="46">46</span>
+<span id="47">47</span>
+<span id="48">48</span>
+<span id="49">49</span>
+<span id="50">50</span>
+<span id="51">51</span>
+<span id="52">52</span>
+<span id="53">53</span>
+<span id="54">54</span>
+<span id="55">55</span>
+<span id="56">56</span>
+<span id="57">57</span>
+<span id="58">58</span>
+<span id="59">59</span>
+<span id="60">60</span>
+<span id="61">61</span>
+<span id="62">62</span>
+<span id="63">63</span>
+<span id="64">64</span>
+<span id="65">65</span>
+<span id="66">66</span>
+<span id="67">67</span>
+<span id="68">68</span>
+<span id="69">69</span>
+<span id="70">70</span>
+<span id="71">71</span>
+<span id="72">72</span>
+<span id="73">73</span>
+<span id="74">74</span>
+<span id="75">75</span>
+<span id="76">76</span>
+<span id="77">77</span>
+<span id="78">78</span>
+<span id="79">79</span>
+<span id="80">80</span>
+<span id="81">81</span>
+<span id="82">82</span>
+<span id="83">83</span>
+<span id="84">84</span>
+<span id="85">85</span>
+<span id="86">86</span>
+<span id="87">87</span>
+<span id="88">88</span>
+<span id="89">89</span>
+<span id="90">90</span>
+<span id="91">91</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::list::Styles</span>;
+<span class="kw">use</span> <span class="ident">camino</span>::{<span class="ident">Utf8Path</span>, <span class="ident">Utf8PathBuf</span>};
 <span class="kw">use</span> <span class="ident">owo_colors::OwoColorize</span>;
-<span class="kw">use</span> <span class="ident">std::io</span>::{<span class="self">self</span>, <span class="ident">Write</span>};
+<span class="kw">use</span> <span class="ident">std</span>::{
+    <span class="ident">io</span>::{<span class="self">self</span>, <span class="ident">Write</span>},
+    <span class="ident">path::PathBuf</span>,
+};
 
 <span class="doccomment">/// Write out a test name.</span>
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">write_test_name</span>(
@@ -55,6 +122,65 @@
     <span class="macro">write!</span>(<span class="ident">writer</span>, <span class="string">&quot;{}&quot;</span>, <span class="ident">trailing</span>.<span class="ident">style</span>(<span class="ident">style</span>.<span class="ident">test_name</span>))<span class="question-mark">?</span>;
 
     <span class="prelude-val">Ok</span>(())
+}
+
+<span class="comment">// ---</span>
+<span class="comment">// Functions below copied from cargo-util to avoid pulling in a bunch of dependencies</span>
+<span class="comment">// ---</span>
+
+<span class="doccomment">/// Returns the name of the environment variable used for searching for</span>
+<span class="doccomment">/// dynamic libraries.</span>
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">dylib_path_envvar</span>() -&gt; <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span> {
+    <span class="kw">if</span> <span class="macro">cfg!</span>(<span class="ident">windows</span>) {
+        <span class="string">&quot;PATH&quot;</span>
+    } <span class="kw">else</span> <span class="kw">if</span> <span class="macro">cfg!</span>(<span class="ident">target_os</span> <span class="op">=</span> <span class="string">&quot;macos&quot;</span>) {
+        <span class="comment">// When loading and linking a dynamic library or bundle, dlopen</span>
+        <span class="comment">// searches in LD_LIBRARY_PATH, DYLD_LIBRARY_PATH, PWD, and</span>
+        <span class="comment">// DYLD_FALLBACK_LIBRARY_PATH.</span>
+        <span class="comment">// In the Mach-O format, a dynamic library has an &quot;install path.&quot;</span>
+        <span class="comment">// Clients linking against the library record this path, and the</span>
+        <span class="comment">// dynamic linker, dyld, uses it to locate the library.</span>
+        <span class="comment">// dyld searches DYLD_LIBRARY_PATH *before* the install path.</span>
+        <span class="comment">// dyld searches DYLD_FALLBACK_LIBRARY_PATH only if it cannot</span>
+        <span class="comment">// find the library in the install path.</span>
+        <span class="comment">// Setting DYLD_LIBRARY_PATH can easily have unintended</span>
+        <span class="comment">// consequences.</span>
+        <span class="comment">//</span>
+        <span class="comment">// Also, DYLD_LIBRARY_PATH appears to have significant performance</span>
+        <span class="comment">// penalty starting in 10.13. Cargo&#39;s testsuite ran more than twice as</span>
+        <span class="comment">// slow with it on CI.</span>
+        <span class="string">&quot;DYLD_FALLBACK_LIBRARY_PATH&quot;</span>
+    } <span class="kw">else</span> {
+        <span class="string">&quot;LD_LIBRARY_PATH&quot;</span>
+    }
+}
+
+<span class="doccomment">/// Returns a list of directories that are searched for dynamic libraries.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Note that some operating systems will have defaults if this is empty that</span>
+<span class="doccomment">/// will need to be dealt with.</span>
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">dylib_path</span>() -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">PathBuf</span><span class="op">&gt;</span> {
+    <span class="kw">match</span> <span class="ident">std::env::var_os</span>(<span class="ident">dylib_path_envvar</span>()) {
+        <span class="prelude-val">Some</span>(<span class="ident">var</span>) =&gt; <span class="ident">std::env::split_paths</span>(<span class="kw-2">&amp;</span><span class="ident">var</span>).<span class="ident">collect</span>(),
+        <span class="prelude-val">None</span> =&gt; <span class="ident">Vec::new</span>(),
+    }
+}
+
+<span class="doccomment">/// On Windows, convert relative paths to always use forward slashes.</span>
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">convert_rel_path_to_forward_slash</span>(<span class="ident">rel_path</span>: <span class="kw-2">&amp;</span><span class="ident">Utf8Path</span>) -&gt; <span class="ident">Utf8PathBuf</span> {
+    <span class="kw">if</span> <span class="op">!</span><span class="ident">rel_path</span>.<span class="ident">is_relative</span>() {
+        <span class="macro">panic!</span>(
+            <span class="string">&quot;path for conversion to forward slash &#39;{}&#39; is not relative&quot;</span>,
+            <span class="ident">rel_path</span>
+        );
+    }
+    <span class="ident">rel_path</span>.<span class="ident">as_str</span>().<span class="ident">replace</span>(<span class="string">&#39;\\&#39;</span>, <span class="string">&quot;/&quot;</span>).<span class="ident">into</span>()
+}
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">windows</span>))]</span>
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">convert_rel_path_to_forward_slash</span>(<span class="ident">rel_path</span>: <span class="kw-2">&amp;</span><span class="ident">Utf8Path</span>) -&gt; <span class="ident">Utf8PathBuf</span> {
+    <span class="ident">rel_path</span>.<span class="ident">to_path_buf</span>()
 }
 </code></pre></div>
 </section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="nextest_runner" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0 (9d1b2106e 2022-02-23)" ></div>

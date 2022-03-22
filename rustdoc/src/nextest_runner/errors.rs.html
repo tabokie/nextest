@@ -528,6 +528,28 @@
 <span id="526">526</span>
 <span id="527">527</span>
 <span id="528">528</span>
+<span id="529">529</span>
+<span id="530">530</span>
+<span id="531">531</span>
+<span id="532">532</span>
+<span id="533">533</span>
+<span id="534">534</span>
+<span id="535">535</span>
+<span id="536">536</span>
+<span id="537">537</span>
+<span id="538">538</span>
+<span id="539">539</span>
+<span id="540">540</span>
+<span id="541">541</span>
+<span id="542">542</span>
+<span id="543">543</span>
+<span id="544">544</span>
+<span id="545">545</span>
+<span id="546">546</span>
+<span id="547">547</span>
+<span id="548">548</span>
+<span id="549">549</span>
+<span id="550">550</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -539,7 +561,7 @@
 };
 <span class="kw">use</span> <span class="ident">camino::Utf8PathBuf</span>;
 <span class="kw">use</span> <span class="ident">config::ConfigError</span>;
-<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">borrow::Cow</span>, <span class="ident">error</span>, <span class="ident">fmt</span>};
+<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">borrow::Cow</span>, <span class="ident">env::JoinPathsError</span>, <span class="ident">error</span>, <span class="ident">fmt</span>};
 
 <span class="doccomment">/// An error that occurred while parsing the config.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
@@ -800,6 +822,15 @@
         <span class="doccomment">/// The full output.</span>
         <span class="ident">full_output</span>: <span class="ident">String</span>,
     },
+
+    <span class="doccomment">/// An error occurred while joining paths for dynamic libraries.</span>
+    <span class="ident">DylibJoinPaths</span> {
+        <span class="doccomment">/// New paths attempted to be added to the dynamic library environment variable.</span>
+        <span class="ident">new_paths</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Utf8PathBuf</span><span class="op">&gt;</span>,
+
+        <span class="doccomment">/// The underlying error.</span>
+        <span class="ident">error</span>: <span class="ident">JoinPathsError</span>,
+    },
 }
 
 <span class="kw">impl</span> <span class="ident">ParseTestListError</span> {
@@ -819,6 +850,10 @@
             <span class="ident">full_output</span>: <span class="ident">full_output</span>.<span class="ident">into</span>(),
         }
     }
+
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">dylib_join_paths</span>(<span class="ident">new_paths</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Utf8PathBuf</span><span class="op">&gt;</span>, <span class="ident">error</span>: <span class="ident">JoinPathsError</span>) -&gt; <span class="self">Self</span> {
+        <span class="ident">ParseTestListError::DylibJoinPaths</span> { <span class="ident">new_paths</span>, <span class="ident">error</span> }
+    }
 }
 
 <span class="kw">impl</span> <span class="ident">fmt::Display</span> <span class="kw">for</span> <span class="ident">ParseTestListError</span> {
@@ -833,6 +868,14 @@
             } =&gt; {
                 <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;{}\nfull output:\n{}&quot;</span>, <span class="ident">message</span>, <span class="ident">full_output</span>)
             }
+            <span class="ident">ParseTestListError::DylibJoinPaths</span> { <span class="ident">new_paths</span>, .. } =&gt; {
+                <span class="kw">let</span> <span class="ident">new_paths_display</span> <span class="op">=</span> <span class="ident">itertools::join</span>(<span class="ident">new_paths</span>, <span class="string">&quot;, &quot;</span>);
+                <span class="macro">write!</span>(
+                    <span class="ident">f</span>,
+                    <span class="string">&quot;error adding dynamic library paths: [{}]&quot;</span>,
+                    <span class="ident">new_paths_display</span>,
+                )
+            }
         }
     }
 }
@@ -841,6 +884,7 @@
     <span class="kw">fn</span> <span class="ident">source</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>(<span class="kw">dyn</span> <span class="ident">error::Error</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>)<span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span> {
             <span class="ident">ParseTestListError::Command</span> { <span class="ident">error</span>, .. } =&gt; <span class="prelude-val">Some</span>(<span class="ident">error</span>),
+            <span class="ident">ParseTestListError::DylibJoinPaths</span> { <span class="ident">error</span>, .. } =&gt; <span class="prelude-val">Some</span>(<span class="ident">error</span>),
             <span class="ident">ParseTestListError::ParseLine</span> { .. } =&gt; <span class="prelude-val">None</span>,
         }
     }

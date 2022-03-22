@@ -842,18 +842,90 @@
 <span id="840">840</span>
 <span id="841">841</span>
 <span id="842">842</span>
+<span id="843">843</span>
+<span id="844">844</span>
+<span id="845">845</span>
+<span id="846">846</span>
+<span id="847">847</span>
+<span id="848">848</span>
+<span id="849">849</span>
+<span id="850">850</span>
+<span id="851">851</span>
+<span id="852">852</span>
+<span id="853">853</span>
+<span id="854">854</span>
+<span id="855">855</span>
+<span id="856">856</span>
+<span id="857">857</span>
+<span id="858">858</span>
+<span id="859">859</span>
+<span id="860">860</span>
+<span id="861">861</span>
+<span id="862">862</span>
+<span id="863">863</span>
+<span id="864">864</span>
+<span id="865">865</span>
+<span id="866">866</span>
+<span id="867">867</span>
+<span id="868">868</span>
+<span id="869">869</span>
+<span id="870">870</span>
+<span id="871">871</span>
+<span id="872">872</span>
+<span id="873">873</span>
+<span id="874">874</span>
+<span id="875">875</span>
+<span id="876">876</span>
+<span id="877">877</span>
+<span id="878">878</span>
+<span id="879">879</span>
+<span id="880">880</span>
+<span id="881">881</span>
+<span id="882">882</span>
+<span id="883">883</span>
+<span id="884">884</span>
+<span id="885">885</span>
+<span id="886">886</span>
+<span id="887">887</span>
+<span id="888">888</span>
+<span id="889">889</span>
+<span id="890">890</span>
+<span id="891">891</span>
+<span id="892">892</span>
+<span id="893">893</span>
+<span id="894">894</span>
+<span id="895">895</span>
+<span id="896">896</span>
+<span id="897">897</span>
+<span id="898">898</span>
+<span id="899">899</span>
+<span id="900">900</span>
+<span id="901">901</span>
+<span id="902">902</span>
+<span id="903">903</span>
+<span id="904">904</span>
+<span id="905">905</span>
+<span id="906">906</span>
+<span id="907">907</span>
+<span id="908">908</span>
+<span id="909">909</span>
+<span id="910">910</span>
+<span id="911">911</span>
+<span id="912">912</span>
+<span id="913">913</span>
+<span id="914">914</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">errors</span>::{<span class="ident">FromMessagesError</span>, <span class="ident">ParseTestListError</span>, <span class="ident">WriteTestListError</span>},
-    <span class="ident">helpers::write_test_name</span>,
+    <span class="ident">helpers</span>::{<span class="ident">dylib_path</span>, <span class="ident">dylib_path_envvar</span>, <span class="ident">write_test_name</span>},
     <span class="ident">list</span>::{<span class="ident">BinaryList</span>, <span class="ident">BinaryListState</span>, <span class="ident">OutputFormat</span>, <span class="ident">RustMetadata</span>, <span class="ident">Styles</span>, <span class="ident">TestListState</span>},
     <span class="ident">target_runner</span>::{<span class="ident">PlatformRunner</span>, <span class="ident">TargetRunner</span>},
     <span class="ident">test_filter::TestFilterBuilder</span>,
 };
 <span class="kw">use</span> <span class="ident">camino</span>::{<span class="ident">Utf8Path</span>, <span class="ident">Utf8PathBuf</span>};
-<span class="kw">use</span> <span class="ident">duct</span>::{<span class="ident">cmd</span>, <span class="ident">Expression</span>};
+<span class="kw">use</span> <span class="ident">duct::Expression</span>;
 <span class="kw">use</span> <span class="ident">guppy</span>::{
     <span class="ident">graph</span>::{<span class="ident">PackageGraph</span>, <span class="ident">PackageMetadata</span>},
     <span class="ident">PackageId</span>,
@@ -864,7 +936,13 @@
 };
 <span class="kw">use</span> <span class="ident">once_cell::sync::OnceCell</span>;
 <span class="kw">use</span> <span class="ident">owo_colors::OwoColorize</span>;
-<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">collections::BTreeMap</span>, <span class="ident">io</span>, <span class="ident">io::Write</span>};
+<span class="kw">use</span> <span class="ident">std</span>::{
+    <span class="ident">collections::BTreeMap</span>,
+    <span class="ident">ffi</span>::{<span class="ident">OsStr</span>, <span class="ident">OsString</span>},
+    <span class="ident">io</span>,
+    <span class="ident">io::Write</span>,
+    <span class="ident">path::PathBuf</span>,
+};
 
 <span class="doccomment">/// A Rust test binary built by Cargo. This artifact hasn&#39;t been run yet so there&#39;s no information</span>
 <span class="doccomment">/// about the tests within it.</span>
@@ -949,6 +1027,7 @@
     <span class="ident">test_count</span>: <span class="ident">usize</span>,
     <span class="ident">rust_metadata</span>: <span class="ident">RustMetadata</span><span class="op">&lt;</span><span class="ident">TestListState</span><span class="op">&gt;</span>,
     <span class="ident">rust_suites</span>: <span class="ident">BTreeMap</span><span class="op">&lt;</span><span class="ident">Utf8PathBuf</span>, <span class="ident">RustTestSuite</span><span class="op">&lt;</span><span class="lifetime">&#39;g</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">updated_dylib_path</span>: <span class="ident">OsString</span>,
     <span class="comment">// Computed on first access.</span>
     <span class="ident">skip_count</span>: <span class="ident">OnceCell</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>,
 }
@@ -1044,11 +1123,13 @@
         <span class="ident">runner</span>: <span class="kw-2">&amp;</span><span class="ident">TargetRunner</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">ParseTestListError</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">test_count</span> <span class="op">=</span> <span class="number">0</span>;
+        <span class="kw">let</span> <span class="ident">rust_metadata</span> <span class="op">=</span> <span class="ident">rust_metadata</span>.<span class="ident">map_paths</span>(<span class="ident">path_mapper</span>);
+        <span class="kw">let</span> <span class="ident">updated_dylib_path</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::create_dylib_path</span>(<span class="kw-2">&amp;</span><span class="ident">rust_metadata</span>)<span class="question-mark">?</span>;
 
         <span class="kw">let</span> <span class="ident">test_artifacts</span> <span class="op">=</span> <span class="ident">test_artifacts</span>
             .<span class="ident">into_iter</span>()
             .<span class="ident">map</span>(<span class="op">|</span><span class="ident">test_binary</span><span class="op">|</span> {
-                <span class="kw">let</span> (<span class="ident">non_ignored</span>, <span class="ident">ignored</span>) <span class="op">=</span> <span class="ident">test_binary</span>.<span class="ident">exec</span>(<span class="ident">runner</span>)<span class="question-mark">?</span>;
+                <span class="kw">let</span> (<span class="ident">non_ignored</span>, <span class="ident">ignored</span>) <span class="op">=</span> <span class="ident">test_binary</span>.<span class="ident">exec</span>(<span class="kw-2">&amp;</span><span class="ident">updated_dylib_path</span>, <span class="ident">runner</span>)<span class="question-mark">?</span>;
                 <span class="kw">let</span> (<span class="ident">bin</span>, <span class="ident">info</span>) <span class="op">=</span> <span class="ident"><span class="self">Self</span>::process_output</span>(
                     <span class="ident">test_binary</span>,
                     <span class="ident">filter</span>,
@@ -1062,7 +1143,8 @@
 
         <span class="prelude-val">Ok</span>(<span class="self">Self</span> {
             <span class="ident">rust_suites</span>: <span class="ident">test_artifacts</span>,
-            <span class="ident">rust_metadata</span>: <span class="ident">rust_metadata</span>.<span class="ident">map_paths</span>(<span class="ident">path_mapper</span>),
+            <span class="ident">rust_metadata</span>,
+            <span class="ident">updated_dylib_path</span>,
             <span class="ident">test_count</span>,
             <span class="ident">skip_count</span>: <span class="ident">OnceCell::new</span>(),
         })
@@ -1093,9 +1175,13 @@
             })
             .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">BTreeMap</span><span class="op">&lt;</span><span class="kw">_</span>, <span class="kw">_</span><span class="op">&gt;</span>, <span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>()<span class="question-mark">?</span>;
 
+        <span class="kw">let</span> <span class="ident">rust_metadata</span> <span class="op">=</span> <span class="ident">rust_metadata</span>.<span class="ident">map_paths</span>(<span class="ident">path_mapper</span>);
+        <span class="kw">let</span> <span class="ident">updated_dylib_path</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::create_dylib_path</span>(<span class="kw-2">&amp;</span><span class="ident">rust_metadata</span>)<span class="question-mark">?</span>;
+
         <span class="prelude-val">Ok</span>(<span class="self">Self</span> {
             <span class="ident">rust_suites</span>: <span class="ident">test_artifacts</span>,
-            <span class="ident">rust_metadata</span>: <span class="ident">rust_metadata</span>.<span class="ident">map_paths</span>(<span class="ident">path_mapper</span>),
+            <span class="ident">rust_metadata</span>,
+            <span class="ident">updated_dylib_path</span>,
             <span class="ident">test_count</span>,
             <span class="ident">skip_count</span>: <span class="ident">OnceCell::new</span>(),
         })
@@ -1104,6 +1190,11 @@
     <span class="doccomment">/// Returns the total number of tests across all binaries.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_count</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">usize</span> {
         <span class="self">self</span>.<span class="ident">test_count</span>
+    }
+
+    <span class="doccomment">/// Returns the Rust-related metadata for this test list.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">rust_metadata</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">RustMetadata</span><span class="op">&lt;</span><span class="ident">TestListState</span><span class="op">&gt;</span> {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">rust_metadata</span>
     }
 
     <span class="doccomment">/// Returns the total number of skipped tests.</span>
@@ -1130,6 +1221,11 @@
     <span class="doccomment">/// Returns the tests for a given binary, or `None` if the binary wasn&#39;t in the list.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">test_bin</span>: <span class="kw">impl</span> <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Utf8Path</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">RustTestSuite</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">rust_suites</span>.<span class="ident">get</span>(<span class="ident">test_bin</span>.<span class="ident">as_ref</span>())
+    }
+
+    <span class="doccomment">/// Returns the updated dynamic library path used for tests.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">updated_dylib_path</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">OsStr</span> {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">updated_dylib_path</span>
     }
 
     <span class="doccomment">/// Constructs a serializble summary for this test list.</span>
@@ -1215,9 +1311,29 @@
         <span class="self">Self</span> {
             <span class="ident">test_count</span>: <span class="number">0</span>,
             <span class="ident">rust_metadata</span>: <span class="ident">RustMetadata::empty</span>(),
+            <span class="ident">updated_dylib_path</span>: <span class="ident">OsString::new</span>(),
             <span class="ident">rust_suites</span>: <span class="ident">BTreeMap::new</span>(),
             <span class="ident">skip_count</span>: <span class="ident">OnceCell::new</span>(),
         }
+    }
+
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">create_dylib_path</span>(
+        <span class="ident">rust_metadata</span>: <span class="kw-2">&amp;</span><span class="ident">RustMetadata</span><span class="op">&lt;</span><span class="ident">TestListState</span><span class="op">&gt;</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">OsString</span>, <span class="ident">ParseTestListError</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">dylib_path</span> <span class="op">=</span> <span class="ident">dylib_path</span>();
+        <span class="kw">let</span> <span class="ident">new_paths</span> <span class="op">=</span> <span class="ident">rust_metadata</span>.<span class="ident">dylib_paths</span>();
+
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">updated_dylib_path</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">PathBuf</span><span class="op">&gt;</span> <span class="op">=</span>
+            <span class="ident">Vec::with_capacity</span>(<span class="ident">dylib_path</span>.<span class="ident">len</span>() <span class="op">+</span> <span class="ident">new_paths</span>.<span class="ident">len</span>());
+        <span class="ident">updated_dylib_path</span>.<span class="ident">extend</span>(
+            <span class="ident">new_paths</span>
+                .<span class="ident">iter</span>()
+                .<span class="ident">map</span>(<span class="op">|</span><span class="ident">path</span><span class="op">|</span> <span class="ident">path</span>.<span class="ident">clone</span>().<span class="ident">into_std_path_buf</span>()),
+        );
+        <span class="ident">updated_dylib_path</span>.<span class="ident">extend</span>(<span class="ident">dylib_path</span>);
+
+        <span class="ident">std::env::join_paths</span>(<span class="ident">updated_dylib_path</span>)
+            .<span class="ident">map_err</span>(<span class="kw">move</span> <span class="op">|</span><span class="ident">error</span><span class="op">|</span> <span class="ident">ParseTestListError::dylib_join_paths</span>(<span class="ident">new_paths</span>, <span class="ident">error</span>))
     }
 
     <span class="kw">fn</span> <span class="ident">process_output</span>(
@@ -1349,17 +1465,22 @@
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;g</span><span class="op">&gt;</span> <span class="ident">RustTestArtifact</span><span class="op">&lt;</span><span class="lifetime">&#39;g</span><span class="op">&gt;</span> {
     <span class="doccomment">/// Run this binary with and without --ignored and get the corresponding outputs.</span>
-    <span class="kw">fn</span> <span class="ident">exec</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">runner</span>: <span class="kw-2">&amp;</span><span class="ident">TargetRunner</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">String</span>, <span class="ident">String</span>), <span class="ident">ParseTestListError</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">exec</span>(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        <span class="ident">dylib_path</span>: <span class="kw-2">&amp;</span><span class="ident">OsStr</span>,
+        <span class="ident">runner</span>: <span class="kw-2">&amp;</span><span class="ident">TargetRunner</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">String</span>, <span class="ident">String</span>), <span class="ident">ParseTestListError</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">platform_runner</span> <span class="op">=</span> <span class="ident">runner</span>.<span class="ident">for_build_platform</span>(<span class="self">self</span>.<span class="ident">build_platform</span>);
 
-        <span class="kw">let</span> <span class="ident">non_ignored</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">exec_single</span>(<span class="bool-val">false</span>, <span class="ident">platform_runner</span>)<span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="ident">ignored</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">exec_single</span>(<span class="bool-val">true</span>, <span class="ident">platform_runner</span>)<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">non_ignored</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">exec_single</span>(<span class="bool-val">false</span>, <span class="ident">dylib_path</span>, <span class="ident">platform_runner</span>)<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">ignored</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">exec_single</span>(<span class="bool-val">true</span>, <span class="ident">dylib_path</span>, <span class="ident">platform_runner</span>)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>((<span class="ident">non_ignored</span>, <span class="ident">ignored</span>))
     }
 
     <span class="kw">fn</span> <span class="ident">exec_single</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">ignored</span>: <span class="ident">bool</span>,
+        <span class="ident">dylib_path</span>: <span class="kw-2">&amp;</span><span class="ident">OsStr</span>,
         <span class="ident">runner</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">PlatformRunner</span><span class="op">&gt;</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">ParseTestListError</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">argv</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
@@ -1378,7 +1499,8 @@
             <span class="ident">argv</span>.<span class="ident">push</span>(<span class="string">&quot;--ignored&quot;</span>);
         }
 
-        <span class="kw">let</span> <span class="ident">cmd</span> <span class="op">=</span> <span class="ident">cmd</span>(<span class="ident">program</span>, <span class="ident">argv</span>).<span class="ident">dir</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">cwd</span>).<span class="ident">stdout_capture</span>();
+        <span class="kw">let</span> <span class="ident">cmd</span> <span class="op">=</span> <span class="ident">make_test_expression</span>(<span class="ident">program</span>, <span class="ident">argv</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">cwd</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">package</span>, <span class="ident">dylib_path</span>)
+            .<span class="ident">stdout_capture</span>();
 
         <span class="ident">cmd</span>.<span class="ident">read</span>().<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">error</span><span class="op">|</span> {
             <span class="ident">ParseTestListError::command</span>(
@@ -1426,7 +1548,11 @@
     }
 
     <span class="doccomment">/// Creates the command expression for this test instance.</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">make_expression</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">target_runner</span>: <span class="kw-2">&amp;</span><span class="ident">TargetRunner</span>) -&gt; <span class="ident">Expression</span> {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">make_expression</span>(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        <span class="ident">test_list</span>: <span class="kw-2">&amp;</span><span class="ident">TestList</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
+        <span class="ident">target_runner</span>: <span class="kw-2">&amp;</span><span class="ident">TargetRunner</span>,
+    ) -&gt; <span class="ident">Expression</span> {
         <span class="kw">let</span> <span class="ident">platform_runner</span> <span class="op">=</span> <span class="ident">target_runner</span>.<span class="ident">for_build_platform</span>(<span class="self">self</span>.<span class="ident">bin_info</span>.<span class="ident">build_platform</span>);
         <span class="comment">// TODO: non-rust tests</span>
 
@@ -1449,56 +1575,72 @@
             <span class="ident">args</span>.<span class="ident">push</span>(<span class="string">&quot;--ignored&quot;</span>);
         }
 
-        <span class="kw">let</span> <span class="ident">package</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">bin_info</span>.<span class="ident">package</span>;
-
-        <span class="kw">let</span> <span class="ident">cmd</span> <span class="op">=</span> <span class="ident">cmd</span>(<span class="ident">program</span>, <span class="ident">args</span>)
-            .<span class="ident">dir</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">bin_info</span>.<span class="ident">cwd</span>)
-            <span class="comment">// This environment variable is set to indicate that tests are being run under nextest.</span>
-            .<span class="ident">env</span>(<span class="string">&quot;NEXTEST&quot;</span>, <span class="string">&quot;1&quot;</span>)
-            <span class="comment">// This environment variable is set to indicate that each test is being run in its own process.</span>
-            .<span class="ident">env</span>(<span class="string">&quot;NEXTEST_EXECUTION_MODE&quot;</span>, <span class="string">&quot;process-per-test&quot;</span>)
-            <span class="comment">// These environment variables are set at runtime by cargo test:</span>
-            <span class="comment">// https://doc.rust-lang.org/cargo/reference/environment-variables.html#environment-variables-cargo-sets-for-crates</span>
-            .<span class="ident">env</span>(
-                <span class="string">&quot;CARGO_MANIFEST_DIR&quot;</span>,
-                <span class="ident">package</span>.<span class="ident">manifest_path</span>().<span class="ident">parent</span>().<span class="ident">unwrap</span>(),
-            )
-            .<span class="ident">env</span>(<span class="string">&quot;CARGO_PKG_VERSION&quot;</span>, <span class="macro">format!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">package</span>.<span class="ident">version</span>()))
-            .<span class="ident">env</span>(
-                <span class="string">&quot;CARGO_PKG_VERSION_MAJOR&quot;</span>,
-                <span class="macro">format!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">package</span>.<span class="ident">version</span>().<span class="ident">major</span>),
-            )
-            .<span class="ident">env</span>(
-                <span class="string">&quot;CARGO_PKG_VERSION_MINOR&quot;</span>,
-                <span class="macro">format!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">package</span>.<span class="ident">version</span>().<span class="ident">minor</span>),
-            )
-            .<span class="ident">env</span>(
-                <span class="string">&quot;CARGO_PKG_VERSION_PATCH&quot;</span>,
-                <span class="macro">format!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">package</span>.<span class="ident">version</span>().<span class="ident">patch</span>),
-            )
-            .<span class="ident">env</span>(
-                <span class="string">&quot;CARGO_PKG_VERSION_PRE&quot;</span>,
-                <span class="macro">format!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">package</span>.<span class="ident">version</span>().<span class="ident">pre</span>),
-            )
-            .<span class="ident">env</span>(<span class="string">&quot;CARGO_PKG_AUTHORS&quot;</span>, <span class="ident">package</span>.<span class="ident">authors</span>().<span class="ident">join</span>(<span class="string">&quot;:&quot;</span>))
-            .<span class="ident">env</span>(<span class="string">&quot;CARGO_PKG_NAME&quot;</span>, <span class="ident">package</span>.<span class="ident">name</span>())
-            .<span class="ident">env</span>(
-                <span class="string">&quot;CARGO_PKG_DESCRIPTION&quot;</span>,
-                <span class="ident">package</span>.<span class="ident">description</span>().<span class="ident">unwrap_or_default</span>(),
-            )
-            .<span class="ident">env</span>(<span class="string">&quot;CARGO_PKG_HOMEPAGE&quot;</span>, <span class="ident">package</span>.<span class="ident">homepage</span>().<span class="ident">unwrap_or_default</span>())
-            .<span class="ident">env</span>(<span class="string">&quot;CARGO_PKG_LICENSE&quot;</span>, <span class="ident">package</span>.<span class="ident">license</span>().<span class="ident">unwrap_or_default</span>())
-            .<span class="ident">env</span>(
-                <span class="string">&quot;CARGO_PKG_LICENSE_FILE&quot;</span>,
-                <span class="ident">package</span>.<span class="ident">license_file</span>().<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="string">&quot;&quot;</span>.<span class="ident">as_ref</span>()),
-            )
-            .<span class="ident">env</span>(
-                <span class="string">&quot;CARGO_PKG_REPOSITORY&quot;</span>,
-                <span class="ident">package</span>.<span class="ident">repository</span>().<span class="ident">unwrap_or_default</span>(),
-            );
-
-        <span class="ident">cmd</span>
+        <span class="ident">make_test_expression</span>(
+            <span class="ident">program</span>,
+            <span class="ident">args</span>,
+            <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">bin_info</span>.<span class="ident">cwd</span>,
+            <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">bin_info</span>.<span class="ident">package</span>,
+            <span class="ident">test_list</span>.<span class="ident">updated_dylib_path</span>(),
+        )
     }
+}
+
+<span class="doccomment">/// Create a duct Expression for a test binary with the given arguments, using the specified [`PackageMetadata`].</span>
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">make_test_expression</span>(
+    <span class="ident">program</span>: <span class="ident">OsString</span>,
+    <span class="ident">args</span>: <span class="kw">impl</span> <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">OsString</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">cwd</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">PathBuf</span><span class="op">&gt;</span>,
+    <span class="ident">package</span>: <span class="kw-2">&amp;</span><span class="ident">PackageMetadata</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
+    <span class="ident">dylib_path</span>: <span class="kw-2">&amp;</span><span class="ident">OsStr</span>,
+) -&gt; <span class="ident">duct::Expression</span> {
+    <span class="kw">let</span> <span class="ident">cmd</span> <span class="op">=</span> <span class="ident">duct::cmd</span>(<span class="ident">program</span>, <span class="ident">args</span>)
+        .<span class="ident">dir</span>(<span class="ident">cwd</span>)
+        <span class="comment">// This environment variable is set to indicate that tests are being run under nextest.</span>
+        .<span class="ident">env</span>(<span class="string">&quot;NEXTEST&quot;</span>, <span class="string">&quot;1&quot;</span>)
+        <span class="comment">// This environment variable is set to indicate that each test is being run in its own process.</span>
+        .<span class="ident">env</span>(<span class="string">&quot;NEXTEST_EXECUTION_MODE&quot;</span>, <span class="string">&quot;process-per-test&quot;</span>)
+        <span class="comment">// These environment variables are set at runtime by cargo test:</span>
+        <span class="comment">// https://doc.rust-lang.org/cargo/reference/environment-variables.html#environment-variables-cargo-sets-for-crates</span>
+        .<span class="ident">env</span>(
+            <span class="string">&quot;CARGO_MANIFEST_DIR&quot;</span>,
+            <span class="ident">package</span>.<span class="ident">manifest_path</span>().<span class="ident">parent</span>().<span class="ident">unwrap</span>(),
+        )
+        .<span class="ident">env</span>(<span class="string">&quot;CARGO_PKG_VERSION&quot;</span>, <span class="macro">format!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">package</span>.<span class="ident">version</span>()))
+        .<span class="ident">env</span>(
+            <span class="string">&quot;CARGO_PKG_VERSION_MAJOR&quot;</span>,
+            <span class="macro">format!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">package</span>.<span class="ident">version</span>().<span class="ident">major</span>),
+        )
+        .<span class="ident">env</span>(
+            <span class="string">&quot;CARGO_PKG_VERSION_MINOR&quot;</span>,
+            <span class="macro">format!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">package</span>.<span class="ident">version</span>().<span class="ident">minor</span>),
+        )
+        .<span class="ident">env</span>(
+            <span class="string">&quot;CARGO_PKG_VERSION_PATCH&quot;</span>,
+            <span class="macro">format!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">package</span>.<span class="ident">version</span>().<span class="ident">patch</span>),
+        )
+        .<span class="ident">env</span>(
+            <span class="string">&quot;CARGO_PKG_VERSION_PRE&quot;</span>,
+            <span class="macro">format!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">package</span>.<span class="ident">version</span>().<span class="ident">pre</span>),
+        )
+        .<span class="ident">env</span>(<span class="string">&quot;CARGO_PKG_AUTHORS&quot;</span>, <span class="ident">package</span>.<span class="ident">authors</span>().<span class="ident">join</span>(<span class="string">&quot;:&quot;</span>))
+        .<span class="ident">env</span>(<span class="string">&quot;CARGO_PKG_NAME&quot;</span>, <span class="ident">package</span>.<span class="ident">name</span>())
+        .<span class="ident">env</span>(
+            <span class="string">&quot;CARGO_PKG_DESCRIPTION&quot;</span>,
+            <span class="ident">package</span>.<span class="ident">description</span>().<span class="ident">unwrap_or_default</span>(),
+        )
+        .<span class="ident">env</span>(<span class="string">&quot;CARGO_PKG_HOMEPAGE&quot;</span>, <span class="ident">package</span>.<span class="ident">homepage</span>().<span class="ident">unwrap_or_default</span>())
+        .<span class="ident">env</span>(<span class="string">&quot;CARGO_PKG_LICENSE&quot;</span>, <span class="ident">package</span>.<span class="ident">license</span>().<span class="ident">unwrap_or_default</span>())
+        .<span class="ident">env</span>(
+            <span class="string">&quot;CARGO_PKG_LICENSE_FILE&quot;</span>,
+            <span class="ident">package</span>.<span class="ident">license_file</span>().<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="string">&quot;&quot;</span>.<span class="ident">as_ref</span>()),
+        )
+        .<span class="ident">env</span>(
+            <span class="string">&quot;CARGO_PKG_REPOSITORY&quot;</span>,
+            <span class="ident">package</span>.<span class="ident">repository</span>().<span class="ident">unwrap_or_default</span>(),
+        )
+        .<span class="ident">env</span>(<span class="ident">dylib_path_envvar</span>(), <span class="ident">dylib_path</span>);
+
+    <span class="ident">cmd</span>
 }
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
@@ -1599,7 +1741,9 @@
         <span class="kw">static</span> <span class="ident">EXPECTED_JSON_PRETTY</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="macro">indoc!</span> {<span class="string">r#&quot;
             {
               &quot;rust-metadata&quot;: {
-                &quot;target-directory&quot;: &quot;/fake&quot;
+                &quot;target-directory&quot;: &quot;/fake&quot;,
+                &quot;base-output-directories&quot;: [],
+                &quot;linked-paths&quot;: []
               },
               &quot;test-count&quot;: 4,
               &quot;rust-suites&quot;: {

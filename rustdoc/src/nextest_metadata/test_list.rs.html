@@ -292,14 +292,28 @@
 <span id="290">290</span>
 <span id="291">291</span>
 <span id="292">292</span>
+<span id="293">293</span>
+<span id="294">294</span>
+<span id="295">295</span>
+<span id="296">296</span>
+<span id="297">297</span>
+<span id="298">298</span>
+<span id="299">299</span>
+<span id="300">300</span>
+<span id="301">301</span>
+<span id="302">302</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::CommandError</span>;
 <span class="kw">use</span> <span class="ident">camino</span>::{<span class="ident">Utf8Path</span>, <span class="ident">Utf8PathBuf</span>};
 <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
-<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">collections::BTreeMap</span>, <span class="ident">fmt</span>, <span class="ident">path::PathBuf</span>, <span class="ident">process::Command</span>};
-
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::CommandError</span>;
+<span class="kw">use</span> <span class="ident">std</span>::{
+    <span class="ident">collections</span>::{<span class="ident">BTreeMap</span>, <span class="ident">BTreeSet</span>},
+    <span class="ident">fmt</span>,
+    <span class="ident">path::PathBuf</span>,
+    <span class="ident">process::Command</span>,
+};
 
 <span class="doccomment">/// Command builder for `cargo nextest list`.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Default</span>)]</span>
@@ -500,6 +514,12 @@
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">RustMetadataSummary</span> {
     <span class="doccomment">/// The target directory for Rust artifacts.</span>
     <span class="kw">pub</span> <span class="ident">target_directory</span>: <span class="ident">Utf8PathBuf</span>,
+
+    <span class="doccomment">/// Base output directories, relative to the target directory.</span>
+    <span class="kw">pub</span> <span class="ident">base_output_directories</span>: <span class="ident">BTreeSet</span><span class="op">&lt;</span><span class="ident">Utf8PathBuf</span><span class="op">&gt;</span>,
+
+    <span class="doccomment">/// Linked paths, relative to the target directory.</span>
+    <span class="kw">pub</span> <span class="ident">linked_paths</span>: <span class="ident">BTreeSet</span><span class="op">&lt;</span><span class="ident">Utf8PathBuf</span><span class="op">&gt;</span>,
 }
 
 <span class="doccomment">/// A serializable suite of tests within a Rust test binary.</span>

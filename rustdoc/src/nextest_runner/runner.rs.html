@@ -1238,7 +1238,7 @@
         <span class="ident">run_sender</span>: <span class="kw-2">&amp;</span><span class="ident">Sender</span><span class="op">&lt;</span><span class="ident">InternalTestEvent</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     ) -&gt; <span class="ident">std::io::Result</span><span class="op">&lt;</span><span class="ident">InternalExecuteStatus</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">cmd</span> <span class="op">=</span> <span class="ident">test</span>
-            .<span class="ident">make_expression</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">target_runner</span>)
+            .<span class="ident">make_expression</span>(<span class="self">self</span>.<span class="ident">test_list</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">target_runner</span>)
             .<span class="ident">unchecked</span>()
             <span class="comment">// Debug environment variable for testing.</span>
             .<span class="ident">env</span>(<span class="string">&quot;__NEXTEST_ATTEMPT&quot;</span>, <span class="macro">format!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">attempt</span>));
