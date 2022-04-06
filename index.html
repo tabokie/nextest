@@ -158,11 +158,20 @@
 <h2 id="features"><a class="header" href="#features">Features</a></h2>
 <img src="static/cover.png" id="nextest-cover">
 <ul>
-<li><strong>Clean, beautiful user interface.</strong> nextest presents its results concisely so you can see which tests passed and failed at a glance.</li>
+<li><strong>Clean, beautiful user interface.</strong> Nextest presents its results concisely so you can see which tests passed and failed at a glance.</li>
 <li><strong><a href="book/benchmarks.html">Up to 60% faster</a> than cargo test.</strong> Nextest uses a <a href="book/how-it-works.html">state-of-the-art execution model</a> for faster, more reliable test runs.</li>
+<li><strong>Designed for CI.</strong> Nextest thoughtfully addresses pain points in continuous integration scenarios.
+<ul>
+<li>Use <strong><a href="book/pre-built-binaries.html">pre-built binaries</a></strong> for quick installation.</li>
+<li>Set up CI-specific <strong><a href="book/configuration.html">configuration profiles</a></strong>.</li>
+<li>Print failing output <strong><a href="book/other-options.html#reporter-options">at the end of test runs</a></strong>.</li>
+<li><strong><a href="book/partitioning.html">Partition test runs</a></strong> across multiple CI jobs.</li>
+<li>Output information about test runs as <strong><a href="book/junit.html">JUnit XML</a></strong>.</li>
+</ul>
+</li>
+<li><strong>Identify slow tests.</strong> Use nextest to detect tests that take a long time to run, and identify bottlenecks during test execution.</li>
 <li><strong>Detect flaky tests.</strong> Nextest can <a href="book/retries.html">automatically retry</a> failing tests for you, and if they pass later nextest will mark them as flaky.</li>
-<li><strong>Partition test runs across several CI jobs.</strong> If your tests take too long to run in CI, nextest can automatically split them up for you across several jobs.</li>
-<li><strong>Cross-platform.</strong> nextest works on Unix, Mac and Windows, so you get the benefits of faster test runs no matter what platform you use.</li>
+<li><strong>Cross-platform.</strong> Nextest works on Unix, Mac and Windows, so you get the benefits of faster test runs no matter what platform you use.</li>
 <li>... and more <a href="https://github.com/nextest-rs/nextest/projects/1">coming soon</a>!</li>
 </ul>
 <h2 id="quick-start"><a class="header" href="#quick-start">Quick start</a></h2>

@@ -156,11 +156,20 @@
 <h2 id="features"><a class="header" href="#features">Features</a></h2>
 <img src="static/cover.png" id="nextest-cover">
 <ul>
-<li><strong>Clean, beautiful user interface.</strong> nextest presents its results concisely so you can see which tests passed and failed at a glance.</li>
+<li><strong>Clean, beautiful user interface.</strong> Nextest presents its results concisely so you can see which tests passed and failed at a glance.</li>
 <li><strong><a href="book/benchmarks.html">Up to 60% faster</a> than cargo test.</strong> Nextest uses a <a href="book/how-it-works.html">state-of-the-art execution model</a> for faster, more reliable test runs.</li>
+<li><strong>Designed for CI.</strong> Nextest thoughtfully addresses pain points in continuous integration scenarios.
+<ul>
+<li>Use <strong><a href="book/pre-built-binaries.html">pre-built binaries</a></strong> for quick installation.</li>
+<li>Set up CI-specific <strong><a href="book/configuration.html">configuration profiles</a></strong>.</li>
+<li>Print failing output <strong><a href="book/other-options.html#reporter-options">at the end of test runs</a></strong>.</li>
+<li><strong><a href="book/partitioning.html">Partition test runs</a></strong> across multiple CI jobs.</li>
+<li>Output information about test runs as <strong><a href="book/junit.html">JUnit XML</a></strong>.</li>
+</ul>
+</li>
+<li><strong>Identify slow tests.</strong> Use nextest to detect tests that take a long time to run, and identify bottlenecks during test execution.</li>
 <li><strong>Detect flaky tests.</strong> Nextest can <a href="book/retries.html">automatically retry</a> failing tests for you, and if they pass later nextest will mark them as flaky.</li>
-<li><strong>Partition test runs across several CI jobs.</strong> If your tests take too long to run in CI, nextest can automatically split them up for you across several jobs.</li>
-<li><strong>Cross-platform.</strong> nextest works on Unix, Mac and Windows, so you get the benefits of faster test runs no matter what platform you use.</li>
+<li><strong>Cross-platform.</strong> Nextest works on Unix, Mac and Windows, so you get the benefits of faster test runs no matter what platform you use.</li>
 <li>... and more <a href="https://github.com/nextest-rs/nextest/projects/1">coming soon</a>!</li>
 </ul>
 <h2 id="quick-start"><a class="header" href="#quick-start">Quick start</a></h2>
@@ -378,6 +387,9 @@ unit, or excluding those tests from nextest.</p>
 <ul>
 <li>
 <p>Tests are marked <strong><code>PASS</code></strong> or <strong><code>FAIL</code></strong>, and the amount of wall-clock time each test takes is listed within square brackets. In the example above, <strong><code>test_list_tests</code></strong> passed and took 0.603 seconds to execute.</p>
+</li>
+<li>
+<p>Tests that take more than a specified amount of time are marked <strong>SLOW</strong>. The timeout is 60 seconds by default, and can be <a href="book/configuration.html">changed through configuration</a>.</p>
 </li>
 <li>
 <p>The part of the test in purple is the <em>test binary</em>. A test binary is either:</p>
@@ -614,7 +626,7 @@ runner = &quot;wine&quot;
 <p>While cross-compiling code, some tests may need to be run on the host platform. (See the note about <a href="book/running.html#filtering-by-build-platform">Filtering by build platform</a> for more.)</p>
 <p>For tests that run on the host platform, nextest uses the target runner defined for the host. For example, if cross-compiling from <code>x86_64-unknown-linux-gnu</code> to <code>x86_64-pc-windows-msvc</code>, nextest will use the <code>CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_RUNNER</code> for proc-macro and other host-only tests, and <code>CARGO_TARGET_X86_64_PC_WINDOWS_MSVC_RUNNER</code> for other tests.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="other-options"><a class="header" href="#other-options">Other options</a></h1>
-<p>Some other options accepted by <code>cargo nextest run</code>:</p>
+<p>Some other options accepted by <code>cargo nextest run</code>. Many of these options are also accepted as <a href="book/configuration.html">configuration settings</a> and <a href="book/env-vars.html">environment variables</a>.</p>
 <h3 id="runner-options"><a class="header" href="#runner-options">Runner options</a></h3>
 <ul>
 <li><code>--no-fail-fast</code>: do not exit the test run on the first failure. Most useful for CI scenarios.</li>
@@ -627,7 +639,7 @@ runner = &quot;wine&quot;
 <ul>
 <li><code>immediate</code>: display output as soon as the test fails. Default for <code>--failure-output</code>.</li>
 <li><code>final</code>: display output at the end of the test run.</li>
-<li><code>immediate-final</code>: display output as soon as the test fails, and at the end of the run. This is most useful for CI runs.</li>
+<li><code>immediate-final</code>: display output as soon as the test fails, and at the end of the run. This is most useful for CI jobs.</li>
 <li><code>never</code>: never display output. Default for <code>--success-output</code>.</li>
 </ul>
 </li>

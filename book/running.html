@@ -165,6 +165,9 @@
 <p>Tests are marked <strong><code>PASS</code></strong> or <strong><code>FAIL</code></strong>, and the amount of wall-clock time each test takes is listed within square brackets. In the example above, <strong><code>test_list_tests</code></strong> passed and took 0.603 seconds to execute.</p>
 </li>
 <li>
+<p>Tests that take more than a specified amount of time are marked <strong>SLOW</strong>. The timeout is 60 seconds by default, and can be <a href="configuration.html">changed through configuration</a>.</p>
+</li>
+<li>
 <p>The part of the test in purple is the <em>test binary</em>. A test binary is either:</p>
 <ul>
 <li>a <em>unit test binary</em> built from tests inline within <code>lib.rs</code>. These test binaries are shown by nextest as just the crate name, without a <code>::</code> separator inside them.</li>
