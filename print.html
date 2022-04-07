@@ -1184,7 +1184,7 @@ my-test-2: test
 <p>Custom test harnesses that are meant to be run as a single unit MUST produce just one line in the output.</p>
 </li>
 <li>
-<p><strong>Custom test harnesses MUST support being run with <code>--list --format terse --ignored</code></strong>. This command MUST print to stdout exactly the set of ignored tests (however the harness defines them) in the same format as above. If there are no ignored tests or if the test harness doesn't support ignored tests, the output MUST be empty.</p>
+<p><strong>Custom test harnesses MUST support being run with <code>--list --format terse --ignored</code></strong>. This command MUST print to stdout exactly the set of ignored tests (however the harness defines them) in the same format as above. If there are no ignored tests or if the test harness doesn't support ignored tests, the output MUST be empty. The set of ignored and non-ignored tests MUST be completely disjoint.</p>
 </li>
 <li>
 <p><strong>Test names that are not at the top level (however the harness defines this) SHOULD be returned as <code>path::to::test::test_name</code>.</strong> This is recommended because the cargo-nextest UI uses <code>::</code> as a separator to format test names nicely.</p>
