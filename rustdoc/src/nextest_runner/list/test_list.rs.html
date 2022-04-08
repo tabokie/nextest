@@ -917,6 +917,9 @@
 <span id="912">912</span>
 <span id="913">913</span>
 <span id="914">914</span>
+<span id="915">915</span>
+<span id="916">916</span>
+<span id="917">917</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -1362,7 +1365,10 @@
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ignored_filter</span> <span class="op">=</span> <span class="ident">filter</span>.<span class="ident">build</span>();
         <span class="kw">for</span> <span class="ident">test_name</span> <span class="kw">in</span> <span class="ident"><span class="self">Self</span>::parse</span>(<span class="ident">ignored</span>.<span class="ident">as_ref</span>())<span class="question-mark">?</span> {
-            <span class="comment">// TODO: catch dups</span>
+            <span class="comment">// Note that libtest prints out:</span>
+            <span class="comment">// * just ignored tests if --ignored is passed in</span>
+            <span class="comment">// * all tests, both ignored and non-ignored, if --ignored is not passed in</span>
+            <span class="comment">// Adding ignored tests after non-ignored ones makes everything resolve correctly.</span>
             <span class="ident">tests</span>.<span class="ident">insert</span>(
                 <span class="ident">test_name</span>.<span class="ident">into</span>(),
                 <span class="ident">RustTestCaseSummary</span> {
