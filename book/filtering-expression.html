@@ -155,7 +155,7 @@
                     <main>
                         <h1 id="filtering-expression"><a class="header" href="#filtering-expression">Filtering expression</a></h1>
 <ul>
-<li><strong>Introduced in:</strong> cargo-nextest 0.9.13</li>
+<li><strong>Introduced in:</strong> cargo-nextest 0.9.13 (not released yet)</li>
 <li><strong>Environment variable</strong>: <code>NEXTEST_EXPERIMENTAL_EXPR_FILTER=1</code></li>
 <li><strong>Tracking issue</strong>: []</li>
 </ul>
@@ -190,18 +190,23 @@
 <li><code>set_1 - set_2</code>: equivalent to <code>set_1 and not set_2</code></li>
 <li><code>(set)</code>: include everything in <code>set</code></li>
 </ul>
-<p>Precedences from lowest to highest:</p>
-<ul>
-<li><code>not</code>, <code>()</code></li>
-<li><code>&amp;</code>, <code>|</code>, <code>-</code></li>
-</ul>
+<h3 id="operator-precedence"><a class="header" href="#operator-precedence">Operator precedence</a></h3>
+<p>In order from highest to lowest, or in other words from tightest to loosest binding:</p>
+<ol>
+<li><code>()</code></li>
+<li><code>not</code>, <code>!</code></li>
+<li><code>and</code>, <code>&amp;</code>, <code>-</code></li>
+<li><code>or</code>, <code>|</code></li>
+</ol>
+<p>Within a precedence group, operators bind from left to right.</p>
 <p>Examples:</p>
 <ul>
-<li><code>package(=serde) and test(deserialize)</code>: every tests containing <code>deserialize</code> in the package <code>serde</code></li>
+<li><code>package(=serde) and test(deserialize)</code>: every test containing the string <code>deserialize</code> in the package <code>serde</code></li>
 <li><code>not (test(parse) | test(run))</code>: every test not containing <code>parse</code> or <code>run</code></li>
-<li><code>test(a) &amp; test(b) | test(c)</code> is equivalent to <code>( test(a) &amp; test(b) ) | test(c)</code></li>
-<li><code>test(a) | test(b) &amp; test(c)</code> is equivalent to <code>( test(a) | test(b) ) &amp; test(c)</code></li>
-<li><code>not test(a) | test(b)</code> is equivalent to <code>( not test(a) ) | test(b)</code></li>
+<li><code>test(a) &amp; test(b) | test(c)</code> is equivalent to <code>(test(a) &amp; test(b)) | test(c)</code></li>
+<li><code>test(a) | test(b) &amp; test(c)</code> is equivalent to <code>test(a) | (test(b) &amp; test(c))</code></li>
+<li><code>test(a) &amp; test(b) - test(c)</code> is equivalent to <code>(test(a) &amp; test(b)) - test(c)</code></li>
+<li><code>not test(a) | test(b)</code> is equivalent to <code>(not test(a)) | test(b)</code></li>
 </ul>
 <h2 id="usage"><a class="header" href="#usage">Usage</a></h2>
 <p>Multiple filter expressions can be pass to <code>cargo nextest</code>, if a test is include by one of the filtering expressions it will be run.</p>
