@@ -254,6 +254,53 @@
 <span id="249">249</span>
 <span id="250">250</span>
 <span id="251">251</span>
+<span id="252">252</span>
+<span id="253">253</span>
+<span id="254">254</span>
+<span id="255">255</span>
+<span id="256">256</span>
+<span id="257">257</span>
+<span id="258">258</span>
+<span id="259">259</span>
+<span id="260">260</span>
+<span id="261">261</span>
+<span id="262">262</span>
+<span id="263">263</span>
+<span id="264">264</span>
+<span id="265">265</span>
+<span id="266">266</span>
+<span id="267">267</span>
+<span id="268">268</span>
+<span id="269">269</span>
+<span id="270">270</span>
+<span id="271">271</span>
+<span id="272">272</span>
+<span id="273">273</span>
+<span id="274">274</span>
+<span id="275">275</span>
+<span id="276">276</span>
+<span id="277">277</span>
+<span id="278">278</span>
+<span id="279">279</span>
+<span id="280">280</span>
+<span id="281">281</span>
+<span id="282">282</span>
+<span id="283">283</span>
+<span id="284">284</span>
+<span id="285">285</span>
+<span id="286">286</span>
+<span id="287">287</span>
+<span id="288">288</span>
+<span id="289">289</span>
+<span id="290">290</span>
+<span id="291">291</span>
+<span id="292">292</span>
+<span id="293">293</span>
+<span id="294">294</span>
+<span id="295">295</span>
+<span id="296">296</span>
+<span id="297">297</span>
+<span id="298">298</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -267,9 +314,11 @@
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">errors::RunIgnoredParseError</span>,
+    <span class="ident">list::RustTestArtifact</span>,
     <span class="ident">partition</span>::{<span class="ident">Partitioner</span>, <span class="ident">PartitionerBuilder</span>},
 };
 <span class="kw">use</span> <span class="ident">aho_corasick::AhoCorasick</span>;
+<span class="kw">use</span> <span class="ident">nextest_filtering::FilteringExpr</span>;
 <span class="kw">use</span> <span class="ident">nextest_metadata</span>::{<span class="ident">FilterMatch</span>, <span class="ident">MismatchReason</span>};
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">fmt</span>, <span class="ident">str::FromStr</span>};
 
@@ -331,6 +380,7 @@
     <span class="ident">run_ignored</span>: <span class="ident">RunIgnored</span>,
     <span class="ident">partitioner_builder</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PartitionerBuilder</span><span class="op">&gt;</span>,
     <span class="ident">name_match</span>: <span class="ident">NameMatch</span>,
+    <span class="ident">exprs</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">FilteringExpr</span><span class="op">&gt;</span>,
 }
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>)]</span>
@@ -347,16 +397,19 @@
         <span class="ident">run_ignored</span>: <span class="ident">RunIgnored</span>,
         <span class="ident">partitioner_builder</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PartitionerBuilder</span><span class="op">&gt;</span>,
         <span class="ident">patterns</span>: <span class="kw-2">&amp;</span>[<span class="kw">impl</span> <span class="ident">AsRef</span><span class="op">&lt;</span>[<span class="ident">u8</span>]<span class="op">&gt;</span>],
+        <span class="ident">exprs</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">FilteringExpr</span><span class="op">&gt;</span>,
     ) -&gt; <span class="self">Self</span> {
         <span class="kw">let</span> <span class="ident">name_match</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">patterns</span>.<span class="ident">is_empty</span>() {
             <span class="ident">NameMatch::MatchAll</span>
         } <span class="kw">else</span> {
             <span class="ident">NameMatch::MatchSet</span>(<span class="ident">Box::new</span>(<span class="ident">AhoCorasick::new_auto_configured</span>(<span class="ident">patterns</span>)))
         };
+
         <span class="self">Self</span> {
             <span class="ident">run_ignored</span>,
             <span class="ident">partitioner_builder</span>,
             <span class="ident">name_match</span>,
+            <span class="ident">exprs</span>,
         }
     }
 
@@ -366,6 +419,7 @@
             <span class="ident">run_ignored</span>,
             <span class="ident">partitioner_builder</span>: <span class="prelude-val">None</span>,
             <span class="ident">name_match</span>: <span class="ident">NameMatch::MatchAll</span>,
+            <span class="ident">exprs</span>: <span class="ident">Vec::new</span>(),
         }
     }
 
@@ -393,46 +447,86 @@
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;filter</span><span class="op">&gt;</span> <span class="ident">TestFilter</span><span class="op">&lt;</span><span class="lifetime">&#39;filter</span><span class="op">&gt;</span> {
     <span class="doccomment">/// Returns an enum describing the match status of this filter.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">filter_match</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">test_name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">ignored</span>: <span class="ident">bool</span>) -&gt; <span class="ident">FilterMatch</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">filter_match</span>(
+        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
+        <span class="ident">test_binary</span>: <span class="kw-2">&amp;</span><span class="ident">RustTestArtifact</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
+        <span class="ident">test_name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
+        <span class="ident">ignored</span>: <span class="ident">bool</span>,
+    ) -&gt; <span class="ident">FilterMatch</span> {
+        <span class="self">self</span>.<span class="ident">filter_ignored_mismatch</span>(<span class="ident">ignored</span>)
+            .<span class="ident">or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">filter_name_mismatch</span>(<span class="ident">test_name</span>))
+            .<span class="ident">or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">filter_expression_mismatch</span>(<span class="ident">test_binary</span>, <span class="ident">test_name</span>))
+            .<span class="ident">or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">filter_partition_mismatch</span>(<span class="ident">test_name</span>))
+            .<span class="ident">unwrap_or</span>(<span class="ident">FilterMatch::Matches</span>)
+    }
+
+    <span class="kw">fn</span> <span class="ident">filter_ignored_mismatch</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">ignored</span>: <span class="ident">bool</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">FilterMatch</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span>.<span class="ident">builder</span>.<span class="ident">run_ignored</span> {
             <span class="ident">RunIgnored::IgnoredOnly</span> =&gt; {
                 <span class="kw">if</span> <span class="op">!</span><span class="ident">ignored</span> {
-                    <span class="kw">return</span> <span class="ident">FilterMatch::Mismatch</span> {
+                    <span class="kw">return</span> <span class="prelude-val">Some</span>(<span class="ident">FilterMatch::Mismatch</span> {
                         <span class="ident">reason</span>: <span class="ident">MismatchReason::Ignored</span>,
-                    };
+                    });
                 }
             }
             <span class="ident">RunIgnored::Default</span> =&gt; {
                 <span class="kw">if</span> <span class="ident">ignored</span> {
-                    <span class="kw">return</span> <span class="ident">FilterMatch::Mismatch</span> {
+                    <span class="kw">return</span> <span class="prelude-val">Some</span>(<span class="ident">FilterMatch::Mismatch</span> {
                         <span class="ident">reason</span>: <span class="ident">MismatchReason::Ignored</span>,
-                    };
+                    });
                 }
             }
             <span class="kw">_</span> =&gt; {}
-        };
+        }
+        <span class="prelude-val">None</span>
+    }
 
+    <span class="kw">fn</span> <span class="ident">filter_name_mismatch</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">test_name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">FilterMatch</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">string_match</span> <span class="op">=</span> <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">builder</span>.<span class="ident">name_match</span> {
             <span class="ident">NameMatch::MatchAll</span> =&gt; <span class="bool-val">true</span>,
             <span class="ident">NameMatch::MatchSet</span>(<span class="ident">set</span>) =&gt; <span class="ident">set</span>.<span class="ident">is_match</span>(<span class="ident">test_name</span>),
         };
-        <span class="kw">if</span> <span class="op">!</span><span class="ident">string_match</span> {
-            <span class="kw">return</span> <span class="ident">FilterMatch::Mismatch</span> {
+        <span class="kw">if</span> <span class="ident">string_match</span> {
+            <span class="prelude-val">None</span>
+        } <span class="kw">else</span> {
+            <span class="prelude-val">Some</span>(<span class="ident">FilterMatch::Mismatch</span> {
                 <span class="ident">reason</span>: <span class="ident">MismatchReason::String</span>,
-            };
+            })
         }
+    }
 
+    <span class="kw">fn</span> <span class="ident">filter_expression_mismatch</span>(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        <span class="ident">test_binary</span>: <span class="kw-2">&amp;</span><span class="ident">RustTestArtifact</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
+        <span class="ident">test_name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
+    ) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">FilterMatch</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">accepted</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">builder</span>.<span class="ident">exprs</span>.<span class="ident">is_empty</span>()
+            <span class="op">|</span><span class="op">|</span> <span class="self">self</span>
+                .<span class="ident">builder</span>
+                .<span class="ident">exprs</span>
+                .<span class="ident">iter</span>()
+                .<span class="ident">any</span>(<span class="op">|</span><span class="ident">expr</span><span class="op">|</span> <span class="ident">expr</span>.<span class="ident">includes</span>(<span class="ident">test_binary</span>.<span class="ident">package</span>.<span class="ident">id</span>(), <span class="ident">test_name</span>));
+
+        <span class="kw">match</span> <span class="ident">accepted</span> {
+            <span class="bool-val">false</span> =&gt; <span class="prelude-val">Some</span>(<span class="ident">FilterMatch::Mismatch</span> {
+                <span class="ident">reason</span>: <span class="ident">MismatchReason::Expression</span>,
+            }),
+            <span class="bool-val">true</span> =&gt; <span class="prelude-val">None</span>,
+        }
+    }
+
+    <span class="kw">fn</span> <span class="ident">filter_partition_mismatch</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">test_name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">FilterMatch</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">partition_match</span> <span class="op">=</span> <span class="kw">match</span> <span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">partitioner</span> {
             <span class="prelude-val">Some</span>(<span class="ident">partitioner</span>) =&gt; <span class="ident">partitioner</span>.<span class="ident">test_matches</span>(<span class="ident">test_name</span>),
             <span class="prelude-val">None</span> =&gt; <span class="bool-val">true</span>,
         };
-        <span class="kw">if</span> <span class="op">!</span><span class="ident">partition_match</span> {
-            <span class="kw">return</span> <span class="ident">FilterMatch::Mismatch</span> {
+        <span class="kw">if</span> <span class="ident">partition_match</span> {
+            <span class="prelude-val">None</span>
+        } <span class="kw">else</span> {
+            <span class="prelude-val">Some</span>(<span class="ident">FilterMatch::Mismatch</span> {
                 <span class="ident">reason</span>: <span class="ident">MismatchReason::Partition</span>,
-            };
+            })
         }
-
-        <span class="ident">FilterMatch::Matches</span>
     }
 }
 
@@ -445,20 +539,20 @@
         <span class="attribute">#[<span class="ident">test</span>]</span>
         <span class="kw">fn</span> <span class="ident">proptest_empty</span>(<span class="ident">test_names</span> <span class="kw">in</span> <span class="ident">vec</span>(<span class="ident">any</span>::<span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>(), <span class="number">0</span>..<span class="number">16</span>)) {
             <span class="kw">let</span> <span class="ident">patterns</span>: <span class="kw-2">&amp;</span>[<span class="ident">String</span>] <span class="op">=</span> <span class="kw-2">&amp;</span>[];
-            <span class="kw">let</span> <span class="ident">test_filter</span> <span class="op">=</span> <span class="ident">TestFilterBuilder::new</span>(<span class="ident">RunIgnored::Default</span>, <span class="prelude-val">None</span>, <span class="ident">patterns</span>);
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">single_filter</span> <span class="op">=</span> <span class="ident">test_filter</span>.<span class="ident">build</span>();
+            <span class="kw">let</span> <span class="ident">test_filter</span> <span class="op">=</span> <span class="ident">TestFilterBuilder::new</span>(<span class="ident">RunIgnored::Default</span>, <span class="prelude-val">None</span>, <span class="ident">patterns</span>, <span class="ident">Vec::new</span>());
+            <span class="kw">let</span> <span class="ident">single_filter</span> <span class="op">=</span> <span class="ident">test_filter</span>.<span class="ident">build</span>();
             <span class="kw">for</span> <span class="ident">test_name</span> <span class="kw">in</span> <span class="ident">test_names</span> {
-                <span class="macro">prop_assert!</span>(<span class="ident">single_filter</span>.<span class="ident">filter_match</span>(<span class="kw-2">&amp;</span><span class="ident">test_name</span>, <span class="bool-val">false</span>).<span class="ident">is_match</span>());
+                <span class="macro">prop_assert!</span>(<span class="ident">single_filter</span>.<span class="ident">filter_name_mismatch</span>(<span class="kw-2">&amp;</span><span class="ident">test_name</span>).<span class="ident">is_none</span>());
             }
         }
 
         <span class="comment">// Test that exact names match.</span>
         <span class="attribute">#[<span class="ident">test</span>]</span>
         <span class="kw">fn</span> <span class="ident">proptest_exact</span>(<span class="ident">test_names</span> <span class="kw">in</span> <span class="ident">vec</span>(<span class="ident">any</span>::<span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>(), <span class="number">0</span>..<span class="number">16</span>)) {
-            <span class="kw">let</span> <span class="ident">test_filter</span> <span class="op">=</span> <span class="ident">TestFilterBuilder::new</span>(<span class="ident">RunIgnored::Default</span>, <span class="prelude-val">None</span>, <span class="kw-2">&amp;</span><span class="ident">test_names</span>);
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">single_filter</span> <span class="op">=</span> <span class="ident">test_filter</span>.<span class="ident">build</span>();
+            <span class="kw">let</span> <span class="ident">test_filter</span> <span class="op">=</span> <span class="ident">TestFilterBuilder::new</span>(<span class="ident">RunIgnored::Default</span>, <span class="prelude-val">None</span>, <span class="kw-2">&amp;</span><span class="ident">test_names</span>, <span class="ident">Vec::new</span>());
+            <span class="kw">let</span> <span class="ident">single_filter</span> <span class="op">=</span> <span class="ident">test_filter</span>.<span class="ident">build</span>();
             <span class="kw">for</span> <span class="ident">test_name</span> <span class="kw">in</span> <span class="ident">test_names</span> {
-                <span class="macro">prop_assert!</span>(<span class="ident">single_filter</span>.<span class="ident">filter_match</span>(<span class="kw-2">&amp;</span><span class="ident">test_name</span>, <span class="bool-val">false</span>).<span class="ident">is_match</span>());
+                <span class="macro">prop_assert!</span>(<span class="ident">single_filter</span>.<span class="ident">filter_name_mismatch</span>(<span class="kw-2">&amp;</span><span class="ident">test_name</span>).<span class="ident">is_none</span>());
             }
         }
 
@@ -474,10 +568,10 @@
                 <span class="ident">patterns</span>.<span class="ident">push</span>(<span class="ident">substring</span>);
             }
 
-            <span class="kw">let</span> <span class="ident">test_filter</span> <span class="op">=</span> <span class="ident">TestFilterBuilder::new</span>(<span class="ident">RunIgnored::Default</span>, <span class="prelude-val">None</span>, <span class="kw-2">&amp;</span><span class="ident">patterns</span>);
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">single_filter</span> <span class="op">=</span> <span class="ident">test_filter</span>.<span class="ident">build</span>();
+            <span class="kw">let</span> <span class="ident">test_filter</span> <span class="op">=</span> <span class="ident">TestFilterBuilder::new</span>(<span class="ident">RunIgnored::Default</span>, <span class="prelude-val">None</span>, <span class="kw-2">&amp;</span><span class="ident">patterns</span>, <span class="ident">Vec::new</span>());
+            <span class="kw">let</span> <span class="ident">single_filter</span> <span class="op">=</span> <span class="ident">test_filter</span>.<span class="ident">build</span>();
             <span class="kw">for</span> <span class="ident">test_name</span> <span class="kw">in</span> <span class="ident">test_names</span> {
-                <span class="macro">prop_assert!</span>(<span class="ident">single_filter</span>.<span class="ident">filter_match</span>(<span class="kw-2">&amp;</span><span class="ident">test_name</span>, <span class="bool-val">false</span>).<span class="ident">is_match</span>());
+                <span class="macro">prop_assert!</span>(<span class="ident">single_filter</span>.<span class="ident">filter_name_mismatch</span>(<span class="kw-2">&amp;</span><span class="ident">test_name</span>).<span class="ident">is_none</span>());
             }
         }
 
@@ -490,9 +584,9 @@
         ) {
             <span class="macro">prop_assume!</span>(<span class="op">!</span><span class="ident">substring</span>.<span class="ident">is_empty</span>() <span class="op">&amp;&amp;</span> <span class="op">!</span>(<span class="ident">prefix</span>.<span class="ident">is_empty</span>() <span class="op">&amp;&amp;</span> <span class="ident">suffix</span>.<span class="ident">is_empty</span>()));
             <span class="kw">let</span> <span class="ident">pattern</span> <span class="op">=</span> <span class="ident">prefix</span> <span class="op">+</span> <span class="kw-2">&amp;</span><span class="ident">substring</span> <span class="op">+</span> <span class="kw-2">&amp;</span><span class="ident">suffix</span>;
-            <span class="kw">let</span> <span class="ident">test_filter</span> <span class="op">=</span> <span class="ident">TestFilterBuilder::new</span>(<span class="ident">RunIgnored::Default</span>, <span class="prelude-val">None</span>, <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span><span class="ident">pattern</span>]);
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">single_filter</span> <span class="op">=</span> <span class="ident">test_filter</span>.<span class="ident">build</span>();
-            <span class="macro">prop_assert!</span>(<span class="op">!</span><span class="ident">single_filter</span>.<span class="ident">filter_match</span>(<span class="kw-2">&amp;</span><span class="ident">substring</span>, <span class="bool-val">false</span>).<span class="ident">is_match</span>());
+            <span class="kw">let</span> <span class="ident">test_filter</span> <span class="op">=</span> <span class="ident">TestFilterBuilder::new</span>(<span class="ident">RunIgnored::Default</span>, <span class="prelude-val">None</span>, <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span><span class="ident">pattern</span>], <span class="ident">Vec::new</span>());
+            <span class="kw">let</span> <span class="ident">single_filter</span> <span class="op">=</span> <span class="ident">test_filter</span>.<span class="ident">build</span>();
+            <span class="macro">prop_assert!</span>(<span class="ident">single_filter</span>.<span class="ident">filter_name_mismatch</span>(<span class="kw-2">&amp;</span><span class="ident">substring</span>).<span class="ident">is_some</span>());
         }
     }
 
