@@ -159,7 +159,7 @@
 name = &quot;my-test&quot;
 harness = false
 </code></pre>
-<p>As mentioned in <a href="how-it-works.html">How nextest works</a>, cargo-nextest has a much thicker interface with the test harness than cargo test does. If you don't use any custom harnesses, cargo-nextest will run out of the box. However, users of custom test harnesses may need to be changed to work with cargo nextest. In general, the changes make the test harness look more like the default Rust test harness, and are pretty small overall.</p>
+<p>As mentioned in <a href="how-it-works.html"><em>How nextest works</em></a>, cargo-nextest has a much thicker interface with the test harness than cargo test does. If you don't use any custom harnesses, cargo-nextest will run out of the box. However, users of custom test harnesses may need to be changed to work with cargo nextest. In general, the changes make the test harness look more like the default Rust test harness, and are pretty small overall.</p>
 <ul>
 <li>
 <p><strong>Custom test harnesses MUST support being run with <code>--list --format terse</code>.</strong> This command MUST print to stdout all tests in <em>exactly</em> the format</p>
