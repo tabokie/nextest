@@ -176,7 +176,7 @@
 <h3 id="examples"><a class="header" href="#examples">Examples</a></h3>
 <ul>
 <li><code>package(=serde) and test(deserialize)</code>: every test containing the string <code>deserialize</code> in the package <code>serde</code></li>
-<li><code>not (test(/parse[0-9]*/) | test(run))</code>: every test containing <code>parse</code> or <code>run</code></li>
+<li><code>not (test(/parse[0-9]*/) | test(run))</code>: every test not containing <code>parse</code> or <code>run</code></li>
 </ul>
 <h2 id="dsl-reference"><a class="header" href="#dsl-reference">DSL reference</a></h2>
 <p>This section contains the full set of operators supported by the DSL.</p>
@@ -224,7 +224,7 @@
 <li><code>()</code></li>
 <li><code>not</code>, <code>!</code></li>
 <li><code>and</code>, <code>&amp;</code>, <code>-</code></li>
-<li><code>or</code>, <code>|</code></li>
+<li><code>or</code>, <code>|</code>, <code>+</code></li>
 </ol>
 <p>Within a precedence group, operators bind from left to right.</p>
 <h5 id="examples-1"><a class="header" href="#examples-1">Examples</a></h5>
