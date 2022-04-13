@@ -1161,8 +1161,7 @@ may be changed or removed at any time, and must be accessed through an environme
 <li><code>\u{7FFF}</code>: 24-bit Unicode character code (up to 6 hex digits)</li>
 </ul>
 <p>All other escape sequences are invalid.</p>
-<p>The <em>regular expression</em> matcher supports the same escape sequences that <a href="https://docs.rs/regex/latest/regex/#escape-sequences">the regex crate does</a>.</p>
-<p>TODO: add a way to escape <code>/</code> in regexes.</p>
+<p>The <em>regular expression</em> matcher supports the same escape sequences that <a href="https://docs.rs/regex/latest/regex/#escape-sequences">the regex crate does</a>, additionally <code>\/</code> is read as an escaped <code>/</code>.</p>
 <h3 id="operators"><a class="header" href="#operators">Operators</a></h3>
 <ul>
 <li><code>set_1 &amp; set_2</code> , <code>set_1 and set_2</code>: the intersection of <code>set_1</code> and <code>set_2</code></li>
