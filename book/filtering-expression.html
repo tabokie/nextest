@@ -153,36 +153,64 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="filtering-expression"><a class="header" href="#filtering-expression">Filtering expression</a></h1>
+                        <h1 id="filter-expression-dsl"><a class="header" href="#filter-expression-dsl">Filter expression DSL</a></h1>
 <ul>
 <li><strong>Introduced in:</strong> cargo-nextest 0.9.13 (not released yet)</li>
 <li><strong>Environment variable</strong>: <code>NEXTEST_EXPERIMENTAL_EXPR_FILTER=1</code></li>
 <li><strong>Tracking issue</strong>: []</li>
 </ul>
-<p>Tests to run can be filtered using filter expressions.</p>
-<h2 id="filtering-expression-dsl"><a class="header" href="#filtering-expression-dsl">Filtering expression DSL</a></h2>
-<p>A filtering expression define a set of tests, any test in the set will be run.</p>
-<p>Basic sets:</p>
+<p>Nextest supports a domain-specific language (DSL) for filtering tests. The DSL is inspired by, and is similar to, <a href="https://bazel.build/docs/query-how-to">Bazel query</a> and <a href="https://www.mercurial-scm.org/repo/hg/help/revsets">Mercurial revsets</a>.</p>
+<h2 id="example-running-all-tests-in-a-crate-and-its-dependencies"><a class="header" href="#example-running-all-tests-in-a-crate-and-its-dependencies">Example: Running all tests in a crate and its dependencies</a></h2>
+<p>To run all tests in <code>my-crate</code> and its dependencies, run:</p>
+<pre><code>cargo nextest run -E 'deps(=my-crate)'
+</code></pre>
+<p>The argument passed into the <code>-E</code> command-line option is called a <em>filter expression</em>. The rest of this page describes the full syntax for the expression DSL.</p>
+<h2 id="the-filter-expression-dsl"><a class="header" href="#the-filter-expression-dsl">The filter expression DSL</a></h2>
+<p>A <em>filter expression</em> defines a set of tests. A test will be run if it matches a filter expression.</p>
+<p>On the command line, multiple filter expressions can be passed in. A test will be run if it matches any of these expressions. For example, to run tests whose names contain the string <code>my_test</code> as well as all tests in package <code>my-crate</code>, run:</p>
+<pre><code>cargo nextest run -E 'test(my_test)' -E 'package(=my-crate)'
+</code></pre>
+<p>This is equivalent to:</p>
+<pre><code>cargo nextest run -E 'test(my_test) + package(=my-crate)'
+</code></pre>
+<h3 id="examples"><a class="header" href="#examples">Examples</a></h3>
 <ul>
-<li><code>all()</code>: include everything</li>
-<li><code>test(name-matcher)</code>: include all tests matching <code>name-matcher</code></li>
-<li><code>package(name-matcher)</code>: include all tests in packages matching <code>name-matcher</code></li>
-<li><code>deps(name-matcher)</code>: include all tests in packages depended on by packages matching <code>name-matcher</code> and include all tests in packages matching <code>name-matcher</code></li>
-<li><code>rdeps(name-matcher)</code>: include all tests in packages depending on packages matching <code>name-matcher</code> and include all tests in packages matching <code>name-matcher</code></li>
-<li><code>none()</code>: include nothing</li>
+<li><code>package(=serde) and test(deserialize)</code>: every test containing the string <code>deserialize</code> in the package <code>serde</code></li>
+<li><code>not (test(/parse[0-9]*/) | test(run))</code>: every test containing <code>parse</code> or <code>run</code></li>
 </ul>
-<p>Name matcher:</p>
+<h2 id="dsl-reference"><a class="header" href="#dsl-reference">DSL reference</a></h2>
+<p>This section contains the full set of operators supported by the DSL.</p>
+<h3 id="basic-sets"><a class="header" href="#basic-sets">Basic sets</a></h3>
 <ul>
-<li><code>unicode_text</code>: match anything containing <code>unicode_text</code></li>
-<li><code>=unicode_text</code>: match anything equal to <code>unicode_text</code></li>
-<li><code>/reg/</code>: match anything matching the regex <code>reg</code></li>
+<li><code>all()</code>: include all tests.</li>
+<li><code>test(name-matcher)</code>: include all tests matching <code>name-matcher</code>.</li>
+<li><code>package(name-matcher)</code>: include all tests in packages (crates) matching <code>name-matcher</code>.</li>
+<li><code>deps(name-matcher)</code>: include all tests in crates matching <code>name-matcher</code>, and all of their (possibly transitive) dependencies.</li>
+<li><code>rdeps(name-matcher)</code>: include all tests in crates matching <code>name-matcher</code>, and all the crates that (possibly transitively) depend on <code>name-matcher</code>.</li>
+<li><code>none()</code>: include no tests.</li>
 </ul>
-<p>Unicode string:</p>
+<h3 id="name-matchers"><a class="header" href="#name-matchers">Name matchers</a></h3>
 <ul>
-<li>can contains escaped closing parenthesis: <code>\)</code></li>
-<li>can contains unicode sequence: <code>\u{xxx}</code> (where <code>xxx</code> is an 1 to 6 digits hexadecimal number)</li>
+<li><code>string</code> or <code>contains:string</code>: match a package or test name containing <code>string</code></li>
+<li><code>=string</code>: match a package or test name that's equal to <code>string</code></li>
+<li><code>/regex/</code>: match a package or test name if any part of it matches the regular expression <code>regex</code>. To match the entire string against a regular expression, use <code>/^regex$/</code>. The implementation uses the regex crate.</li>
 </ul>
-<p>Operations:</p>
+<p>To match a string beginning with <code>=</code> or <code>/</code>, or if you're constructing an expression string in a programmatic context, use the <code>contains:</code> prefix.</p>
+<h4 id="escape-sequences"><a class="header" href="#escape-sequences">Escape sequences</a></h4>
+<p>The <em>contains</em> and <em>equality</em> name matchers can contain escape sequences, preceded by a backslash (<code>\</code>).</p>
+<ul>
+<li><code>\n</code>: line feed</li>
+<li><code>\r</code>: carriage return</li>
+<li><code>\t</code>: tab</li>
+<li><code>\\</code>: backslash</li>
+<li><code>\/</code>: forward slash</li>
+<li><code>\)</code>: closing parenthesis</li>
+<li><code>\u{7FFF}</code>: 24-bit Unicode character code (up to 6 hex digits)</li>
+</ul>
+<p>All other escape sequences are invalid.</p>
+<p>The <em>regular expression</em> matcher supports the same escape sequences that <a href="https://docs.rs/regex/latest/regex/#escape-sequences">the regex crate does</a>.</p>
+<p>TODO: add a way to escape <code>/</code> in regexes.</p>
+<h3 id="operators"><a class="header" href="#operators">Operators</a></h3>
 <ul>
 <li><code>set_1 &amp; set_2</code> , <code>set_1 and set_2</code>: the intersection of <code>set_1</code> and <code>set_2</code></li>
 <li><code>set_1 | set_2</code>, <code>set_1 or set_2</code>, <code>set_1 + set_2</code>: the union of <code>set_1</code> or <code>set_2</code></li>
@@ -190,7 +218,7 @@
 <li><code>set_1 - set_2</code>: equivalent to <code>set_1 and not set_2</code></li>
 <li><code>(set)</code>: include everything in <code>set</code></li>
 </ul>
-<h3 id="operator-precedence"><a class="header" href="#operator-precedence">Operator precedence</a></h3>
+<h4 id="operator-precedence"><a class="header" href="#operator-precedence">Operator precedence</a></h4>
 <p>In order from highest to lowest, or in other words from tightest to loosest binding:</p>
 <ol>
 <li><code>()</code></li>
@@ -199,19 +227,12 @@
 <li><code>or</code>, <code>|</code></li>
 </ol>
 <p>Within a precedence group, operators bind from left to right.</p>
-<p>Examples:</p>
+<h5 id="examples-1"><a class="header" href="#examples-1">Examples</a></h5>
 <ul>
-<li><code>package(=serde) and test(deserialize)</code>: every test containing the string <code>deserialize</code> in the package <code>serde</code></li>
-<li><code>not (test(parse) | test(run))</code>: every test not containing <code>parse</code> or <code>run</code></li>
-<li><code>test(a) &amp; test(b) | test(c)</code> is equivalent to <code>(test(a) &amp; test(b)) | test(c)</code></li>
-<li><code>test(a) | test(b) &amp; test(c)</code> is equivalent to <code>test(a) | (test(b) &amp; test(c))</code></li>
-<li><code>test(a) &amp; test(b) - test(c)</code> is equivalent to <code>(test(a) &amp; test(b)) - test(c)</code></li>
-<li><code>not test(a) | test(b)</code> is equivalent to <code>(not test(a)) | test(b)</code></li>
-</ul>
-<h2 id="usage"><a class="header" href="#usage">Usage</a></h2>
-<p>Multiple filter expressions can be pass to <code>cargo nextest</code>, if a test is include by one of the filtering expressions it will be run.</p>
-<ul>
-<li><code>cargo nextest run -E 'package(=crate_a)' -E 'test(parse)'</code>: will run every tests in the <code>crate_a</code> package and every test containing <code>parse</code>.</li>
+<li><code>test(a) &amp; test(b) | test(c)</code> is equivalent to <code>(test(a) &amp; test(b)) | test(c)</code>.</li>
+<li><code>test(a) | test(b) &amp; test(c)</code> is equivalent to <code>test(a) | (test(b) &amp; test(c))</code>.</li>
+<li><code>test(a) &amp; test(b) - test(c)</code> is equivalent to <code>(test(a) &amp; test(b)) - test(c)</code>.</li>
+<li><code>not test(a) | test(b)</code> is equivalent to <code>(not test(a)) | test(b)</code>.</li>
 </ul>
 
                     </main>

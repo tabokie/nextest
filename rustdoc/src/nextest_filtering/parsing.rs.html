@@ -695,6 +695,24 @@
 <span id="690">690</span>
 <span id="691">691</span>
 <span id="692">692</span>
+<span id="693">693</span>
+<span id="694">694</span>
+<span id="695">695</span>
+<span id="696">696</span>
+<span id="697">697</span>
+<span id="698">698</span>
+<span id="699">699</span>
+<span id="700">700</span>
+<span id="701">701</span>
+<span id="702">702</span>
+<span id="703">703</span>
+<span id="704">704</span>
+<span id="705">705</span>
+<span id="706">706</span>
+<span id="707">707</span>
+<span id="708">708</span>
+<span id="709">709</span>
+<span id="710">710</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -905,9 +923,13 @@
 <span class="comment">// This parse will never fail</span>
 <span class="attribute">#[<span class="ident">tracable_parser</span>]</span>
 <span class="kw">fn</span> <span class="ident">parse_contains_matcher</span>(<span class="ident">input</span>: <span class="ident">Span</span>) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">NameMatcher</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-    <span class="ident">map</span>(<span class="ident">parse_matcher_text</span>, <span class="op">|</span><span class="ident">res</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="op">|</span> {
-        <span class="ident">res</span>.<span class="ident">map</span>(<span class="ident">NameMatcher::Contains</span>)
-    })(<span class="ident">input</span>)
+    <span class="ident">map</span>(
+        <span class="ident">alt</span>((
+            <span class="ident">preceded</span>(<span class="ident">tag</span>(<span class="string">&quot;contains:&quot;</span>), <span class="ident">parse_matcher_text</span>),
+            <span class="ident">parse_matcher_text</span>,
+        )),
+        <span class="op">|</span><span class="ident">res</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="op">|</span> <span class="ident">res</span>.<span class="ident">map</span>(<span class="ident">NameMatcher::Contains</span>),
+    )(<span class="ident">input</span>)
 }
 
 <span class="attribute">#[<span class="ident">tracable_parser</span>]</span>
@@ -1153,6 +1175,20 @@
         <span class="macro">assert_eq!</span>(
             <span class="ident">SetDef::Test</span>(<span class="ident">NameMatcher::Regex</span>(<span class="ident">regex::Regex::new</span>(<span class="string">&quot;some.*&quot;</span>).<span class="ident">unwrap</span>())),
             <span class="ident">parse_set</span>(<span class="string">&quot;test(/some.*/)&quot;</span>)
+        );
+
+        <span class="comment">// &#39;contains:&#39; is an escape hatch to enable literal matches.</span>
+        <span class="macro">assert_eq!</span>(
+            <span class="ident">SetDef::Test</span>(<span class="ident">NameMatcher::Contains</span>(<span class="string">&quot;something&quot;</span>.<span class="ident">to_string</span>())),
+            <span class="ident">parse_set</span>(<span class="string">&quot;test(contains:something)&quot;</span>)
+        );
+        <span class="macro">assert_eq!</span>(
+            <span class="ident">SetDef::Test</span>(<span class="ident">NameMatcher::Contains</span>(<span class="string">&quot;=something&quot;</span>.<span class="ident">to_string</span>())),
+            <span class="ident">parse_set</span>(<span class="string">&quot;test(contains:=something)&quot;</span>)
+        );
+        <span class="macro">assert_eq!</span>(
+            <span class="ident">SetDef::Test</span>(<span class="ident">NameMatcher::Contains</span>(<span class="string">&quot;/something/&quot;</span>.<span class="ident">to_string</span>())),
+            <span class="ident">parse_set</span>(<span class="string">&quot;test(contains:/something/)&quot;</span>)
         );
     }
 
