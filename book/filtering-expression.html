@@ -195,7 +195,7 @@
 <li><code>=string</code>: match a package or test name that's equal to <code>string</code></li>
 <li><code>/regex/</code>: match a package or test name if any part of it matches the regular expression <code>regex</code>. To match the entire string against a regular expression, use <code>/^regex$/</code>. The implementation uses the regex crate.</li>
 </ul>
-<p>To match a string beginning with <code>=</code> or <code>/</code>, or if you're constructing an expression string in a programmatic context, use the <code>contains:</code> prefix.</p>
+<p>To match a string beginning with <code>=</code> or <code>/</code>, or if you're constructing a filter expression in a programmatic context, use the <code>contains:</code> prefix.</p>
 <h4 id="escape-sequences"><a class="header" href="#escape-sequences">Escape sequences</a></h4>
 <p>The <em>contains</em> and <em>equality</em> name matchers can contain escape sequences, preceded by a backslash (<code>\</code>).</p>
 <ul>
@@ -208,11 +208,11 @@
 <li><code>\u{7FFF}</code>: 24-bit Unicode character code (up to 6 hex digits)</li>
 </ul>
 <p>All other escape sequences are invalid.</p>
-<p>The <em>regular expression</em> matcher supports the same escape sequences that <a href="https://docs.rs/regex/latest/regex/#escape-sequences">the regex crate does</a>, additionally <code>\/</code> is read as an escaped <code>/</code>.</p>
+<p>The <em>regular expression</em> matcher supports the same escape sequences that <a href="https://docs.rs/regex/latest/regex/#escape-sequences">the regex crate does</a>. This includes character classes like <code>\d</code>. Additionally, <code>\/</code> is interpreted as an escaped <code>/</code>.</p>
 <h3 id="operators"><a class="header" href="#operators">Operators</a></h3>
 <ul>
-<li><code>set_1 &amp; set_2</code> , <code>set_1 and set_2</code>: the intersection of <code>set_1</code> and <code>set_2</code></li>
-<li><code>set_1 | set_2</code>, <code>set_1 or set_2</code>, <code>set_1 + set_2</code>: the union of <code>set_1</code> or <code>set_2</code></li>
+<li><code>set_1 &amp; set_2</code>, <code>set_1 and set_2</code>: the intersection of <code>set_1</code> and <code>set_2</code></li>
+<li><code>set_1 | set_2</code>, <code>set_1 + set_2</code>, <code>set_1 or set_2</code>: the union of <code>set_1</code> or <code>set_2</code></li>
 <li><code>not set</code>, <code>!set</code>: include everything not included in <code>set</code></li>
 <li><code>set_1 - set_2</code>: equivalent to <code>set_1 and not set_2</code></li>
 <li><code>(set)</code>: include everything in <code>set</code></li>

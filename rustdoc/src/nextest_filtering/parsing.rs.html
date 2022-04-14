@@ -774,6 +774,18 @@
 <span id="769">769</span>
 <span id="770">770</span>
 <span id="771">771</span>
+<span id="772">772</span>
+<span id="773">773</span>
+<span id="774">774</span>
+<span id="775">775</span>
+<span id="776">776</span>
+<span id="777">777</span>
+<span id="778">778</span>
+<span id="779">779</span>
+<span id="780">780</span>
+<span id="781">781</span>
+<span id="782">782</span>
+<span id="783">783</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -803,12 +815,12 @@
 
 <span class="kw">mod</span> <span class="ident">unicode_string</span>;
 
-<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">error</span>::<span class="kw-2">*</span>, <span class="ident">NameMatcher</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">errors</span>::<span class="kw-2">*</span>, <span class="ident">NameMatcher</span>};
 
-<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">Span</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">nom_locate::LocatedSpan</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>, <span class="ident">State</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span><span class="op">&gt;</span>;
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">type</span> <span class="ident">Span</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">nom_locate::LocatedSpan</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>, <span class="ident">State</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span><span class="op">&gt;</span>;
 <span class="kw">type</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">nom::IResult</span><span class="op">&lt;</span><span class="ident">Span</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>, <span class="ident">T</span><span class="op">&gt;</span>;
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">ToSourceSpane</span> <span class="kw">for</span> <span class="ident">Span</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">ToSourceSpan</span> <span class="kw">for</span> <span class="ident">Span</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
     <span class="kw">fn</span> <span class="ident">to_span</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">SourceSpan</span> {
         (<span class="self">self</span>.<span class="ident">location_offset</span>(), <span class="self">self</span>.<span class="ident">fragment</span>().<span class="ident">len</span>()).<span class="ident">into</span>()
     }
@@ -892,7 +904,7 @@
 
 <span class="kw">fn</span> <span class="ident">expect_inner</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">F</span>, <span class="ident">T</span><span class="op">&gt;</span>(
     <span class="kw-2">mut</span> <span class="ident">parser</span>: <span class="ident">F</span>,
-    <span class="ident">make_err</span>: <span class="kw">fn</span>(<span class="ident">SourceSpan</span>) -&gt; <span class="ident">Error</span>,
+    <span class="ident">make_err</span>: <span class="kw">fn</span>(<span class="ident">SourceSpan</span>) -&gt; <span class="ident">ParseSingleError</span>,
     <span class="ident">limit</span>: <span class="ident">SpanLength</span>,
 ) -&gt; <span class="kw">impl</span> <span class="ident">FnMut</span>(<span class="ident">Span</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span>
 <span class="kw">where</span>
@@ -918,7 +930,7 @@
 
 <span class="kw">fn</span> <span class="ident">expect</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">F</span>, <span class="ident">T</span><span class="op">&gt;</span>(
     <span class="ident">parser</span>: <span class="ident">F</span>,
-    <span class="ident">make_err</span>: <span class="kw">fn</span>(<span class="ident">SourceSpan</span>) -&gt; <span class="ident">Error</span>,
+    <span class="ident">make_err</span>: <span class="kw">fn</span>(<span class="ident">SourceSpan</span>) -&gt; <span class="ident">ParseSingleError</span>,
 ) -&gt; <span class="kw">impl</span> <span class="ident">FnMut</span>(<span class="ident">Span</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">F</span>: <span class="ident">FnMut</span>(<span class="ident">Span</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>,
@@ -928,7 +940,7 @@
 
 <span class="kw">fn</span> <span class="ident">expect_char</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(
     <span class="ident">c</span>: <span class="ident">char</span>,
-    <span class="ident">make_err</span>: <span class="kw">fn</span>(<span class="ident">SourceSpan</span>) -&gt; <span class="ident">Error</span>,
+    <span class="ident">make_err</span>: <span class="kw">fn</span>(<span class="ident">SourceSpan</span>) -&gt; <span class="ident">ParseSingleError</span>,
 ) -&gt; <span class="kw">impl</span> <span class="ident">FnMut</span>(<span class="ident">Span</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">char</span><span class="op">&gt;</span><span class="op">&gt;</span> {
     <span class="ident">expect_inner</span>(<span class="ident">ws</span>(<span class="ident">char</span>(<span class="ident">c</span>)), <span class="ident">make_err</span>, <span class="ident">SpanLength::Exact</span>(<span class="number">0</span>))
 }
@@ -970,7 +982,11 @@
 <span class="comment">// This parse will never fail</span>
 <span class="attribute">#[<span class="ident">tracable_parser</span>]</span>
 <span class="kw">fn</span> <span class="ident">parse_matcher_text</span>(<span class="ident">input</span>: <span class="ident">Span</span>) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-    <span class="kw">match</span> <span class="ident">expect</span>(<span class="ident">unicode_string::parse_string</span>, <span class="ident">Error::InvalidUnicodeString</span>)(<span class="ident">input</span>.<span class="ident">clone</span>()) {
+    <span class="kw">match</span> <span class="ident">expect</span>(
+        <span class="ident">unicode_string::parse_string</span>,
+        <span class="ident">ParseSingleError::InvalidUnicodeString</span>,
+    )(<span class="ident">input</span>.<span class="ident">clone</span>())
+    {
         <span class="prelude-val">Ok</span>((<span class="ident">i</span>, <span class="ident">res</span>)) =&gt; <span class="prelude-val">Ok</span>((<span class="ident">i</span>, <span class="ident">res</span>)),
         <span class="prelude-val">Err</span>(<span class="ident">nom::Err::Incomplete</span>(<span class="kw">_</span>)) =&gt; {
             <span class="kw">let</span> <span class="ident">i</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">slice</span>(<span class="ident">input</span>.<span class="ident">fragment</span>().<span class="ident">len</span>()..);
@@ -1004,21 +1020,21 @@
 <span class="attribute">#[<span class="ident">tracable_parser</span>]</span>
 <span class="kw">fn</span> <span class="ident">parse_regex_inner</span>(<span class="ident">input</span>: <span class="ident">Span</span>) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
     <span class="kw">enum</span> <span class="ident">Frag</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-        <span class="ident">Litteral</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>),
+        <span class="ident">Literal</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>),
         <span class="ident">Escape</span>(<span class="ident">char</span>),
     }
 
     <span class="kw">let</span> <span class="ident">parse_escape</span> <span class="op">=</span> <span class="ident">map</span>(<span class="ident">alt</span>((<span class="ident">map</span>(<span class="ident">tag</span>(<span class="string">r&quot;\/&quot;</span>), <span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="string">&#39;/&#39;</span>), <span class="ident">char</span>(<span class="string">&#39;\\&#39;</span>))), <span class="ident">Frag::Escape</span>);
-    <span class="kw">let</span> <span class="ident">parse_litteral</span> <span class="op">=</span> <span class="ident">map</span>(
+    <span class="kw">let</span> <span class="ident">parse_literal</span> <span class="op">=</span> <span class="ident">map</span>(
         <span class="ident">verify</span>(<span class="ident">is_not</span>(<span class="string">&quot;\\/&quot;</span>), <span class="op">|</span><span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="ident">Span</span><span class="op">|</span> <span class="op">!</span><span class="ident">s</span>.<span class="ident">fragment</span>().<span class="ident">is_empty</span>()),
-        <span class="op">|</span><span class="ident">s</span>: <span class="ident">Span</span><span class="op">|</span> <span class="ident">Frag::Litteral</span>(<span class="ident">s</span>.<span class="ident">fragment</span>()),
+        <span class="op">|</span><span class="ident">s</span>: <span class="ident">Span</span><span class="op">|</span> <span class="ident">Frag::Literal</span>(<span class="ident">s</span>.<span class="ident">fragment</span>()),
     );
-    <span class="kw">let</span> <span class="ident">parse_frag</span> <span class="op">=</span> <span class="ident">alt</span>((<span class="ident">parse_escape</span>, <span class="ident">parse_litteral</span>));
+    <span class="kw">let</span> <span class="ident">parse_frag</span> <span class="op">=</span> <span class="ident">alt</span>((<span class="ident">parse_escape</span>, <span class="ident">parse_literal</span>));
 
     <span class="kw">let</span> (<span class="ident">i</span>, <span class="ident">res</span>) <span class="op">=</span> <span class="ident">fold_many0</span>(<span class="ident">parse_frag</span>, <span class="ident">String::new</span>, <span class="op">|</span><span class="kw-2">mut</span> <span class="ident">string</span>, <span class="ident">frag</span><span class="op">|</span> {
         <span class="kw">match</span> <span class="ident">frag</span> {
             <span class="ident">Frag::Escape</span>(<span class="ident">c</span>) =&gt; <span class="ident">string</span>.<span class="ident">push</span>(<span class="ident">c</span>),
-            <span class="ident">Frag::Litteral</span>(<span class="ident">s</span>) =&gt; <span class="ident">string</span>.<span class="ident">push_str</span>(<span class="ident">s</span>),
+            <span class="ident">Frag::Literal</span>(<span class="ident">s</span>) =&gt; <span class="ident">string</span>.<span class="ident">push_str</span>(<span class="ident">s</span>),
         }
         <span class="ident">string</span>
     })(<span class="ident">input</span>)<span class="question-mark">?</span>;
@@ -1035,7 +1051,7 @@
         <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="kw">match</span> <span class="ident">take_till</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="kw">_</span>, <span class="ident">nom::error::Error</span><span class="op">&lt;</span><span class="ident">Span</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="op">|</span><span class="ident">c</span><span class="op">|</span> <span class="ident">c</span> <span class="op">==</span> <span class="string">&#39;)&#39;</span>)(<span class="ident">input</span>.<span class="ident">clone</span>()) {
             <span class="prelude-val">Ok</span>((<span class="ident">i</span>, <span class="kw">_</span>)) =&gt; {
                 <span class="kw">let</span> <span class="ident">start</span> <span class="op">=</span> <span class="ident">i</span>.<span class="ident">location_offset</span>();
-                <span class="kw">let</span> <span class="ident">err</span> <span class="op">=</span> <span class="ident">Error::ExpectedCloseRegex</span>((<span class="ident">start</span>, <span class="number">0</span>).<span class="ident">into</span>());
+                <span class="kw">let</span> <span class="ident">err</span> <span class="op">=</span> <span class="ident">ParseSingleError::ExpectedCloseRegex</span>((<span class="ident">start</span>, <span class="number">0</span>).<span class="ident">into</span>());
                 <span class="ident">i</span>.<span class="ident">extra</span>.<span class="ident">report_error</span>(<span class="ident">err</span>);
                 <span class="kw">return</span> <span class="prelude-val">Ok</span>((<span class="ident">i</span>, <span class="prelude-val">None</span>));
             }
@@ -1047,7 +1063,7 @@
         <span class="kw">_</span> =&gt; {
             <span class="kw">let</span> <span class="ident">start</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">location_offset</span>();
             <span class="kw">let</span> <span class="ident">end</span> <span class="op">=</span> <span class="ident">i</span>.<span class="ident">location_offset</span>();
-            <span class="kw">let</span> <span class="ident">err</span> <span class="op">=</span> <span class="ident">Error::InvalidRegex</span>((<span class="ident">start</span>, <span class="ident">end</span> <span class="op">-</span> <span class="ident">start</span>).<span class="ident">into</span>());
+            <span class="kw">let</span> <span class="ident">err</span> <span class="op">=</span> <span class="ident">ParseSingleError::InvalidRegex</span>((<span class="ident">start</span>, <span class="ident">end</span> <span class="op">-</span> <span class="ident">start</span>).<span class="ident">into</span>());
             <span class="ident">i</span>.<span class="ident">extra</span>.<span class="ident">report_error</span>(<span class="ident">err</span>);
             <span class="prelude-val">Ok</span>((<span class="ident">i</span>, <span class="prelude-val">None</span>))
         }
@@ -1079,18 +1095,18 @@
 ) -&gt; <span class="kw">impl</span> <span class="ident">FnMut</span>(<span class="ident">Span</span>) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SetDef</span><span class="op">&gt;</span><span class="op">&gt;</span> {
     <span class="kw">move</span> <span class="op">|</span><span class="ident">i</span><span class="op">|</span> {
         <span class="kw">let</span> (<span class="ident">i</span>, <span class="kw">_</span>) <span class="op">=</span> <span class="ident">tag</span>(<span class="ident">name</span>)(<span class="ident">i</span>)<span class="question-mark">?</span>;
-        <span class="kw">let</span> (<span class="ident">i</span>, <span class="kw">_</span>) <span class="op">=</span> <span class="ident">expect_char</span>(<span class="string">&#39;(&#39;</span>, <span class="ident">Error::ExpectedOpenParenthesis</span>)(<span class="ident">i</span>)<span class="question-mark">?</span>;
+        <span class="kw">let</span> (<span class="ident">i</span>, <span class="kw">_</span>) <span class="op">=</span> <span class="ident">expect_char</span>(<span class="string">&#39;(&#39;</span>, <span class="ident">ParseSingleError::ExpectedOpenParenthesis</span>)(<span class="ident">i</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">i</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">recognize</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="kw">_</span>, <span class="ident">nom::error::Error</span><span class="op">&lt;</span><span class="ident">Span</span><span class="op">&gt;</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="ident">take_till</span>(<span class="op">|</span><span class="ident">c</span><span class="op">|</span> <span class="ident">c</span> <span class="op">==</span> <span class="string">&#39;)&#39;</span>))(<span class="ident">i</span>) {
             <span class="prelude-val">Ok</span>((<span class="ident">i</span>, <span class="ident">res</span>)) =&gt; {
                 <span class="kw">if</span> <span class="op">!</span><span class="ident">res</span>.<span class="ident">fragment</span>().<span class="ident">trim</span>().<span class="ident">is_empty</span>() {
-                    <span class="kw">let</span> <span class="ident">err</span> <span class="op">=</span> <span class="ident">Error::UnexpectedNameMatcher</span>(<span class="ident">res</span>.<span class="ident">to_span</span>());
+                    <span class="kw">let</span> <span class="ident">err</span> <span class="op">=</span> <span class="ident">ParseSingleError::UnexpectedNameMatcher</span>(<span class="ident">res</span>.<span class="ident">to_span</span>());
                     <span class="ident">i</span>.<span class="ident">extra</span>.<span class="ident">report_error</span>(<span class="ident">err</span>);
                 }
                 <span class="ident">i</span>
             }
             <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="macro">unreachable!</span>(),
         };
-        <span class="kw">let</span> (<span class="ident">i</span>, <span class="kw">_</span>) <span class="op">=</span> <span class="ident">expect_char</span>(<span class="string">&#39;)&#39;</span>, <span class="ident">Error::ExpectedCloseParenthesis</span>)(<span class="ident">i</span>)<span class="question-mark">?</span>;
+        <span class="kw">let</span> (<span class="ident">i</span>, <span class="kw">_</span>) <span class="op">=</span> <span class="ident">expect_char</span>(<span class="string">&#39;)&#39;</span>, <span class="ident">ParseSingleError::ExpectedCloseParenthesis</span>)(<span class="ident">i</span>)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>((<span class="ident">i</span>, <span class="prelude-val">Some</span>(<span class="ident">make_set</span>())))
     }
 }
@@ -1101,9 +1117,9 @@
 ) -&gt; <span class="kw">impl</span> <span class="ident">FnMut</span>(<span class="ident">Span</span>) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SetDef</span><span class="op">&gt;</span><span class="op">&gt;</span> {
     <span class="kw">move</span> <span class="op">|</span><span class="ident">i</span><span class="op">|</span> {
         <span class="kw">let</span> (<span class="ident">i</span>, <span class="kw">_</span>) <span class="op">=</span> <span class="ident">tag</span>(<span class="ident">name</span>)(<span class="ident">i</span>)<span class="question-mark">?</span>;
-        <span class="kw">let</span> (<span class="ident">i</span>, <span class="kw">_</span>) <span class="op">=</span> <span class="ident">expect_char</span>(<span class="string">&#39;(&#39;</span>, <span class="ident">Error::ExpectedOpenParenthesis</span>)(<span class="ident">i</span>)<span class="question-mark">?</span>;
+        <span class="kw">let</span> (<span class="ident">i</span>, <span class="kw">_</span>) <span class="op">=</span> <span class="ident">expect_char</span>(<span class="string">&#39;(&#39;</span>, <span class="ident">ParseSingleError::ExpectedOpenParenthesis</span>)(<span class="ident">i</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> (<span class="ident">i</span>, <span class="ident">res</span>) <span class="op">=</span> <span class="ident">parse_set_matcher</span>(<span class="ident">i</span>)<span class="question-mark">?</span>;
-        <span class="kw">let</span> (<span class="ident">i</span>, <span class="kw">_</span>) <span class="op">=</span> <span class="ident">expect_char</span>(<span class="string">&#39;)&#39;</span>, <span class="ident">Error::ExpectedCloseParenthesis</span>)(<span class="ident">i</span>)<span class="question-mark">?</span>;
+        <span class="kw">let</span> (<span class="ident">i</span>, <span class="kw">_</span>) <span class="op">=</span> <span class="ident">expect_char</span>(<span class="string">&#39;)&#39;</span>, <span class="ident">ParseSingleError::ExpectedCloseParenthesis</span>)(<span class="ident">i</span>)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>((<span class="ident">i</span>, <span class="ident">res</span>.<span class="ident">map</span>(<span class="ident">make_set</span>)))
     }
 }
@@ -1123,7 +1139,7 @@
 <span class="kw">fn</span> <span class="ident">expect_expr</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">P</span>: <span class="ident">FnMut</span>(<span class="ident">Span</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">ParsedExpr</span><span class="op">&gt;</span><span class="op">&gt;</span>(
     <span class="ident">inner</span>: <span class="ident">P</span>,
 ) -&gt; <span class="kw">impl</span> <span class="ident">FnMut</span>(<span class="ident">Span</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">ParsedExpr</span><span class="op">&gt;</span> {
-    <span class="ident">map</span>(<span class="ident">expect</span>(<span class="ident">inner</span>, <span class="ident">Error::ExpectedExpr</span>), <span class="op">|</span><span class="ident">res</span><span class="op">|</span> {
+    <span class="ident">map</span>(<span class="ident">expect</span>(<span class="ident">inner</span>, <span class="ident">ParseSingleError::ExpectedExpr</span>), <span class="op">|</span><span class="ident">res</span><span class="op">|</span> {
         <span class="ident">res</span>.<span class="ident">unwrap_or</span>(<span class="ident">ParsedExpr::Error</span>)
     })
 }
@@ -1144,7 +1160,7 @@
     <span class="ident">delimited</span>(
         <span class="ident">char</span>(<span class="string">&#39;(&#39;</span>),
         <span class="ident">expect_expr</span>(<span class="ident">parse_expr</span>),
-        <span class="ident">expect_char</span>(<span class="string">&#39;)&#39;</span>, <span class="ident">Error::ExpectedCloseParenthesis</span>),
+        <span class="ident">expect_char</span>(<span class="string">&#39;)&#39;</span>, <span class="ident">ParseSingleError::ExpectedCloseParenthesis</span>),
     )(<span class="ident">input</span>)
 }
 
@@ -1233,7 +1249,10 @@
 <span class="comment">// ---</span>
 
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">parse</span>(<span class="ident">input</span>: <span class="ident">Span</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ParsedExpr</span>, <span class="ident">nom::Err</span><span class="op">&lt;</span><span class="ident">nom::error::Error</span><span class="op">&lt;</span><span class="ident">Span</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-    <span class="kw">let</span> (<span class="kw">_</span>, <span class="ident">expr</span>) <span class="op">=</span> <span class="ident">terminated</span>(<span class="ident">parse_expr</span>, <span class="ident">expect</span>(<span class="ident">ws</span>(<span class="ident">eof</span>), <span class="ident">Error::ExpectedEndOfExpression</span>))(<span class="ident">input</span>)<span class="question-mark">?</span>;
+    <span class="kw">let</span> (<span class="kw">_</span>, <span class="ident">expr</span>) <span class="op">=</span> <span class="ident">terminated</span>(
+        <span class="ident">parse_expr</span>,
+        <span class="ident">expect</span>(<span class="ident">ws</span>(<span class="ident">eof</span>), <span class="ident">ParseSingleError::ExpectedEndOfExpression</span>),
+    )(<span class="ident">input</span>)<span class="question-mark">?</span>;
     <span class="prelude-val">Ok</span>(<span class="ident">expr</span>)
 }
 
@@ -1272,6 +1291,11 @@
         <span class="macro">assert_eq!</span>(
             <span class="ident">NameMatcher::Regex</span>(<span class="ident">regex::Regex::new</span>(<span class="string">r&quot;\w\\/a&quot;</span>).<span class="ident">unwrap</span>()),
             <span class="ident">parse_regex</span>(<span class="string">r&quot;/\w\\\/a/&quot;</span>)
+        );
+
+        <span class="macro">assert_eq!</span>(
+            <span class="ident">NameMatcher::Regex</span>(<span class="ident">regex::Regex::new</span>(<span class="string">r&quot;\p{Greek}\\/a&quot;</span>).<span class="ident">unwrap</span>()),
+            <span class="ident">parse_regex</span>(<span class="string">r&quot;/\p{Greek}\\\/a/&quot;</span>)
         );
     }
 
@@ -1448,7 +1472,7 @@
     }
 
     <span class="attribute">#[<span class="ident">track_caller</span>]</span>
-    <span class="kw">fn</span> <span class="ident">parse_err</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">parse_err</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">ParseSingleError</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">errors</span> <span class="op">=</span> <span class="ident">RefCell::new</span>(<span class="ident">Vec::new</span>());
         <span class="ident"><span class="kw">super</span>::parse</span>(<span class="ident">Span::new_extra</span>(<span class="ident">input</span>, <span class="ident">State::new</span>(<span class="kw-2">&amp;</span><span class="ident">errors</span>))).<span class="ident">unwrap</span>();
         <span class="ident">errors</span>.<span class="ident">into_inner</span>()
@@ -1456,7 +1480,7 @@
 
     <span class="macro">macro_rules!</span> <span class="ident">assert_error</span> {
         (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">error</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">start</span>:<span class="ident">literal</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">end</span>:<span class="ident">literal</span>) =&gt; {
-            <span class="macro">assert_eq!</span>(<span class="ident">Error</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>((<span class="macro-nonterminal">$</span><span class="macro-nonterminal">start</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">end</span>).<span class="ident">into</span>()), <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error</span>);
+            <span class="macro">assert_eq!</span>(<span class="ident">ParseSingleError</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>((<span class="macro-nonterminal">$</span><span class="macro-nonterminal">start</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">end</span>).<span class="ident">into</span>()), <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error</span>);
         };
     }
 

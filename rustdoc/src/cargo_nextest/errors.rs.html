@@ -175,9 +175,23 @@
 <span id="170">170</span>
 <span id="171">171</span>
 <span id="172">172</span>
+<span id="173">173</span>
+<span id="174">174</span>
+<span id="175">175</span>
+<span id="176">176</span>
+<span id="177">177</span>
+<span id="178">178</span>
+<span id="179">179</span>
+<span id="180">180</span>
+<span id="181">181</span>
+<span id="182">182</span>
+<span id="183">183</span>
+<span id="184">184</span>
+<span id="185">185</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
+<span class="kw">use</span> <span class="ident">nextest_filtering::errors::FilterExpressionParseErrors</span>;
 <span class="kw">use</span> <span class="ident">nextest_metadata::NextestExitCode</span>;
 <span class="kw">use</span> <span class="ident">nextest_runner::errors</span>::{<span class="ident">ConfigParseError</span>, <span class="ident">ProfileNotFound</span>};
 <span class="kw">use</span> <span class="ident">owo_colors</span>::{<span class="ident">OwoColorize</span>, <span class="ident">Stream</span>};
@@ -206,7 +220,9 @@
         <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>,
         <span class="ident">var_name</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>,
     },
-    <span class="ident">FilterExpressionParseError</span>,
+    <span class="ident">FilterExpressionParseError</span> {
+        <span class="ident">all_errors</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">FilterExpressionParseErrors</span><span class="op">&gt;</span>,
+    },
 }
 
 <span class="kw">impl</span> <span class="ident">ExpectedError</span> {
@@ -239,8 +255,10 @@
         }
     }
 
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">filter_expression_parse_error</span>() -&gt; <span class="self">Self</span> {
-        <span class="ident"><span class="self">Self</span>::FilterExpressionParseError</span>
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">filter_expression_parse_error</span>(
+        <span class="ident">all_errors</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">FilterExpressionParseErrors</span><span class="op">&gt;</span>,
+    ) -&gt; <span class="self">Self</span> {
+        <span class="ident"><span class="self">Self</span>::FilterExpressionParseError</span> { <span class="ident">all_errors</span> }
     }
 
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">test_run_failed</span>() -&gt; <span class="self">Self</span> {
@@ -314,8 +332,16 @@
                 );
                 <span class="prelude-val">None</span>
             }
-            <span class="ident"><span class="self">Self</span>::FilterExpressionParseError</span> =&gt; {
-                <span class="macro">log::error!</span>(<span class="string">&quot;Failed to parse filter expression&quot;</span>);
+            <span class="ident"><span class="self">Self</span>::FilterExpressionParseError</span> { <span class="ident">all_errors</span> } =&gt; {
+                <span class="kw">for</span> <span class="ident">errors</span> <span class="kw">in</span> <span class="ident">all_errors</span> {
+                    <span class="kw">for</span> <span class="ident">single_error</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">errors</span>.<span class="ident">errors</span> {
+                        <span class="kw">let</span> <span class="ident">report</span> <span class="op">=</span> <span class="ident">miette::Report::new</span>(<span class="ident">single_error</span>.<span class="ident">clone</span>())
+                            .<span class="ident">with_source_code</span>(<span class="ident">errors</span>.<span class="ident">input</span>.<span class="ident">to_owned</span>());
+                        <span class="macro">log::error!</span>(<span class="ident">target</span>: <span class="string">&quot;cargo_nextest::no_heading&quot;</span>, <span class="string">&quot;{:?}&quot;</span>, <span class="ident">report</span>);
+                    }
+                }
+
+                <span class="macro">log::error!</span>(<span class="string">&quot;failed to parse filter expression&quot;</span>);
                 <span class="prelude-val">None</span>
             }
         };
@@ -339,7 +365,7 @@
             <span class="ident"><span class="self">Self</span>::ExperimentalFeatureNotEnabled</span> { .. } =&gt; {
                 <span class="macro">writeln!</span>(<span class="ident">f</span>, <span class="string">&quot;experimental feature not enabled&quot;</span>)
             }
-            <span class="ident"><span class="self">Self</span>::FilterExpressionParseError</span> =&gt; {
+            <span class="ident"><span class="self">Self</span>::FilterExpressionParseError</span> { .. } =&gt; {
                 <span class="macro">writeln!</span>(<span class="ident">f</span>, <span class="string">&quot;Failed to parse some filter expressions&quot;</span>)
             }
         }

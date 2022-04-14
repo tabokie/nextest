@@ -751,13 +751,6 @@
 <span id="746">746</span>
 <span id="747">747</span>
 <span id="748">748</span>
-<span id="749">749</span>
-<span id="750">750</span>
-<span id="751">751</span>
-<span id="752">752</span>
-<span id="753">753</span>
-<span id="754">754</span>
-<span id="755">755</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -771,6 +764,7 @@
 <span class="kw">use</span> <span class="ident">clap</span>::{<span class="ident">ArgEnum</span>, <span class="ident">Args</span>, <span class="ident">Parser</span>, <span class="ident">Subcommand</span>};
 <span class="kw">use</span> <span class="ident">color_eyre::eyre</span>::{<span class="ident">Report</span>, <span class="prelude-ty">Result</span>, <span class="ident">WrapErr</span>};
 <span class="kw">use</span> <span class="ident">guppy::graph::PackageGraph</span>;
+<span class="kw">use</span> <span class="ident">itertools::Itertools</span>;
 <span class="kw">use</span> <span class="ident">nextest_filtering::FilteringExpr</span>;
 <span class="kw">use</span> <span class="ident">nextest_metadata</span>::{<span class="ident">BinaryListSummary</span>, <span class="ident">BuildPlatform</span>};
 <span class="kw">use</span> <span class="ident">nextest_runner</span>::{
@@ -1317,23 +1311,15 @@
     }
 
     <span class="kw">fn</span> <span class="ident">build_filtering_expressions</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">FilteringExpr</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">exprs</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">failed</span> <span class="op">=</span> <span class="bool-val">false</span>;
-        <span class="kw">for</span> <span class="ident">res</span> <span class="kw">in</span> <span class="self">self</span>
+        <span class="kw">let</span> (<span class="ident">exprs</span>, <span class="ident">all_errors</span>): (<span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span>) <span class="op">=</span> <span class="self">self</span>
             .<span class="ident">build_filter</span>
             .<span class="ident">expr_filter</span>
             .<span class="ident">iter</span>()
             .<span class="ident">map</span>(<span class="op">|</span><span class="ident">input</span><span class="op">|</span> <span class="ident">FilteringExpr::parse</span>(<span class="ident">input</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">graph</span>))
-        {
-            <span class="kw">match</span> <span class="ident">res</span> {
-                <span class="prelude-val">Ok</span>(<span class="ident">expr</span>) =&gt; <span class="ident">exprs</span>.<span class="ident">push</span>(<span class="ident">expr</span>),
-                <span class="prelude-val">Err</span>(<span class="ident">nextest_filtering::error::FilteringExprParsingError</span>(<span class="kw">_</span>)) =&gt; {
-                    <span class="ident">failed</span> <span class="op">=</span> <span class="bool-val">true</span>;
-                }
-            }
-        }
-        <span class="kw">if</span> <span class="ident">failed</span> {
-            <span class="prelude-val">Err</span>(<span class="ident">ExpectedError::filter_expression_parse_error</span>().<span class="ident">into</span>())
+            .<span class="ident">partition_result</span>();
+
+        <span class="kw">if</span> <span class="op">!</span><span class="ident">all_errors</span>.<span class="ident">is_empty</span>() {
+            <span class="prelude-val">Err</span>(<span class="ident">ExpectedError::filter_expression_parse_error</span>(<span class="ident">all_errors</span>).<span class="ident">into</span>())
         } <span class="kw">else</span> {
             <span class="prelude-val">Ok</span>(<span class="ident">exprs</span>)
         }

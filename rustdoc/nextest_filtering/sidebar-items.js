@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["FilteringExpr","Filtering expression"],["FilteringSet","Define a set of tests"],["NameMatcher","Matcher for name"]],"mod":[["error",""]]});
+initSidebarItems({"enum":[["FilteringExpr","Filtering expression"],["FilteringSet","Define a set of tests"],["NameMatcher","Matcher for name"]],"mod":[["errors",""]]});
