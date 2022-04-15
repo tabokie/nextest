@@ -129,6 +129,26 @@
 <span id="124">124</span>
 <span id="125">125</span>
 <span id="126">126</span>
+<span id="127">127</span>
+<span id="128">128</span>
+<span id="129">129</span>
+<span id="130">130</span>
+<span id="131">131</span>
+<span id="132">132</span>
+<span id="133">133</span>
+<span id="134">134</span>
+<span id="135">135</span>
+<span id="136">136</span>
+<span id="137">137</span>
+<span id="138">138</span>
+<span id="139">139</span>
+<span id="140">140</span>
+<span id="141">141</span>
+<span id="142">142</span>
+<span id="143">143</span>
+<span id="144">144</span>
+<span id="145">145</span>
+<span id="146">146</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -137,6 +157,7 @@
 <span class="kw">use</span> <span class="ident">std::cell::RefCell</span>;
 <span class="kw">use</span> <span class="ident">thiserror::Error</span>;
 
+<span class="doccomment">/// A set of errors that occurred while parsing a filter expression.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>)]</span>
 <span class="attribute">#[<span class="ident">non_exhaustive</span>]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">FilterExpressionParseErrors</span> {
@@ -156,35 +177,54 @@
     }
 }
 
+<span class="doccomment">/// An individual error that occurred while parsing a filter expression.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Error</span>, <span class="ident">Diagnostic</span>, <span class="ident">PartialEq</span>)]</span>
 <span class="attribute">#[<span class="ident">non_exhaustive</span>]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ParseSingleError</span> {
+    <span class="doccomment">/// An invalid regex was encountered.</span>
     <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;invalid regex&quot;</span>)]</span>
     <span class="ident">InvalidRegex</span> {
+        <span class="doccomment">/// The part of the input that failed.</span>
         <span class="attribute">#[<span class="ident">label</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">message</span>)]</span>
         <span class="ident">span</span>: <span class="ident">SourceSpan</span>,
+
+        <span class="doccomment">/// A message indicating the failure.</span>
         <span class="ident">message</span>: <span class="ident">String</span>,
     },
+
     <span class="doccomment">/// An invalid regex was encountered but we couldn&#39;t determine a better error message.</span>
     <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;invalid regex&quot;</span>)]</span>
     <span class="ident">InvalidRegexWithoutMessage</span>(<span class="attribute">#[<span class="ident">label</span>(<span class="string">&quot;invalid regex&quot;</span>)]</span> <span class="ident">SourceSpan</span>),
+
+    <span class="doccomment">/// A regex string was not closed.</span>
     <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;expected close regex&quot;</span>)]</span>
-    <span class="ident">ExpectedCloseRegex</span>(<span class="attribute">#[<span class="ident">label</span>(<span class="string">&quot;missing &#39;/&#39;&quot;</span>)]</span> <span class="ident">SourceSpan</span>),
-    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;expected matcher input&quot;</span>)]</span>
-    <span class="ident">ExpectedMatcherInput</span>(<span class="attribute">#[<span class="ident">label</span>(<span class="string">&quot;missing matcher content&quot;</span>)]</span> <span class="ident">SourceSpan</span>),
-    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;unexpected name matcher&quot;</span>)]</span>
-    <span class="ident">UnexpectedNameMatcher</span>(<span class="attribute">#[<span class="ident">label</span>(<span class="string">&quot;this set doesn&#39;t take an argument&quot;</span>)]</span> <span class="ident">SourceSpan</span>),
-    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;invalid unicode string&quot;</span>)]</span>
-    <span class="ident">InvalidUnicodeString</span>(<span class="attribute">#[<span class="ident">label</span>(<span class="string">&quot;invalid unicode string&quot;</span>)]</span> <span class="ident">SourceSpan</span>),
+    <span class="ident">ExpectedCloseRegex</span>(<span class="attribute">#[<span class="ident">label</span>(<span class="string">&quot;missing `/`&quot;</span>)]</span> <span class="ident">SourceSpan</span>),
+
+    <span class="doccomment">/// An unexpected argument was found.</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;unexpected argument&quot;</span>)]</span>
+    <span class="ident">UnexpectedArgument</span>(<span class="attribute">#[<span class="ident">label</span>(<span class="string">&quot;this set doesn&#39;t take an argument&quot;</span>)]</span> <span class="ident">SourceSpan</span>),
+
+    <span class="doccomment">/// An invalid string was found.</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;invalid string&quot;</span>)]</span>
+    <span class="ident">InvalidString</span>(<span class="attribute">#[<span class="ident">label</span>(<span class="string">&quot;invalid string&quot;</span>)]</span> <span class="ident">SourceSpan</span>),
+
+    <span class="doccomment">/// An open parenthesis `(` was expected but not found.</span>
     <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;expected open parenthesis&quot;</span>)]</span>
-    <span class="ident">ExpectedOpenParenthesis</span>(<span class="attribute">#[<span class="ident">label</span>(<span class="string">&quot;missing &#39;(&#39;&quot;</span>)]</span> <span class="ident">SourceSpan</span>),
+    <span class="ident">ExpectedOpenParenthesis</span>(<span class="attribute">#[<span class="ident">label</span>(<span class="string">&quot;missing `(`&quot;</span>)]</span> <span class="ident">SourceSpan</span>),
+
+    <span class="doccomment">/// A close parenthesis `)` was expected but not found.</span>
     <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;expected close parenthesis&quot;</span>)]</span>
-    <span class="ident">ExpectedCloseParenthesis</span>(<span class="attribute">#[<span class="ident">label</span>(<span class="string">&quot;missing &#39;)&#39;&quot;</span>)]</span> <span class="ident">SourceSpan</span>),
-    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;expected filtering expression&quot;</span>)]</span>
+    <span class="ident">ExpectedCloseParenthesis</span>(<span class="attribute">#[<span class="ident">label</span>(<span class="string">&quot;missing `)`&quot;</span>)]</span> <span class="ident">SourceSpan</span>),
+
+    <span class="doccomment">/// An expression was expected in this position but not found.</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;expected expression&quot;</span>)]</span>
     <span class="ident">ExpectedExpr</span>(<span class="attribute">#[<span class="ident">label</span>(<span class="string">&quot;missing expression&quot;</span>)]</span> <span class="ident">SourceSpan</span>),
+
+    <span class="doccomment">/// The expression was expected to end here but some extra text was found.</span>
     <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;expected end of expression&quot;</span>)]</span>
     <span class="ident">ExpectedEndOfExpression</span>(<span class="attribute">#[<span class="ident">label</span>(<span class="string">&quot;unparsed input&quot;</span>)]</span> <span class="ident">SourceSpan</span>),
 
+    <span class="doccomment">/// An unknown parsing error occurred.</span>
     <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;unknown parsing error&quot;</span>)]</span>
     <span class="ident">Unknown</span>,
 }
