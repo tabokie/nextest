@@ -149,6 +149,10 @@
 <span id="144">144</span>
 <span id="145">145</span>
 <span id="146">146</span>
+<span id="147">147</span>
+<span id="148">148</span>
+<span id="149">149</span>
+<span id="150">150</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -203,6 +207,10 @@
     <span class="doccomment">/// An unexpected argument was found.</span>
     <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;unexpected argument&quot;</span>)]</span>
     <span class="ident">UnexpectedArgument</span>(<span class="attribute">#[<span class="ident">label</span>(<span class="string">&quot;this set doesn&#39;t take an argument&quot;</span>)]</span> <span class="ident">SourceSpan</span>),
+
+    <span class="doccomment">/// An unexpected comma was found.</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;unexpected comma&quot;</span>)]</span>
+    <span class="ident">UnexpectedComma</span>(<span class="attribute">#[<span class="ident">label</span>(<span class="string">&quot;this set doesn&#39;t take multiple arguments&quot;</span>)]</span> <span class="ident">SourceSpan</span>),
 
     <span class="doccomment">/// An invalid string was found.</span>
     <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;invalid string&quot;</span>)]</span>
