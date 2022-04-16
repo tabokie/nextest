@@ -191,19 +191,19 @@
 </ul>
 <h3 id="name-matchers"><a class="header" href="#name-matchers">Name matchers</a></h3>
 <ul>
-<li><code>~string</code> or <code>contains:string</code>: match a package or test name containing <code>string</code></li>
+<li><code>~string</code>: match a package or test name containing <code>string</code></li>
 <li><code>=string</code>: match a package or test name that's equal to <code>string</code></li>
-<li><code>/regex/</code>: match a package or test name if any part of it matches the regular expression <code>regex</code>. To match the entire string against a regular expression, use <code>/^regex$/</code>. The implementation uses the regex crate.</li>
-<li><code>string</code>: default matching strategy
+<li><code>/regex/</code>: match a package or test name if any part of it matches the regular expression <code>regex</code>. To match the entire string against a regular expression, use <code>/^regex$/</code>. The implementation uses the <a href="https://github.com/rust-lang/regex">regex</a> crate.</li>
+<li><code>string</code>: default matching strategy.
 <ul>
-<li>for tests (<code>test()</code>) this is a <code>contain</code></li>
-<li>for packages (<code>package()</code>, <code>deps()</code> and <code>rdeps()</code>) this is an <code>equal</code></li>
+<li>For tests (<code>test()</code>), this is equivalent to <code>~string</code>.</li>
+<li>For packages (<code>package()</code>, <code>deps()</code> and <code>rdeps()</code>), this is equivalent to <code>=string</code>.</li>
 </ul>
 </li>
 </ul>
-<p>To match a string beginning with <code>=</code>, <code>~</code> or <code>/</code>, or if you're constructing a filter expression in a programmatic context, use the <code>contains:</code> prefix.</p>
+<p>If you're constructing an expression string programmatically, it is recommended that you always use a prefix to avoid ambiguity.</p>
 <h4 id="escape-sequences"><a class="header" href="#escape-sequences">Escape sequences</a></h4>
-<p>The <em>contains</em> and <em>equality</em> name matchers can contain escape sequences, preceded by a backslash (<code>\</code>).</p>
+<p>The <code>~string</code> and <code>=string</code> name matchers can contain escape sequences, preceded by a backslash (<code>\</code>).</p>
 <ul>
 <li><code>\n</code>: line feed</li>
 <li><code>\r</code>: carriage return</li>

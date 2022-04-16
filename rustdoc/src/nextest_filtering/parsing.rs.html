@@ -891,6 +891,61 @@
 <span id="886">886</span>
 <span id="887">887</span>
 <span id="888">888</span>
+<span id="889">889</span>
+<span id="890">890</span>
+<span id="891">891</span>
+<span id="892">892</span>
+<span id="893">893</span>
+<span id="894">894</span>
+<span id="895">895</span>
+<span id="896">896</span>
+<span id="897">897</span>
+<span id="898">898</span>
+<span id="899">899</span>
+<span id="900">900</span>
+<span id="901">901</span>
+<span id="902">902</span>
+<span id="903">903</span>
+<span id="904">904</span>
+<span id="905">905</span>
+<span id="906">906</span>
+<span id="907">907</span>
+<span id="908">908</span>
+<span id="909">909</span>
+<span id="910">910</span>
+<span id="911">911</span>
+<span id="912">912</span>
+<span id="913">913</span>
+<span id="914">914</span>
+<span id="915">915</span>
+<span id="916">916</span>
+<span id="917">917</span>
+<span id="918">918</span>
+<span id="919">919</span>
+<span id="920">920</span>
+<span id="921">921</span>
+<span id="922">922</span>
+<span id="923">923</span>
+<span id="924">924</span>
+<span id="925">925</span>
+<span id="926">926</span>
+<span id="927">927</span>
+<span id="928">928</span>
+<span id="929">929</span>
+<span id="930">930</span>
+<span id="931">931</span>
+<span id="932">932</span>
+<span id="933">933</span>
+<span id="934">934</span>
+<span id="935">935</span>
+<span id="936">936</span>
+<span id="937">937</span>
+<span id="938">938</span>
+<span id="939">939</span>
+<span id="940">940</span>
+<span id="941">941</span>
+<span id="942">942</span>
+<span id="943">943</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -933,10 +988,10 @@
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">enum</span> <span class="ident">SetDef</span> {
-    <span class="ident">Package</span>(<span class="ident">NameMatcher</span>),
-    <span class="ident">Deps</span>(<span class="ident">NameMatcher</span>),
-    <span class="ident">Rdeps</span>(<span class="ident">NameMatcher</span>),
-    <span class="ident">Test</span>(<span class="ident">NameMatcher</span>),
+    <span class="ident">Package</span>(<span class="ident">NameMatcher</span>, <span class="ident">SourceSpan</span>),
+    <span class="ident">Deps</span>(<span class="ident">NameMatcher</span>, <span class="ident">SourceSpan</span>),
+    <span class="ident">Rdeps</span>(<span class="ident">NameMatcher</span>, <span class="ident">SourceSpan</span>),
+    <span class="ident">Test</span>(<span class="ident">NameMatcher</span>, <span class="ident">SourceSpan</span>),
     <span class="ident">All</span>,
     <span class="prelude-val">None</span>,
 }
@@ -1112,10 +1167,7 @@
 <span class="attribute">#[<span class="ident">tracable_parser</span>]</span>
 <span class="kw">fn</span> <span class="ident">parse_contains_matcher</span>(<span class="ident">input</span>: <span class="ident">Span</span>) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">NameMatcher</span><span class="op">&gt;</span><span class="op">&gt;</span> {
     <span class="ident">map</span>(
-        <span class="ident">alt</span>((
-            <span class="ident">preceded</span>(<span class="ident">char</span>(<span class="string">&#39;~&#39;</span>), <span class="ident">parse_matcher_text</span>),
-            <span class="ident">preceded</span>(<span class="ident">tag</span>(<span class="string">&quot;contains:&quot;</span>), <span class="ident">parse_matcher_text</span>),
-        )),
+        <span class="ident">preceded</span>(<span class="ident">char</span>(<span class="string">&#39;~&#39;</span>), <span class="ident">parse_matcher_text</span>),
         <span class="op">|</span><span class="ident">res</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="op">|</span> <span class="ident">res</span>.<span class="ident">map</span>(<span class="ident">NameMatcher::Contains</span>),
     )(<span class="ident">input</span>)
 }
@@ -1252,15 +1304,20 @@
 <span class="kw">fn</span> <span class="ident">unary_set_def</span>(
     <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>,
     <span class="ident">make_default_matcher</span>: <span class="kw">fn</span>(<span class="ident">String</span>) -&gt; <span class="ident">NameMatcher</span>,
-    <span class="ident">make_set</span>: <span class="kw">fn</span>(<span class="ident">NameMatcher</span>) -&gt; <span class="ident">SetDef</span>,
+    <span class="ident">make_set</span>: <span class="kw">fn</span>(<span class="ident">NameMatcher</span>, <span class="ident">SourceSpan</span>) -&gt; <span class="ident">SetDef</span>,
 ) -&gt; <span class="kw">impl</span> <span class="ident">FnMut</span>(<span class="ident">Span</span>) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SetDef</span><span class="op">&gt;</span><span class="op">&gt;</span> {
     <span class="kw">move</span> <span class="op">|</span><span class="ident">i</span><span class="op">|</span> {
         <span class="kw">let</span> (<span class="ident">i</span>, <span class="kw">_</span>) <span class="op">=</span> <span class="ident">tag</span>(<span class="ident">name</span>)(<span class="ident">i</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> (<span class="ident">i</span>, <span class="kw">_</span>) <span class="op">=</span> <span class="ident">expect_char</span>(<span class="string">&#39;(&#39;</span>, <span class="ident">ParseSingleError::ExpectedOpenParenthesis</span>)(<span class="ident">i</span>)<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">start</span> <span class="op">=</span> <span class="ident">i</span>.<span class="ident">location_offset</span>();
         <span class="kw">let</span> (<span class="ident">i</span>, <span class="ident">res</span>) <span class="op">=</span> <span class="ident">set_matcher</span>(<span class="ident">make_default_matcher</span>)(<span class="ident">i</span>)<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">end</span> <span class="op">=</span> <span class="ident">i</span>.<span class="ident">location_offset</span>();
         <span class="kw">let</span> (<span class="ident">i</span>, <span class="kw">_</span>) <span class="op">=</span> <span class="ident">recover_unexpected_comma</span>(<span class="ident">i</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> (<span class="ident">i</span>, <span class="kw">_</span>) <span class="op">=</span> <span class="ident">expect_char</span>(<span class="string">&#39;)&#39;</span>, <span class="ident">ParseSingleError::ExpectedCloseParenthesis</span>)(<span class="ident">i</span>)<span class="question-mark">?</span>;
-        <span class="prelude-val">Ok</span>((<span class="ident">i</span>, <span class="ident">res</span>.<span class="ident">map</span>(<span class="ident">make_set</span>)))
+        <span class="prelude-val">Ok</span>((
+            <span class="ident">i</span>,
+            <span class="ident">res</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">matcher</span><span class="op">|</span> <span class="ident">make_set</span>(<span class="ident">matcher</span>, (<span class="ident">start</span>, <span class="ident">end</span> <span class="op">-</span> <span class="ident">start</span>).<span class="ident">into</span>())),
+        ))
     }
 }
 
@@ -1448,64 +1505,110 @@
             .<span class="ident">unwrap</span>()
     }
 
+    <span class="macro">macro_rules!</span> <span class="ident">assert_set_def</span> {
+        (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">input</span>: <span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">matches</span>:<span class="ident">expr</span>) =&gt; {
+            <span class="macro">assert!</span>(<span class="macro">matches!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">input</span>, <span class="ident">SetDef</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>(<span class="ident">x</span>, <span class="kw">_</span>) <span class="kw">if</span> <span class="ident">x</span> <span class="op">==</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">matches</span>));
+        };
+    }
+
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_parse_name_matcher</span>() {
         <span class="comment">// Basic matchers</span>
-        <span class="macro">assert_eq!</span>(
-            <span class="ident">SetDef::Test</span>(<span class="ident">NameMatcher::Contains</span>(<span class="string">&quot;something&quot;</span>.<span class="ident">to_string</span>())),
-            <span class="ident">parse_set</span>(<span class="string">&quot;test(~something)&quot;</span>)
+        <span class="macro">assert_set_def!</span>(
+            <span class="ident">parse_set</span>(<span class="string">&quot;test(~something)&quot;</span>),
+            <span class="ident">Test</span>,
+            <span class="ident">NameMatcher::Contains</span>(<span class="string">&quot;something&quot;</span>.<span class="ident">to_string</span>())
         );
-        <span class="macro">assert_eq!</span>(
-            <span class="ident">SetDef::Test</span>(<span class="ident">NameMatcher::Equal</span>(<span class="string">&quot;something&quot;</span>.<span class="ident">to_string</span>())),
-            <span class="ident">parse_set</span>(<span class="string">&quot;test(=something)&quot;</span>)
+
+        <span class="macro">assert_set_def!</span>(
+            <span class="ident">parse_set</span>(<span class="string">&quot;test(~something)&quot;</span>),
+            <span class="ident">Test</span>,
+            <span class="ident">NameMatcher::Contains</span>(<span class="string">&quot;something&quot;</span>.<span class="ident">to_string</span>())
         );
-        <span class="macro">assert_eq!</span>(
-            <span class="ident">SetDef::Test</span>(<span class="ident">NameMatcher::Regex</span>(<span class="ident">regex::Regex::new</span>(<span class="string">&quot;some.*&quot;</span>).<span class="ident">unwrap</span>())),
-            <span class="ident">parse_set</span>(<span class="string">&quot;test(/some.*/)&quot;</span>)
+        <span class="macro">assert_set_def!</span>(
+            <span class="ident">parse_set</span>(<span class="string">&quot;test(=something)&quot;</span>),
+            <span class="ident">Test</span>,
+            <span class="ident">NameMatcher::Equal</span>(<span class="string">&quot;something&quot;</span>.<span class="ident">to_string</span>())
+        );
+        <span class="macro">assert_set_def!</span>(
+            <span class="ident">parse_set</span>(<span class="string">&quot;test(/some.*/)&quot;</span>),
+            <span class="ident">Test</span>,
+            <span class="ident">NameMatcher::Regex</span>(<span class="ident">regex::Regex::new</span>(<span class="string">&quot;some.*&quot;</span>).<span class="ident">unwrap</span>())
         );
 
         <span class="comment">// Default matchers</span>
-        <span class="macro">assert_eq!</span>(
-            <span class="ident">SetDef::Test</span>(<span class="ident">NameMatcher::Contains</span>(<span class="string">&quot;something&quot;</span>.<span class="ident">to_string</span>())),
-            <span class="ident">parse_set</span>(<span class="string">&quot;test(something)&quot;</span>)
+        <span class="macro">assert_set_def!</span>(
+            <span class="ident">parse_set</span>(<span class="string">&quot;test(something)&quot;</span>),
+            <span class="ident">Test</span>,
+            <span class="ident">NameMatcher::Contains</span>(<span class="string">&quot;something&quot;</span>.<span class="ident">to_string</span>())
         );
-        <span class="macro">assert_eq!</span>(
-            <span class="ident">SetDef::Package</span>(<span class="ident">NameMatcher::Equal</span>(<span class="string">&quot;something&quot;</span>.<span class="ident">to_string</span>())),
-            <span class="ident">parse_set</span>(<span class="string">&quot;package(something)&quot;</span>)
+        <span class="macro">assert_set_def!</span>(
+            <span class="ident">parse_set</span>(<span class="string">&quot;package(something)&quot;</span>),
+            <span class="ident">Package</span>,
+            <span class="ident">NameMatcher::Equal</span>(<span class="string">&quot;something&quot;</span>.<span class="ident">to_string</span>())
         );
 
-        <span class="comment">// &#39;contains:&#39; is an escape hatch to enable literal matches.</span>
-        <span class="macro">assert_eq!</span>(
-            <span class="ident">SetDef::Test</span>(<span class="ident">NameMatcher::Contains</span>(<span class="string">&quot;something&quot;</span>.<span class="ident">to_string</span>())),
-            <span class="ident">parse_set</span>(<span class="string">&quot;test(contains:something)&quot;</span>)
+        <span class="comment">// Explicit contains matching</span>
+        <span class="macro">assert_set_def!</span>(
+            <span class="ident">parse_set</span>(<span class="string">&quot;test(~something)&quot;</span>),
+            <span class="ident">Test</span>,
+            <span class="ident">NameMatcher::Contains</span>(<span class="string">&quot;something&quot;</span>.<span class="ident">to_string</span>())
         );
-        <span class="macro">assert_eq!</span>(
-            <span class="ident">SetDef::Test</span>(<span class="ident">NameMatcher::Contains</span>(<span class="string">&quot;~something&quot;</span>.<span class="ident">to_string</span>())),
-            <span class="ident">parse_set</span>(<span class="string">&quot;test(contains:~something)&quot;</span>)
+        <span class="macro">assert_set_def!</span>(
+            <span class="ident">parse_set</span>(<span class="string">&quot;test(~~something)&quot;</span>),
+            <span class="ident">Test</span>,
+            <span class="ident">NameMatcher::Contains</span>(<span class="string">&quot;~something&quot;</span>.<span class="ident">to_string</span>())
         );
-        <span class="macro">assert_eq!</span>(
-            <span class="ident">SetDef::Test</span>(<span class="ident">NameMatcher::Contains</span>(<span class="string">&quot;=something&quot;</span>.<span class="ident">to_string</span>())),
-            <span class="ident">parse_set</span>(<span class="string">&quot;test(contains:=something)&quot;</span>)
+        <span class="macro">assert_set_def!</span>(
+            <span class="ident">parse_set</span>(<span class="string">&quot;test(~=something)&quot;</span>),
+            <span class="ident">Test</span>,
+            <span class="ident">NameMatcher::Contains</span>(<span class="string">&quot;=something&quot;</span>.<span class="ident">to_string</span>())
         );
-        <span class="macro">assert_eq!</span>(
-            <span class="ident">SetDef::Test</span>(<span class="ident">NameMatcher::Contains</span>(<span class="string">&quot;/something/&quot;</span>.<span class="ident">to_string</span>())),
-            <span class="ident">parse_set</span>(<span class="string">&quot;test(contains:/something/)&quot;</span>)
+        <span class="macro">assert_set_def!</span>(
+            <span class="ident">parse_set</span>(<span class="string">&quot;test(~/something/)&quot;</span>),
+            <span class="ident">Test</span>,
+            <span class="ident">NameMatcher::Contains</span>(<span class="string">&quot;/something/&quot;</span>.<span class="ident">to_string</span>())
+        );
+
+        <span class="comment">// Explicit equals matching.</span>
+        <span class="macro">assert_set_def!</span>(
+            <span class="ident">parse_set</span>(<span class="string">&quot;test(=something)&quot;</span>),
+            <span class="ident">Test</span>,
+            <span class="ident">NameMatcher::Equal</span>(<span class="string">&quot;something&quot;</span>.<span class="ident">to_string</span>())
+        );
+        <span class="macro">assert_set_def!</span>(
+            <span class="ident">parse_set</span>(<span class="string">&quot;test(=~something)&quot;</span>),
+            <span class="ident">Test</span>,
+            <span class="ident">NameMatcher::Equal</span>(<span class="string">&quot;~something&quot;</span>.<span class="ident">to_string</span>())
+        );
+        <span class="macro">assert_set_def!</span>(
+            <span class="ident">parse_set</span>(<span class="string">&quot;test(==something)&quot;</span>),
+            <span class="ident">Test</span>,
+            <span class="ident">NameMatcher::Equal</span>(<span class="string">&quot;=something&quot;</span>.<span class="ident">to_string</span>())
+        );
+        <span class="macro">assert_set_def!</span>(
+            <span class="ident">parse_set</span>(<span class="string">&quot;test(=/something/)&quot;</span>),
+            <span class="ident">Test</span>,
+            <span class="ident">NameMatcher::Equal</span>(<span class="string">&quot;/something/&quot;</span>.<span class="ident">to_string</span>())
         );
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_parse_name_matcher_quote</span>() {
-        <span class="macro">assert_eq!</span>(
-            <span class="ident">SetDef::Test</span>(<span class="ident">NameMatcher::Contains</span>(<span class="string">r&quot;some&#39;thing&quot;</span>.<span class="ident">to_string</span>())),
-            <span class="ident">parse_set</span>(<span class="string">r&quot;test(some&#39;thing)&quot;</span>)
+        <span class="macro">assert_set_def!</span>(
+            <span class="ident">parse_set</span>(<span class="string">r&quot;test(some&#39;thing)&quot;</span>),
+            <span class="ident">Test</span>,
+            <span class="ident">NameMatcher::Contains</span>(<span class="string">r&quot;some&#39;thing&quot;</span>.<span class="ident">to_string</span>())
         );
-        <span class="macro">assert_eq!</span>(
-            <span class="ident">SetDef::Test</span>(<span class="ident">NameMatcher::Contains</span>(<span class="string">r&quot;some(thing)&quot;</span>.<span class="ident">to_string</span>())),
-            <span class="ident">parse_set</span>(<span class="string">r&quot;test(some(thing\))&quot;</span>)
+        <span class="macro">assert_set_def!</span>(
+            <span class="ident">parse_set</span>(<span class="string">r&quot;test(some(thing\))&quot;</span>),
+            <span class="ident">Test</span>,
+            <span class="ident">NameMatcher::Contains</span>(<span class="string">r&quot;some(thing)&quot;</span>.<span class="ident">to_string</span>())
         );
-        <span class="macro">assert_eq!</span>(
-            <span class="ident">SetDef::Test</span>(<span class="ident">NameMatcher::Contains</span>(<span class="string">r&quot;some U&quot;</span>.<span class="ident">to_string</span>())),
-            <span class="ident">parse_set</span>(<span class="string">r&quot;test(some \u{55})&quot;</span>)
+        <span class="macro">assert_set_def!</span>(
+            <span class="ident">parse_set</span>(<span class="string">r&quot;test(some \u{55})&quot;</span>),
+            <span class="ident">Test</span>,
+            <span class="ident">NameMatcher::Contains</span>(<span class="string">r&quot;some U&quot;</span>.<span class="ident">to_string</span>())
         );
     }
 
@@ -1516,21 +1619,25 @@
 
         <span class="macro">assert_eq!</span>(<span class="ident">SetDef::None</span>, <span class="ident">parse_set</span>(<span class="string">&quot;none()&quot;</span>));
 
-        <span class="macro">assert_eq!</span>(
-            <span class="ident">SetDef::Package</span>(<span class="ident">NameMatcher::Equal</span>(<span class="string">&quot;something&quot;</span>.<span class="ident">to_string</span>())),
-            <span class="ident">parse_set</span>(<span class="string">&quot;package(something)&quot;</span>)
+        <span class="macro">assert_set_def!</span>(
+            <span class="ident">parse_set</span>(<span class="string">&quot;package(something)&quot;</span>),
+            <span class="ident">Package</span>,
+            <span class="ident">NameMatcher::Equal</span>(<span class="string">&quot;something&quot;</span>.<span class="ident">to_string</span>())
         );
-        <span class="macro">assert_eq!</span>(
-            <span class="ident">SetDef::Deps</span>(<span class="ident">NameMatcher::Equal</span>(<span class="string">&quot;something&quot;</span>.<span class="ident">to_string</span>())),
-            <span class="ident">parse_set</span>(<span class="string">&quot;deps(something)&quot;</span>)
+        <span class="macro">assert_set_def!</span>(
+            <span class="ident">parse_set</span>(<span class="string">&quot;deps(something)&quot;</span>),
+            <span class="ident">Deps</span>,
+            <span class="ident">NameMatcher::Equal</span>(<span class="string">&quot;something&quot;</span>.<span class="ident">to_string</span>())
         );
-        <span class="macro">assert_eq!</span>(
-            <span class="ident">SetDef::Rdeps</span>(<span class="ident">NameMatcher::Equal</span>(<span class="string">&quot;something&quot;</span>.<span class="ident">to_string</span>())),
-            <span class="ident">parse_set</span>(<span class="string">&quot;rdeps(something)&quot;</span>)
+        <span class="macro">assert_set_def!</span>(
+            <span class="ident">parse_set</span>(<span class="string">&quot;rdeps(something)&quot;</span>),
+            <span class="ident">Rdeps</span>,
+            <span class="ident">NameMatcher::Equal</span>(<span class="string">&quot;something&quot;</span>.<span class="ident">to_string</span>())
         );
-        <span class="macro">assert_eq!</span>(
-            <span class="ident">SetDef::Test</span>(<span class="ident">NameMatcher::Contains</span>(<span class="string">&quot;something&quot;</span>.<span class="ident">to_string</span>())),
-            <span class="ident">parse_set</span>(<span class="string">&quot;test(something)&quot;</span>)
+        <span class="macro">assert_set_def!</span>(
+            <span class="ident">parse_set</span>(<span class="string">&quot;test(something)&quot;</span>),
+            <span class="ident">Test</span>,
+            <span class="ident">NameMatcher::Contains</span>(<span class="string">&quot;something&quot;</span>.<span class="ident">to_string</span>())
         );
     }
 
@@ -1629,7 +1736,10 @@
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_parse_comma</span>() {
         <span class="comment">// accept escaped comma</span>
-        <span class="kw">let</span> <span class="ident">expr</span> <span class="op">=</span> <span class="ident">Expr::Set</span>(<span class="ident">SetDef::Test</span>(<span class="ident">NameMatcher::Contains</span>(<span class="string">&quot;a,&quot;</span>.<span class="ident">to_string</span>())));
+        <span class="kw">let</span> <span class="ident">expr</span> <span class="op">=</span> <span class="ident">Expr::Set</span>(<span class="ident">SetDef::Test</span>(
+            <span class="ident">NameMatcher::Contains</span>(<span class="string">&quot;a,&quot;</span>.<span class="ident">to_string</span>()),
+            (<span class="number">5</span>, <span class="number">3</span>).<span class="ident">into</span>(),
+        ));
         <span class="macro">assert_eq!</span>(<span class="ident">expr</span>, <span class="ident">parse</span>(<span class="string">r&quot;test(a\,)&quot;</span>));
 
         <span class="comment">// string parsing is compatible with possible future syntax</span>
