@@ -162,7 +162,7 @@
 <p>Nextest supports a domain-specific language (DSL) for filtering tests. The DSL is inspired by, and is similar to, <a href="https://bazel.build/docs/query-how-to">Bazel query</a> and <a href="https://www.mercurial-scm.org/repo/hg/help/revsets">Mercurial revsets</a>.</p>
 <h2 id="example-running-all-tests-in-a-crate-and-its-dependencies"><a class="header" href="#example-running-all-tests-in-a-crate-and-its-dependencies">Example: Running all tests in a crate and its dependencies</a></h2>
 <p>To run all tests in <code>my-crate</code> and its dependencies, run:</p>
-<pre><code>cargo nextest run -E 'deps(=my-crate)'
+<pre><code>cargo nextest run -E 'deps(my-crate)'
 </code></pre>
 <p>The argument passed into the <code>-E</code> command-line option is called a <em>filter expression</em>. The rest of this page describes the full syntax for the expression DSL.</p>
 <h2 id="the-filter-expression-dsl"><a class="header" href="#the-filter-expression-dsl">The filter expression DSL</a></h2>
