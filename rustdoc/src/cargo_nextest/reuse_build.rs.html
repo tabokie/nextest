@@ -56,31 +56,17 @@
 <span id="51">51</span>
 <span id="52">52</span>
 <span id="53">53</span>
-<span id="54">54</span>
-<span id="55">55</span>
-<span id="56">56</span>
-<span id="57">57</span>
-<span id="58">58</span>
-<span id="59">59</span>
-<span id="60">60</span>
-<span id="61">61</span>
-<span id="62">62</span>
-<span id="63">63</span>
-<span id="64">64</span>
-<span id="65">65</span>
-<span id="66">66</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
-<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">output::OutputContext</span>, <span class="ident">ExpectedError</span>};
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::output::OutputContext</span>;
 <span class="kw">use</span> <span class="ident">camino</span>::{<span class="ident">Utf8Path</span>, <span class="ident">Utf8PathBuf</span>};
 <span class="kw">use</span> <span class="ident">clap::Args</span>;
-<span class="kw">use</span> <span class="ident">color_eyre::eyre</span>::{<span class="ident">Report</span>, <span class="prelude-ty">Result</span>};
 <span class="kw">use</span> <span class="ident">guppy::graph::PackageGraph</span>;
 <span class="kw">use</span> <span class="ident">nextest_runner::list::PathMapper</span>;
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Args</span>)]</span>
-<span class="attribute">#[<span class="ident">clap</span>(<span class="ident">next_help_heading</span> <span class="op">=</span> <span class="string">&quot;REUSE BUILD OPTIONS (EXPERIMENTAL)&quot;</span>)]</span>
+<span class="attribute">#[<span class="ident">clap</span>(<span class="ident">next_help_heading</span> <span class="op">=</span> <span class="string">&quot;REUSE BUILD OPTIONS&quot;</span>)]</span>
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct</span> <span class="ident">ReuseBuildOpts</span> {
     <span class="doccomment">/// Path to binaries-metadata JSON</span>
     <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">value_name</span> <span class="op">=</span> <span class="string">&quot;PATH&quot;</span>)]</span>
@@ -104,21 +90,9 @@
 
     <span class="comment">// (_output is not used, but must be passed in to ensure that the output is properly initialized</span>
     <span class="comment">// before calling this method)</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">check_experimental</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_output</span>: <span class="ident">OutputContext</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">used</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">binaries_metadata</span>.<span class="ident">is_some</span>()
-            <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">target_dir_remap</span>.<span class="ident">is_some</span>()
-            <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">cargo_metadata</span>.<span class="ident">is_some</span>()
-            <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">workspace_remap</span>.<span class="ident">is_some</span>();
-
-        <span class="kw">let</span> <span class="ident">enabled</span> <span class="op">=</span> <span class="ident">std::env::var</span>(<span class="ident"><span class="self">Self</span>::EXPERIMENTAL_ENV</span>).<span class="ident">is_ok</span>();
-
-        <span class="kw">if</span> <span class="ident">used</span> <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="ident">enabled</span> {
-            <span class="prelude-val">Err</span>(<span class="ident">Report::new</span>(<span class="ident">ExpectedError::experimental_feature_error</span>(
-                <span class="string">&quot;build reuse&quot;</span>,
-                <span class="ident"><span class="self">Self</span>::EXPERIMENTAL_ENV</span>,
-            )))
-        } <span class="kw">else</span> {
-            <span class="prelude-val">Ok</span>(())
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">check_experimental</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_output</span>: <span class="ident">OutputContext</span>) {
+        <span class="kw">if</span> <span class="ident">std::env::var</span>(<span class="ident"><span class="self">Self</span>::EXPERIMENTAL_ENV</span>).<span class="ident">is_ok</span>() {
+            <span class="macro">log::warn!</span>(<span class="string">&quot;build reuse is no longer experimental: NEXTEST_EXPERIMENTAL_REUSE_BUILD does not need to be set&quot;</span>);
         }
     }
 
