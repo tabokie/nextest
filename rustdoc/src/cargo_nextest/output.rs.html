@@ -316,6 +316,8 @@
 <span id="311">311</span>
 <span id="312">312</span>
 <span id="313">313</span>
+<span id="314">314</span>
+<span id="315">315</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// Copyright (c) The cargo-guppy Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
@@ -401,9 +403,9 @@
             <span class="ident">miette::set_hook</span>(<span class="ident">Box::new</span>(<span class="kw">move</span> <span class="op">|</span><span class="kw">_</span><span class="op">|</span> {
                 <span class="kw">let</span> <span class="ident">theme_styles</span> <span class="op">=</span> <span class="kw">if</span> <span class="self">self</span>.<span class="ident">should_colorize</span>(<span class="ident">Stream::Stderr</span>) {
                     <span class="ident">ThemeStyles</span> {
-                        <span class="ident">error</span>: <span class="ident">style</span>().<span class="ident">bright_red</span>(),
-                        <span class="ident">warning</span>: <span class="ident">style</span>().<span class="ident">bright_yellow</span>(),
-                        <span class="ident">advice</span>: <span class="ident">style</span>().<span class="ident">bright_cyan</span>(),
+                        <span class="ident">error</span>: <span class="ident">style</span>().<span class="ident">bright_red</span>().<span class="ident">bold</span>(),
+                        <span class="ident">warning</span>: <span class="ident">style</span>().<span class="ident">bright_yellow</span>().<span class="ident">bold</span>(),
+                        <span class="ident">advice</span>: <span class="ident">style</span>().<span class="ident">bright_cyan</span>().<span class="ident">bold</span>(),
                         <span class="ident">help</span>: <span class="ident">style</span>().<span class="ident">cyan</span>(),
                         <span class="ident">link</span>: <span class="ident">style</span>().<span class="ident">cyan</span>().<span class="ident">underline</span>().<span class="ident">bold</span>(),
                         <span class="ident">linum</span>: <span class="ident">style</span>().<span class="ident">dimmed</span>(),
@@ -474,13 +476,15 @@
         <span class="ident">Level::Error</span> =&gt; <span class="macro">writeln!</span>(
             <span class="ident">f</span>,
             <span class="string">&quot;{}: {}&quot;</span>,
-            <span class="string">&quot;error&quot;</span>.<span class="ident">if_supports_color</span>(<span class="ident">Stream::Stderr</span>, <span class="op">|</span><span class="ident">s</span><span class="op">|</span> <span class="ident">s</span>.<span class="ident">style</span>(<span class="ident">Style::new</span>().<span class="ident">bold</span>().<span class="ident">red</span>())),
+            <span class="string">&quot;error&quot;</span>.<span class="ident">if_supports_color</span>(<span class="ident">Stream::Stderr</span>, <span class="op">|</span><span class="ident">s</span><span class="op">|</span> <span class="ident">s</span>
+                .<span class="ident">style</span>(<span class="ident">Style::new</span>().<span class="ident">bright_red</span>().<span class="ident">bold</span>())),
             <span class="ident">record</span>.<span class="ident">args</span>()
         ),
         <span class="ident">Level::Warn</span> =&gt; <span class="macro">writeln!</span>(
             <span class="ident">f</span>,
             <span class="string">&quot;{}: {}&quot;</span>,
-            <span class="string">&quot;warning&quot;</span>.<span class="ident">if_supports_color</span>(<span class="ident">Stream::Stderr</span>, <span class="op">|</span><span class="ident">s</span><span class="op">|</span> <span class="ident">s</span>.<span class="ident">style</span>(<span class="ident">Style::new</span>().<span class="ident">bold</span>().<span class="ident">yellow</span>())),
+            <span class="string">&quot;warning&quot;</span>.<span class="ident">if_supports_color</span>(<span class="ident">Stream::Stderr</span>, <span class="op">|</span><span class="ident">s</span><span class="op">|</span> <span class="ident">s</span>
+                .<span class="ident">style</span>(<span class="ident">Style::new</span>().<span class="ident">bright_yellow</span>().<span class="ident">bold</span>())),
             <span class="ident">record</span>.<span class="ident">args</span>()
         ),
         <span class="ident">Level::Info</span> =&gt; <span class="macro">writeln!</span>(
