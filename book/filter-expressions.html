@@ -168,14 +168,14 @@
 <h2 id="the-filter-expression-dsl"><a class="header" href="#the-filter-expression-dsl">The filter expression DSL</a></h2>
 <p>A <em>filter expression</em> defines a set of tests. A test will be run if it matches a filter expression.</p>
 <p>On the command line, multiple filter expressions can be passed in. A test will be run if it matches any of these expressions. For example, to run tests whose names contain the string <code>my_test</code> as well as all tests in package <code>my-crate</code>, run:</p>
-<pre><code>cargo nextest run -E 'test(my_test)' -E 'package(=my-crate)'
+<pre><code>cargo nextest run -E 'test(my_test)' -E 'package(my-crate)'
 </code></pre>
 <p>This is equivalent to:</p>
 <pre><code>cargo nextest run -E 'test(my_test) + package(=my-crate)'
 </code></pre>
 <h3 id="examples"><a class="header" href="#examples">Examples</a></h3>
 <ul>
-<li><code>package(=serde) and test(deserialize)</code>: every test containing the string <code>deserialize</code> in the package <code>serde</code></li>
+<li><code>package(serde) and test(deserialize)</code>: every test containing the string <code>deserialize</code> in the package <code>serde</code></li>
 <li><code>not (test(/parse[0-9]*/) | test(run))</code>: every test not containing <code>parse</code> or <code>run</code></li>
 </ul>
 <h2 id="dsl-reference"><a class="header" href="#dsl-reference">DSL reference</a></h2>
