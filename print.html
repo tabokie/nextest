@@ -599,7 +599,7 @@ REUSE BUILD OPTIONS:
 <p>Retries can also be <a href="book/configuration.html">configured in <code>.config/nextest.toml</code></a>. The command-line <code>--retries</code> option overrides the configured value.</p>
 <p>Flaky test detection is integrated with nextest's JUnit support. For more information, see <a href="book/junit.html">JUnit support</a>.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="reusing-builds"><a class="header" href="#reusing-builds">Reusing builds</a></h1>
-<p>In some cases, it can be useful to separate out building tests and running them. Nextest has experimental support for serializing metadata on one machine, and then using that to run tests on another machine.</p>
+<p>In some cases, it can be useful to separate out building tests from running them. Nextest supports serializing test metadata on one machine, and then using that to run tests on another machine.</p>
 <h2 id="terms"><a class="header" href="#terms">Terms</a></h2>
 <ul>
 <li><strong>Build machine:</strong> The computer that builds tests.</li>
