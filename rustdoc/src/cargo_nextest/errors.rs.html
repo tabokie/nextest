@@ -277,13 +277,27 @@
 <span id="272">272</span>
 <span id="273">273</span>
 <span id="274">274</span>
+<span id="275">275</span>
+<span id="276">276</span>
+<span id="277">277</span>
+<span id="278">278</span>
+<span id="279">279</span>
+<span id="280">280</span>
+<span id="281">281</span>
+<span id="282">282</span>
+<span id="283">283</span>
+<span id="284">284</span>
+<span id="285">285</span>
+<span id="286">286</span>
+<span id="287">287</span>
+<span id="288">288</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
 <span class="kw">use</span> <span class="ident">camino::Utf8PathBuf</span>;
 <span class="kw">use</span> <span class="ident">nextest_filtering::errors::FilterExpressionParseErrors</span>;
 <span class="kw">use</span> <span class="ident">nextest_metadata::NextestExitCode</span>;
-<span class="kw">use</span> <span class="ident">nextest_runner::errors</span>::{<span class="ident">ConfigParseError</span>, <span class="ident">ProfileNotFound</span>};
+<span class="kw">use</span> <span class="ident">nextest_runner::errors</span>::{<span class="ident">ConfigParseError</span>, <span class="ident">PathMapperConstructError</span>, <span class="ident">ProfileNotFound</span>};
 <span class="kw">use</span> <span class="ident">owo_colors</span>::{<span class="ident">OwoColorize</span>, <span class="ident">Stream</span>};
 <span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">error</span>::{<span class="self">self</span>, <span class="ident">Error</span>},
@@ -305,6 +319,10 @@
         <span class="ident">arg_name</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>,
         <span class="ident">file_name</span>: <span class="ident">Utf8PathBuf</span>,
         <span class="ident">err</span>: <span class="ident">std::io::Error</span>,
+    },
+    <span class="ident">PathMapperConstructError</span> {
+        <span class="ident">arg_name</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>,
+        <span class="ident">err</span>: <span class="ident">PathMapperConstructError</span>,
     },
     <span class="ident">ArgumentJsonParseError</span> {
         <span class="ident">arg_name</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>,
@@ -410,6 +428,7 @@
             <span class="ident"><span class="self">Self</span>::ProfileNotFound</span> { .. }
             <span class="op">|</span> <span class="ident"><span class="self">Self</span>::ConfigParseError</span> { .. }
             <span class="op">|</span> <span class="ident"><span class="self">Self</span>::ArgumentFileReadError</span> { .. }
+            <span class="op">|</span> <span class="ident"><span class="self">Self</span>::PathMapperConstructError</span> { .. }
             <span class="op">|</span> <span class="ident"><span class="self">Self</span>::ArgumentJsonParseError</span> { .. }
             <span class="op">|</span> <span class="ident"><span class="self">Self</span>::CargoMetadataParseError</span> { .. } =&gt; <span class="ident">NextestExitCode::SETUP_ERROR</span>,
             <span class="ident"><span class="self">Self</span>::BuildFailed</span> { .. } =&gt; <span class="ident">NextestExitCode::BUILD_FAILED</span>,
@@ -457,6 +476,14 @@
                     <span class="string">&quot;argument {} specified JSON file `{}` that couldn&#39;t be deserialized&quot;</span>,
                     <span class="macro">format!</span>(<span class="string">&quot;--{}&quot;</span>, <span class="ident">arg_name</span>).<span class="ident">if_supports_color</span>(<span class="ident">Stream::Stderr</span>, <span class="op">|</span><span class="ident">x</span><span class="op">|</span> <span class="ident">x</span>.<span class="ident">bold</span>()),
                     <span class="ident">file_name</span>.<span class="ident">if_supports_color</span>(<span class="ident">Stream::Stderr</span>, <span class="op">|</span><span class="ident">x</span><span class="op">|</span> <span class="ident">x</span>.<span class="ident">bold</span>()),
+                );
+                <span class="prelude-val">Some</span>(<span class="ident">err</span> <span class="kw">as</span> <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">Error</span>)
+            }
+            <span class="ident"><span class="self">Self</span>::PathMapperConstructError</span> { <span class="ident">arg_name</span>, <span class="ident">err</span> } =&gt; {
+                <span class="macro">log::error!</span>(
+                    <span class="string">&quot;argument {} specified `{}` that couldn&#39;t be read&quot;</span>,
+                    <span class="macro">format!</span>(<span class="string">&quot;--{}&quot;</span>, <span class="ident">arg_name</span>).<span class="ident">if_supports_color</span>(<span class="ident">Stream::Stderr</span>, <span class="op">|</span><span class="ident">x</span><span class="op">|</span> <span class="ident">x</span>.<span class="ident">bold</span>()),
+                    <span class="ident">err</span>.<span class="ident">input</span>().<span class="ident">if_supports_color</span>(<span class="ident">Stream::Stderr</span>, <span class="op">|</span><span class="ident">x</span><span class="op">|</span> <span class="ident">x</span>.<span class="ident">bold</span>())
                 );
                 <span class="prelude-val">Some</span>(<span class="ident">err</span> <span class="kw">as</span> <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">Error</span>)
             }
@@ -536,6 +563,7 @@
             <span class="ident"><span class="self">Self</span>::ProfileNotFound</span> { .. } =&gt; <span class="macro">writeln!</span>(<span class="ident">f</span>, <span class="string">&quot;profile not found&quot;</span>),
             <span class="ident"><span class="self">Self</span>::ConfigParseError</span> { .. } =&gt; <span class="macro">writeln!</span>(<span class="ident">f</span>, <span class="string">&quot;config read error&quot;</span>),
             <span class="ident"><span class="self">Self</span>::ArgumentFileReadError</span> { .. } =&gt; <span class="macro">writeln!</span>(<span class="ident">f</span>, <span class="string">&quot;argument file error&quot;</span>),
+            <span class="ident"><span class="self">Self</span>::PathMapperConstructError</span> { .. } =&gt; <span class="macro">writeln!</span>(<span class="ident">f</span>, <span class="string">&quot;path mapper construct error&quot;</span>),
             <span class="ident"><span class="self">Self</span>::ArgumentJsonParseError</span> { .. } =&gt; <span class="macro">writeln!</span>(<span class="ident">f</span>, <span class="string">&quot;argument json decode error&quot;</span>),
             <span class="ident"><span class="self">Self</span>::CargoMetadataParseError</span> { .. } =&gt; <span class="macro">writeln!</span>(<span class="ident">f</span>, <span class="string">&quot;cargo metadata parse error&quot;</span>),
             <span class="ident"><span class="self">Self</span>::BuildFailed</span> { .. } =&gt; <span class="macro">writeln!</span>(<span class="ident">f</span>, <span class="string">&quot;build failed&quot;</span>),
