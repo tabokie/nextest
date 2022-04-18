@@ -301,6 +301,9 @@
 <span id="296">296</span>
 <span id="297">297</span>
 <span id="298">298</span>
+<span id="299">299</span>
+<span id="300">300</span>
+<span id="301">301</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -456,6 +459,9 @@
         <span class="self">self</span>.<span class="ident">filter_ignored_mismatch</span>(<span class="ident">ignored</span>)
             .<span class="ident">or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">filter_name_mismatch</span>(<span class="ident">test_name</span>))
             .<span class="ident">or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">filter_expression_mismatch</span>(<span class="ident">test_binary</span>, <span class="ident">test_name</span>))
+            <span class="comment">// Note that partition-based filtering MUST come after all other kinds of filtering,</span>
+            <span class="comment">// so that count-based bucketing applies after ignored, name and expression matching.</span>
+            <span class="comment">// This also means that mutable count state must be maintained by the partitioner.</span>
             .<span class="ident">or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">filter_partition_mismatch</span>(<span class="ident">test_name</span>))
             .<span class="ident">unwrap_or</span>(<span class="ident">FilterMatch::Matches</span>)
     }
