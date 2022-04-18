@@ -695,7 +695,7 @@ REUSE BUILD OPTIONS:
 <p><img src="book/../static/nextest-partition.png" alt="Output of cargo nextest run --partition count:1/2" /></p>
 <p>Tests not in the current bucket are marked skipped.</p>
 <p>Count-based partitioning is done <em>per test binary</em>. This means that the tests in one binary <em>do not</em> influence counting for other binaries.</p>
-<p>Count-based partitioning also applies after all other test filters. For example, if you specify <code>cargo nextest run --partition count:1/3 test_parsing</code>, nextest first filters out tests that match the substring <code>test_parsing</code>, then buckets them into 3 partitions and runs the tests in partition 1.</p>
+<p>Count-based partitioning also applies after all other test filters. For example, if you specify <code>cargo nextest run --partition count:1/3 test_parsing</code>, nextest first selects tests that match the substring <code>test_parsing</code>, then buckets this subset of tests into 3 partitions and runs the tests in partition 1.</p>
 <h2 id="hash-based-partitioning"><a class="header" href="#hash-based-partitioning">Hash-based partitioning</a></h2>
 <p>Hash-based partitioning is specified with <code>--partition hash:m/n</code>, where m and n are both integers, and 1 ≤ m ≤ n. Specifying this operator means &quot;run tests in hash-based bucket m of n&quot;.</p>
 <p>The hash is completely deterministic, and is based on a combination of the binary and test names. The hash algorithm is guaranteed never to change within a nextest version series.</p>
