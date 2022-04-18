@@ -246,20 +246,20 @@
     <span class="kw">match</span> <span class="ident">set</span> {
         <span class="ident">SetDef::Package</span>(<span class="ident">matcher</span>, <span class="ident">span</span>) =&gt; <span class="ident">FilteringSet::Packages</span>(<span class="ident">expect_non_empty</span>(
             <span class="ident">matching_packages</span>(<span class="ident">matcher</span>, <span class="ident">packages</span>),
-            <span class="ident">span</span>.<span class="ident">clone</span>(),
+            <span class="kw-2">*</span><span class="ident">span</span>,
             <span class="ident">errors</span>,
         )),
         <span class="ident">SetDef::Deps</span>(<span class="ident">matcher</span>, <span class="ident">span</span>) =&gt; <span class="ident">FilteringSet::Packages</span>(<span class="ident">expect_non_empty</span>(
             <span class="ident">dependencies_packages</span>(<span class="ident">matcher</span>, <span class="ident">packages</span>, <span class="ident">cache</span>),
-            <span class="ident">span</span>.<span class="ident">clone</span>(),
+            <span class="kw-2">*</span><span class="ident">span</span>,
             <span class="ident">errors</span>,
         )),
         <span class="ident">SetDef::Rdeps</span>(<span class="ident">matcher</span>, <span class="ident">span</span>) =&gt; <span class="ident">FilteringSet::Packages</span>(<span class="ident">expect_non_empty</span>(
             <span class="ident">rdependencies_packages</span>(<span class="ident">matcher</span>, <span class="ident">packages</span>, <span class="ident">cache</span>),
-            <span class="ident">span</span>.<span class="ident">clone</span>(),
+            <span class="kw-2">*</span><span class="ident">span</span>,
             <span class="ident">errors</span>,
         )),
-        <span class="ident">SetDef::Test</span>(<span class="ident">matcher</span>, <span class="ident">span</span>) =&gt; <span class="ident">FilteringSet::Test</span>(<span class="ident">matcher</span>.<span class="ident">clone</span>(), <span class="ident">span</span>.<span class="ident">clone</span>()),
+        <span class="ident">SetDef::Test</span>(<span class="ident">matcher</span>, <span class="ident">span</span>) =&gt; <span class="ident">FilteringSet::Test</span>(<span class="ident">matcher</span>.<span class="ident">clone</span>(), <span class="kw-2">*</span><span class="ident">span</span>),
         <span class="ident">SetDef::All</span> =&gt; <span class="ident">FilteringSet::All</span>,
         <span class="ident">SetDef::None</span> =&gt; <span class="ident">FilteringSet::None</span>,
     }
