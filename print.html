@@ -178,6 +178,9 @@
 <pre><code>cargo nextest run
 </code></pre>
 <p>For more detailed installation instructions, see <a href="book/installation.html">Installation</a>.</p>
+<blockquote>
+<p>Note: Doctests are currently <a href="https://github.com/nextest-rs/nextest/issues/16">not supported</a> because of limitations in stable Rust. For now, run doctests in a separate step with <code>cargo test --doc</code>.</p>
+</blockquote>
 <h2 id="crates-in-this-project"><a class="header" href="#crates-in-this-project">Crates in this project</a></h2>
 <table><thead><tr><th>Crate</th><th style="text-align: center">crates.io</th><th style="text-align: center">rustdoc (latest version)</th><th style="text-align: center">rustdoc (main)</th></tr></thead><tbody>
 <tr><td><strong>cargo-nextest,</strong> the main test binary</td><td style="text-align: center"><a href="https://crates.io/crates/cargo-nextest"><img src="https://img.shields.io/crates/v/cargo-nextest" alt="cargo-nextest on crates.io" /></a></td><td style="text-align: center"><a href="https://docs.rs/cargo-nextest"><img src="https://img.shields.io/badge/docs-latest-brightgreen" alt="Documentation (latest release)" /></a></td><td style="text-align: center"><a href="https://nexte.st/rustdoc/cargo_nextest"><img src="https://img.shields.io/badge/docs-main-purple" alt="Documentation (main)" /></a></td></tr>
@@ -427,7 +430,7 @@ unit, or excluding those tests from nextest.</p>
 </code></pre>
 <p>In this mode, cargo-nextest will run tests <em>serially</em> so that output from different tests isn't interspersed. This is different from <code>cargo test -- --nocapture</code>, which will run tests in parallel.</p>
 <div class="footnote-definition" id="doctest"><sup class="footnote-definition-label">1</sup>
-<p>Doctests are currently <a href="https://github.com/nextest-rs/nextest/issues/16">not supported</a> because of limitations in stable Rust.</p>
+<p>Doctests are currently <a href="https://github.com/nextest-rs/nextest/issues/16">not supported</a> because of limitations in stable Rust. For now, run doctests in a separate step with <code>cargo test --doc</code>.</p>
 </div>
 <h2 id="options-and-arguments"><a class="header" href="#options-and-arguments">Options and arguments</a></h2>
 <pre><code>cargo-nextest-run 
@@ -519,7 +522,7 @@ REUSE BUILD OPTIONS:
 <p><code>cargo nextest list</code> takes most of the same options that <code>cargo nextest run</code> takes. For a full list of options accepted, see <code>cargo nextest list --help</code>.</p>
 <p><img src="book/../static/nextest-list.png" alt="Output of cargo nextest list" /></p>
 <div class="footnote-definition" id="doctest"><sup class="footnote-definition-label">1</sup>
-<p>Doctests are currently <a href="https://github.com/nextest-rs/nextest/issues/16">not supported</a> because of limitations in stable Rust.</p>
+<p>Doctests are currently <a href="https://github.com/nextest-rs/nextest/issues/16">not supported</a> because of limitations in stable Rust. For now, run doctests in a separate step with <code>cargo test --doc</code>.</p>
 </div>
 <h2 id="options-and-arguments-1"><a class="header" href="#options-and-arguments-1">Options and arguments</a></h2>
 <pre><code>cargo-nextest-list 

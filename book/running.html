@@ -202,7 +202,7 @@
 </code></pre>
 <p>In this mode, cargo-nextest will run tests <em>serially</em> so that output from different tests isn't interspersed. This is different from <code>cargo test -- --nocapture</code>, which will run tests in parallel.</p>
 <div class="footnote-definition" id="doctest"><sup class="footnote-definition-label">1</sup>
-<p>Doctests are currently <a href="https://github.com/nextest-rs/nextest/issues/16">not supported</a> because of limitations in stable Rust.</p>
+<p>Doctests are currently <a href="https://github.com/nextest-rs/nextest/issues/16">not supported</a> because of limitations in stable Rust. For now, run doctests in a separate step with <code>cargo test --doc</code>.</p>
 </div>
 <h2 id="options-and-arguments"><a class="header" href="#options-and-arguments">Options and arguments</a></h2>
 <pre><code>cargo-nextest-run 
