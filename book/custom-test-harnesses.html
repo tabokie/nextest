@@ -159,10 +159,16 @@
 name = &quot;my-test&quot;
 harness = false
 </code></pre>
-<p>As mentioned in <a href="how-it-works.html"><em>How nextest works</em></a>, cargo-nextest has a much thicker interface with the test harness than cargo test does. If you don't use any custom harnesses, cargo-nextest will run out of the box. However, users of custom test harnesses may need to be changed to work with cargo nextest. In general, the changes make the test harness look more like the default Rust test harness, and are pretty small overall.</p>
+<p>As mentioned in <a href="how-it-works.html"><em>How nextest works</em></a>, cargo-nextest has a much thicker interface with the test harness than cargo test does. If you don't use any custom harnesses, cargo-nextest will run out of the box. However, custom test harnesses need to follow certain rules in order to work with nextest.</p>
+<h2 id="libtest-mimic-recommended"><a class="header" href="#libtest-mimic-recommended">libtest-mimic (recommended)</a></h2>
+<p>Any custom test harness that uses <a href="https://github.com/LukasKalbertodt/libtest-mimic">libtest-mimic</a> (version 0.4.0 or above) is compatible with nextest. Using this crate is recommended.</p>
+<p>For an example test harness that uses libtest-mimic, see <a href="https://github.com/nextest-rs/datatest-stable">datatest-stable</a>.</p>
+<p><em>Note: prior versions of libtest-mimic are not compatible with nextest.</em></p>
+<h2 id="manually-implementing-a-test-harness"><a class="header" href="#manually-implementing-a-test-harness">Manually implementing a test harness</a></h2>
+<p>For your test harness to work with nextest, follow these rules (keywords are as in <a href="https://datatracker.ietf.org/doc/html/rfc2119">RFC2119</a>):</p>
 <ul>
 <li>
-<p><strong>Custom test harnesses MUST support being run with <code>--list --format terse</code>.</strong> This command MUST print to stdout all tests in <em>exactly</em> the format</p>
+<p><strong>The test harness MUST support being run with <code>--list --format terse</code>.</strong> This command MUST print to stdout all tests in <em>exactly</em> the format</p>
 <pre><code>my-test-1: test
 my-test-2: test
 </code></pre>
@@ -170,7 +176,7 @@ my-test-2: test
 <p>Custom test harnesses that are meant to be run as a single unit MUST produce just one line in the output.</p>
 </li>
 <li>
-<p><strong>Custom test harnesses MUST support being run with <code>--list --format terse --ignored</code></strong>. This command MUST print to stdout exactly the set of ignored tests (however the harness defines them) in the same format as above. If there are no ignored tests or if the test harness doesn't support ignored tests, the output MUST be empty. The set of ignored tests MUST be either of the following two options:</p>
+<p><strong>The test harness MUST support being run with <code>--list --format terse --ignored</code></strong>. This command MUST print to stdout exactly the set of ignored tests (however the harness defines them) in the same format as above. If there are no ignored tests or if the test harness doesn't support ignored tests, the output MUST be empty. The set of ignored tests MUST be either of the following two options:</p>
 <ul>
 <li>A subset of the tests printed out without <code>--ignored</code>; this is what libtest does.</li>
 <li>A completely disjoint set of tests from those printed out without <code>--ignored</code>.</li>
@@ -180,7 +186,7 @@ my-test-2: test
 <p><strong>Test names that are not at the top level (however the harness defines this) SHOULD be returned as <code>path::to::test::test_name</code>.</strong> This is recommended because the cargo-nextest UI uses <code>::</code> as a separator to format test names nicely.</p>
 </li>
 <li>
-<p><strong>Custom test harnesses MUST support being run with <code>&lt;test-name&gt; --nocapture --exact</code></strong>. This command will be called with every test name provided by the harness in <code>--list</code> above.</p>
+<p><strong>The test harness MUST support being run with <code>&lt;test-name&gt; --nocapture --exact</code></strong>. This command will be called with every test name provided by the harness in <code>--list</code> above.</p>
 </li>
 </ul>
 
