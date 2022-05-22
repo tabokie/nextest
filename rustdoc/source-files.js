@@ -114,6 +114,7 @@ sourcesIndex["thiserror_impl"] = {"name":"","files":["ast.rs","attr.rs","expand.
 sourcesIndex["time"] = {"name":"","files":["display.rs","duration.rs","lib.rs","parse.rs","sys.rs"]};
 sourcesIndex["toml"] = {"name":"","files":["datetime.rs","de.rs","lib.rs","macros.rs","map.rs","ser.rs","spanned.rs","tokens.rs","value.rs"]};
 sourcesIndex["twox_hash"] = {"name":"","files":["lib.rs","sixty_four.rs","thirty_two.rs","xxh3.rs"]};
+sourcesIndex["unicode_ident"] = {"name":"","files":["lib.rs","tables.rs"]};
 sourcesIndex["unicode_linebreak"] = {"name":"","files":["lib.rs","shared.rs"]};
 sourcesIndex["unicode_width"] = {"name":"","files":["lib.rs","tables.rs"]};
 sourcesIndex["unicode_xid"] = {"name":"","files":["lib.rs","tables.rs"]};
