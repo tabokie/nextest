@@ -117,7 +117,6 @@ sourcesIndex["twox_hash"] = {"name":"","files":["lib.rs","sixty_four.rs","thirty
 sourcesIndex["unicode_ident"] = {"name":"","files":["lib.rs","tables.rs"]};
 sourcesIndex["unicode_linebreak"] = {"name":"","files":["lib.rs","shared.rs"]};
 sourcesIndex["unicode_width"] = {"name":"","files":["lib.rs","tables.rs"]};
-sourcesIndex["unicode_xid"] = {"name":"","files":["lib.rs","tables.rs"]};
 sourcesIndex["utf8parse"] = {"name":"","files":["lib.rs","types.rs"]};
 sourcesIndex["vte"] = {"name":"","files":["definitions.rs","lib.rs","params.rs","table.rs"]};
 sourcesIndex["vte_generate_state_changes"] = {"name":"","files":["lib.rs"]};
