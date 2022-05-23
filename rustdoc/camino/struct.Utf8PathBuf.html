@@ -497,7 +497,7 @@ documentation for more.</p>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">camino</span>::{<span class="ident">Utf8Path</span>, <span class="ident">Utf8PathBuf</span>};
 
 <span class="kw">let</span> <span class="ident">path</span> <span class="op">=</span> <span class="ident">Utf8Path::new</span>(<span class="string">&quot;/foo/test/../test/bar.rs&quot;</span>);
-<span class="macro">assert_eq!</span>(<span class="ident">path</span>.<span class="ident">canonicalize</span>().<span class="ident">unwrap</span>(), <span class="ident">Utf8PathBuf::from</span>(<span class="string">&quot;/foo/test/bar.rs&quot;</span>));</code></pre></div>
+<span class="macro">assert_eq!</span>(<span class="ident">path</span>.<span class="ident">canonicalize_utf8</span>().<span class="ident">unwrap</span>(), <span class="ident">Utf8PathBuf::from</span>(<span class="string">&quot;/foo/test/bar.rs&quot;</span>));</code></pre></div>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><section id="method.read_link" class="method has-srclink"><span class="rightside"><a class="srclink" href="../src/camino/lib.rs.html#1137-1139">source</a></span><a href="#method.read_link" class="anchor"></a><h4 class="code-header">pub fn <a href="#method.read_link" class="fnname">read_link</a>(&amp;self) -&gt; <a class="type" href="https://doc.rust-lang.org/1.61.0/std/io/error/type.Result.html" title="type std::io::error::Result">Result</a>&lt;<a class="struct" href="https://doc.rust-lang.org/1.61.0/std/path/struct.PathBuf.html" title="struct std::path::PathBuf">PathBuf</a>&gt;</h4></section></summary><div class="docblock"><p>Reads a symbolic link, returning the file that the link points to.</p>
 <p>This returns a <a href="https://doc.rust-lang.org/1.61.0/std/path/struct.PathBuf.html" title="PathBuf"><code>PathBuf</code></a> because even if a symlink is valid Unicode, its target may not
 be. For a version that returns a <a href="struct.Utf8PathBuf.html" title="Utf8PathBuf"><code>Utf8PathBuf</code></a>, see
@@ -548,9 +548,9 @@ documentation for more.</p>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">camino::Utf8Path</span>;
 
 <span class="kw">let</span> <span class="ident">path</span> <span class="op">=</span> <span class="ident">Utf8Path::new</span>(<span class="string">&quot;/laputa&quot;</span>);
-<span class="kw">for</span> <span class="ident">entry</span> <span class="kw">in</span> <span class="ident">path</span>.<span class="ident">read_dir</span>().<span class="ident">expect</span>(<span class="string">&quot;read_dir call failed&quot;</span>) {
+<span class="kw">for</span> <span class="ident">entry</span> <span class="kw">in</span> <span class="ident">path</span>.<span class="ident">read_dir_utf8</span>().<span class="ident">expect</span>(<span class="string">&quot;read_dir call failed&quot;</span>) {
     <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">entry</span>) <span class="op">=</span> <span class="ident">entry</span> {
-        <span class="macro">println!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">entry</span>.<span class="ident">path</span>());
+        <span class="macro">println!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">entry</span>.<span class="ident">path</span>());
     }
 }</code></pre></div>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><section id="method.exists" class="method has-srclink"><span class="rightside"><a class="srclink" href="../src/camino/lib.rs.html#1243-1245">source</a></span><a href="#method.exists" class="anchor"></a><h4 class="code-header">pub fn <a href="#method.exists" class="fnname">exists</a>(&amp;self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/1.61.0/std/primitive.bool.html">bool</a></h4></section></summary><div class="docblock"><p>Returns <code>true</code> if the path points at an existing entity.</p>

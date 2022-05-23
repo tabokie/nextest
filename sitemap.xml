@@ -2,106 +2,106 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
         <loc>https://nexte.st/</loc>
-        <lastmod>2022-05-23T18:21:54.946Z</lastmod>
+        <lastmod>2022-05-23T18:39:03.197Z</lastmod>
     </url>
     <url>
         <loc>https://nexte.st/CHANGELOG</loc>
-        <lastmod>2022-05-23T18:21:54.974Z</lastmod>
+        <lastmod>2022-05-23T18:39:03.221Z</lastmod>
     </url>
     <url>
         <loc>https://nexte.st/book/antivirus-gatekeeper</loc>
-        <lastmod>2022-05-23T18:21:54.954Z</lastmod>
+        <lastmod>2022-05-23T18:39:03.201Z</lastmod>
     </url>
     <url>
         <loc>https://nexte.st/book/benchmarks</loc>
-        <lastmod>2022-05-23T18:21:54.970Z</lastmod>
+        <lastmod>2022-05-23T18:39:03.221Z</lastmod>
     </url>
     <url>
         <loc>https://nexte.st/book/configuration</loc>
-        <lastmod>2022-05-23T18:21:54.962Z</lastmod>
+        <lastmod>2022-05-23T18:39:03.213Z</lastmod>
     </url>
     <url>
         <loc>https://nexte.st/book/custom-test-harnesses</loc>
-        <lastmod>2022-05-23T18:21:54.970Z</lastmod>
+        <lastmod>2022-05-23T18:39:03.221Z</lastmod>
     </url>
     <url>
         <loc>https://nexte.st/book/env-vars</loc>
-        <lastmod>2022-05-23T18:21:54.962Z</lastmod>
+        <lastmod>2022-05-23T18:39:03.209Z</lastmod>
     </url>
     <url>
         <loc>https://nexte.st/book/experimental-features</loc>
-        <lastmod>2022-05-23T18:21:54.966Z</lastmod>
+        <lastmod>2022-05-23T18:39:03.217Z</lastmod>
     </url>
     <url>
         <loc>https://nexte.st/book/filter-expressions</loc>
-        <lastmod>2022-05-23T18:21:54.970Z</lastmod>
+        <lastmod>2022-05-23T18:39:03.217Z</lastmod>
     </url>
     <url>
         <loc>https://nexte.st/book/how-it-works</loc>
-        <lastmod>2022-05-23T18:21:54.970Z</lastmod>
+        <lastmod>2022-05-23T18:39:03.217Z</lastmod>
     </url>
     <url>
         <loc>https://nexte.st/book/installation</loc>
-        <lastmod>2022-05-23T18:21:54.950Z</lastmod>
+        <lastmod>2022-05-23T18:39:03.197Z</lastmod>
     </url>
     <url>
         <loc>https://nexte.st/book/installing-from-source</loc>
-        <lastmod>2022-05-23T18:21:54.950Z</lastmod>
+        <lastmod>2022-05-23T18:39:03.201Z</lastmod>
     </url>
     <url>
         <loc>https://nexte.st/book/junit</loc>
-        <lastmod>2022-05-23T18:21:54.966Z</lastmod>
+        <lastmod>2022-05-23T18:39:03.213Z</lastmod>
     </url>
     <url>
         <loc>https://nexte.st/book/listing</loc>
-        <lastmod>2022-05-23T18:21:54.954Z</lastmod>
+        <lastmod>2022-05-23T18:39:03.205Z</lastmod>
     </url>
     <url>
         <loc>https://nexte.st/book/machine-readable</loc>
-        <lastmod>2022-05-23T18:21:54.962Z</lastmod>
+        <lastmod>2022-05-23T18:39:03.213Z</lastmod>
     </url>
     <url>
         <loc>https://nexte.st/book/other-options</loc>
-        <lastmod>2022-05-23T18:21:54.958Z</lastmod>
+        <lastmod>2022-05-23T18:39:03.209Z</lastmod>
     </url>
     <url>
         <loc>https://nexte.st/book/partitioning</loc>
-        <lastmod>2022-05-23T18:21:54.958Z</lastmod>
+        <lastmod>2022-05-23T18:39:03.209Z</lastmod>
     </url>
     <url>
         <loc>https://nexte.st/book/pre-built-binaries</loc>
-        <lastmod>2022-05-23T18:21:54.950Z</lastmod>
+        <lastmod>2022-05-23T18:39:03.201Z</lastmod>
     </url>
     <url>
         <loc>https://nexte.st/book/release-urls</loc>
-        <lastmod>2022-05-23T18:21:54.950Z</lastmod>
+        <lastmod>2022-05-23T18:39:03.201Z</lastmod>
     </url>
     <url>
         <loc>https://nexte.st/book/retries</loc>
-        <lastmod>2022-05-23T18:21:54.954Z</lastmod>
+        <lastmod>2022-05-23T18:39:03.205Z</lastmod>
     </url>
     <url>
         <loc>https://nexte.st/book/reusing-builds</loc>
-        <lastmod>2022-05-23T18:21:54.958Z</lastmod>
+        <lastmod>2022-05-23T18:39:03.205Z</lastmod>
     </url>
     <url>
         <loc>https://nexte.st/book/running</loc>
-        <lastmod>2022-05-23T18:21:54.954Z</lastmod>
+        <lastmod>2022-05-23T18:39:03.205Z</lastmod>
     </url>
     <url>
         <loc>https://nexte.st/book/stability</loc>
-        <lastmod>2022-05-23T18:21:54.966Z</lastmod>
+        <lastmod>2022-05-23T18:39:03.217Z</lastmod>
     </url>
     <url>
         <loc>https://nexte.st/book/target-runners</loc>
-        <lastmod>2022-05-23T18:21:54.958Z</lastmod>
+        <lastmod>2022-05-23T18:39:03.209Z</lastmod>
     </url>
     <url>
         <loc>https://nexte.st/book/test-coverage</loc>
-        <lastmod>2022-05-23T18:21:54.966Z</lastmod>
+        <lastmod>2022-05-23T18:39:03.213Z</lastmod>
     </url>
     <url>
         <loc>https://nexte.st/book/usage</loc>
-        <lastmod>2022-05-23T18:21:54.954Z</lastmod>
+        <lastmod>2022-05-23T18:39:03.205Z</lastmod>
     </url>
 </urlset>
