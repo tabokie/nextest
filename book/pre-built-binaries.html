@@ -208,6 +208,15 @@ $tmp | Remove-Item
     ## version can also be a specific version like 0.9.11:
     # version: 0.9.11
 </code></pre>
+<blockquote>
+<p><strong>Tip:</strong> GitHub Actions supports ANSI color codes. To get color support for nextest (and Cargo), add this to your workflow:</p>
+<pre><code class="language-yml">jobs:
+  my-test-job:
+    env:
+      CARGO_TERM_COLOR: always
+</code></pre>
+<p>For a full list of environment variables supported by nextest, see <a href="env-vars.html">Environment variables</a>.</p>
+</blockquote>
 <h3 id="other-ci-systems"><a class="header" href="#other-ci-systems">Other CI systems</a></h3>
 <p>Install pre-built binaries on other CI systems by downloading and extracting the respective archives, using the commands above as a guide. See <a href="release-urls.html">Release URLs</a> for more about how to specify nextest versions and platforms.</p>
 <blockquote>
