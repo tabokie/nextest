@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["MetadataJsonWithRemap","A metadata JSON file path, along with a possible directory remap."],["PathMapper","A helper for path remapping."],["ReuseBuildInfo","Reuse build information."]]});

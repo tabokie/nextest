@@ -109,10 +109,16 @@
 <span id="104">104</span>
 <span id="105">105</span>
 <span id="106">106</span>
+<span id="107">107</span>
+<span id="108">108</span>
+<span id="109">109</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::list</span>::{<span class="ident">BinaryListState</span>, <span class="ident">PathMapper</span>, <span class="ident">TestListState</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::{
+    <span class="ident">list</span>::{<span class="ident">BinaryListState</span>, <span class="ident">TestListState</span>},
+    <span class="ident">reuse_build::PathMapper</span>,
+};
 <span class="kw">use</span> <span class="ident">camino::Utf8PathBuf</span>;
 <span class="kw">use</span> <span class="ident">nextest_metadata::RustBuildMetaSummary</span>;
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">collections::BTreeSet</span>, <span class="ident">marker::PhantomData</span>};

@@ -294,6 +294,10 @@
 <span id="289">289</span>
 <span id="290">290</span>
 <span id="291">291</span>
+<span id="292">292</span>
+<span id="293">293</span>
+<span id="294">294</span>
+<span id="295">295</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -306,123 +310,127 @@
 
 <span class="doccomment">/// Options passed down to cargo.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Args</span>)]</span>
-<span class="attribute">#[<span class="ident">clap</span>(<span class="ident">next_help_heading</span> <span class="op">=</span> <span class="string">&quot;CARGO OPTIONS&quot;</span>, <span class="ident">setting</span> <span class="op">=</span> <span class="ident">AppSettings::DeriveDisplayOrder</span>)]</span>
+<span class="attribute">#[<span class="ident">clap</span>(
+    <span class="ident">next_help_heading</span> <span class="op">=</span> <span class="string">&quot;CARGO OPTIONS&quot;</span>,
+    <span class="ident">group</span> <span class="op">=</span> <span class="ident">clap::ArgGroup::new</span>(<span class="string">&quot;cargo-opts&quot;</span>).<span class="ident">multiple</span>(<span class="bool-val">true</span>),
+    <span class="ident">setting</span> <span class="op">=</span> <span class="ident">AppSettings::DeriveDisplayOrder</span>,
+)]</span>
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct</span> <span class="ident">CargoOptions</span> {
     <span class="doccomment">/// Test only this package&#39;s library unit tests</span>
-    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">conflicts_with</span> <span class="op">=</span> <span class="string">&quot;binaries-metadata&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">group</span> <span class="op">=</span> <span class="string">&quot;cargo-opts&quot;</span>)]</span>
     <span class="ident">lib</span>: <span class="ident">bool</span>,
 
     <span class="doccomment">/// Test only the specified binary</span>
-    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">conflicts_with</span> <span class="op">=</span> <span class="string">&quot;binaries-metadata&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">group</span> <span class="op">=</span> <span class="string">&quot;cargo-opts&quot;</span>)]</span>
     <span class="ident">bin</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
 
     <span class="doccomment">/// Test all binaries</span>
-    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">conflicts_with</span> <span class="op">=</span> <span class="string">&quot;binaries-metadata&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">group</span> <span class="op">=</span> <span class="string">&quot;cargo-opts&quot;</span>)]</span>
     <span class="ident">bins</span>: <span class="ident">bool</span>,
 
     <span class="doccomment">/// Test only the specified test target</span>
-    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">conflicts_with</span> <span class="op">=</span> <span class="string">&quot;binaries-metadata&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">group</span> <span class="op">=</span> <span class="string">&quot;cargo-opts&quot;</span>)]</span>
     <span class="ident">test</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
 
     <span class="doccomment">/// Test all targets</span>
-    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">conflicts_with</span> <span class="op">=</span> <span class="string">&quot;binaries-metadata&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">group</span> <span class="op">=</span> <span class="string">&quot;cargo-opts&quot;</span>)]</span>
     <span class="ident">tests</span>: <span class="ident">bool</span>,
 
     <span class="doccomment">/// Test only the specified bench target</span>
-    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">conflicts_with</span> <span class="op">=</span> <span class="string">&quot;binaries-metadata&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">group</span> <span class="op">=</span> <span class="string">&quot;cargo-opts&quot;</span>)]</span>
     <span class="ident">bench</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
 
     <span class="doccomment">/// Test all benches</span>
-    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">conflicts_with</span> <span class="op">=</span> <span class="string">&quot;binaries-metadata&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">group</span> <span class="op">=</span> <span class="string">&quot;cargo-opts&quot;</span>)]</span>
     <span class="ident">benches</span>: <span class="ident">bool</span>,
 
     <span class="doccomment">/// Test all targets</span>
-    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">conflicts_with</span> <span class="op">=</span> <span class="string">&quot;binaries-metadata&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">group</span> <span class="op">=</span> <span class="string">&quot;cargo-opts&quot;</span>)]</span>
     <span class="ident">all_targets</span>: <span class="ident">bool</span>,
 
     <span class="comment">//  TODO: doc?</span>
     <span class="comment">// no-run is handled by test runner</span>
     <span class="doccomment">/// Package to test</span>
-    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">short</span> <span class="op">=</span> <span class="string">&#39;p&#39;</span>, <span class="ident">long</span> <span class="op">=</span> <span class="string">&quot;package&quot;</span>, <span class="ident">conflicts_with</span> <span class="op">=</span> <span class="string">&quot;binaries-metadata&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">short</span> <span class="op">=</span> <span class="string">&#39;p&#39;</span>, <span class="ident">long</span> <span class="op">=</span> <span class="string">&quot;package&quot;</span>, <span class="ident">group</span> <span class="op">=</span> <span class="string">&quot;cargo-opts&quot;</span>)]</span>
     <span class="ident">packages</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
 
     <span class="doccomment">/// Build all packages in the workspace</span>
-    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">conflicts_with</span> <span class="op">=</span> <span class="string">&quot;binaries-metadata&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">group</span> <span class="op">=</span> <span class="string">&quot;cargo-opts&quot;</span>)]</span>
     <span class="ident">workspace</span>: <span class="ident">bool</span>,
 
     <span class="doccomment">/// Exclude packages from the test</span>
-    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">conflicts_with</span> <span class="op">=</span> <span class="string">&quot;binaries-metadata&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">group</span> <span class="op">=</span> <span class="string">&quot;cargo-opts&quot;</span>)]</span>
     <span class="ident">exclude</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
 
     <span class="doccomment">/// Alias for workspace (deprecated)</span>
-    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">conflicts_with</span> <span class="op">=</span> <span class="string">&quot;binaries-metadata&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">group</span> <span class="op">=</span> <span class="string">&quot;cargo-opts&quot;</span>)]</span>
     <span class="ident">all</span>: <span class="ident">bool</span>,
 
     <span class="comment">// jobs is handled by test runner</span>
     <span class="doccomment">/// Build artifacts in release mode, with optimizations</span>
-    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">short</span> <span class="op">=</span> <span class="string">&#39;r&#39;</span>, <span class="ident">conflicts_with</span> <span class="op">=</span> <span class="string">&quot;binaries-metadata&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">short</span> <span class="op">=</span> <span class="string">&#39;r&#39;</span>, <span class="ident">group</span> <span class="op">=</span> <span class="string">&quot;cargo-opts&quot;</span>)]</span>
     <span class="ident">release</span>: <span class="ident">bool</span>,
 
     <span class="doccomment">/// Build artifacts with the specified Cargo profile</span>
-    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">value_name</span> <span class="op">=</span> <span class="string">&quot;NAME&quot;</span>, <span class="ident">conflicts_with</span> <span class="op">=</span> <span class="string">&quot;binaries-metadata&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">value_name</span> <span class="op">=</span> <span class="string">&quot;NAME&quot;</span>, <span class="ident">group</span> <span class="op">=</span> <span class="string">&quot;cargo-opts&quot;</span>)]</span>
     <span class="ident">cargo_profile</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
 
     <span class="doccomment">/// Number of build jobs to run</span>
-    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">value_name</span> <span class="op">=</span> <span class="string">&quot;JOBS&quot;</span>, <span class="ident">conflicts_with</span> <span class="op">=</span> <span class="string">&quot;binaries-metadata&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">value_name</span> <span class="op">=</span> <span class="string">&quot;JOBS&quot;</span>, <span class="ident">group</span> <span class="op">=</span> <span class="string">&quot;cargo-opts&quot;</span>)]</span>
     <span class="ident">build_jobs</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
 
     <span class="doccomment">/// Space or comma separated list of features to activate</span>
-    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">conflicts_with</span> <span class="op">=</span> <span class="string">&quot;binaries-metadata&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">group</span> <span class="op">=</span> <span class="string">&quot;cargo-opts&quot;</span>)]</span>
     <span class="ident">features</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
 
     <span class="doccomment">/// Activate all available features</span>
-    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">conflicts_with</span> <span class="op">=</span> <span class="string">&quot;binaries-metadata&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">group</span> <span class="op">=</span> <span class="string">&quot;cargo-opts&quot;</span>)]</span>
     <span class="ident">all_features</span>: <span class="ident">bool</span>,
 
     <span class="doccomment">/// Do not activate the `default` feature</span>
-    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">conflicts_with</span> <span class="op">=</span> <span class="string">&quot;binaries-metadata&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">group</span> <span class="op">=</span> <span class="string">&quot;cargo-opts&quot;</span>)]</span>
     <span class="ident">no_default_features</span>: <span class="ident">bool</span>,
 
     <span class="doccomment">/// Build for the target triple</span>
-    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">value_name</span> <span class="op">=</span> <span class="string">&quot;TRIPLE&quot;</span>, <span class="ident">conflicts_with</span> <span class="op">=</span> <span class="string">&quot;binaries-metadata&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">value_name</span> <span class="op">=</span> <span class="string">&quot;TRIPLE&quot;</span>, <span class="ident">group</span> <span class="op">=</span> <span class="string">&quot;cargo-opts&quot;</span>)]</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">target</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
 
     <span class="doccomment">/// Directory for all generated artifacts</span>
-    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">value_name</span> <span class="op">=</span> <span class="string">&quot;DIR&quot;</span>, <span class="ident">conflicts_with</span> <span class="op">=</span> <span class="string">&quot;binaries-metadata&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">value_name</span> <span class="op">=</span> <span class="string">&quot;DIR&quot;</span>, <span class="ident">group</span> <span class="op">=</span> <span class="string">&quot;cargo-opts&quot;</span>)]</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">target_dir</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Utf8PathBuf</span><span class="op">&gt;</span>,
 
     <span class="doccomment">/// Ignore `rust-version` specification in packages</span>
-    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">conflicts_with</span> <span class="op">=</span> <span class="string">&quot;binaries-metadata&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">group</span> <span class="op">=</span> <span class="string">&quot;cargo-opts&quot;</span>)]</span>
     <span class="ident">ignore_rust_version</span>: <span class="ident">bool</span>,
     <span class="comment">// --message-format is captured by nextest</span>
     <span class="doccomment">/// Output build graph in JSON (unstable)</span>
-    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">conflicts_with</span> <span class="op">=</span> <span class="string">&quot;binaries-metadata&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">group</span> <span class="op">=</span> <span class="string">&quot;cargo-opts&quot;</span>)]</span>
     <span class="ident">unit_graph</span>: <span class="ident">bool</span>,
 
     <span class="doccomment">/// Outputs a future incompatibility report at the end of the build</span>
-    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">conflicts_with</span> <span class="op">=</span> <span class="string">&quot;binaries-metadata&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">group</span> <span class="op">=</span> <span class="string">&quot;cargo-opts&quot;</span>)]</span>
     <span class="ident">future_incompat_report</span>: <span class="ident">bool</span>,
 
     <span class="comment">// --verbose is not currently supported</span>
     <span class="comment">// --color is handled by runner</span>
     <span class="doccomment">/// Require Cargo.lock and cache are up to date</span>
-    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">conflicts_with</span> <span class="op">=</span> <span class="string">&quot;binaries-metadata&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">group</span> <span class="op">=</span> <span class="string">&quot;cargo-opts&quot;</span>)]</span>
     <span class="ident">frozen</span>: <span class="ident">bool</span>,
 
     <span class="doccomment">/// Require Cargo.lock is up to date</span>
-    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">conflicts_with</span> <span class="op">=</span> <span class="string">&quot;binaries-metadata&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">group</span> <span class="op">=</span> <span class="string">&quot;cargo-opts&quot;</span>)]</span>
     <span class="ident">locked</span>: <span class="ident">bool</span>,
 
     <span class="doccomment">/// Run without accessing the network</span>
-    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">conflicts_with</span> <span class="op">=</span> <span class="string">&quot;binaries-metadata&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">group</span> <span class="op">=</span> <span class="string">&quot;cargo-opts&quot;</span>)]</span>
     <span class="ident">offline</span>: <span class="ident">bool</span>,
 
     <span class="doccomment">/// Override a configuration value (unstable)</span>
-    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">value_name</span> <span class="op">=</span> <span class="string">&quot;KEY=VALUE&quot;</span>, <span class="ident">conflicts_with</span> <span class="op">=</span> <span class="string">&quot;binaries-metadata&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">value_name</span> <span class="op">=</span> <span class="string">&quot;KEY=VALUE&quot;</span>, <span class="ident">group</span> <span class="op">=</span> <span class="string">&quot;cargo-opts&quot;</span>)]</span>
     <span class="ident">config</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
 
     <span class="doccomment">/// Unstable (nightly-only) flags to Cargo, see &#39;cargo -Z help&#39; for details</span>
-    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">short</span> <span class="op">=</span> <span class="string">&#39;Z&#39;</span>, <span class="ident">value_name</span> <span class="op">=</span> <span class="string">&quot;FLAG&quot;</span>, <span class="ident">conflicts_with</span> <span class="op">=</span> <span class="string">&quot;binaries-metadata&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">short</span> <span class="op">=</span> <span class="string">&#39;Z&#39;</span>, <span class="ident">value_name</span> <span class="op">=</span> <span class="string">&quot;FLAG&quot;</span>, <span class="ident">group</span> <span class="op">=</span> <span class="string">&quot;cargo-opts&quot;</span>)]</span>
     <span class="ident">unstable_flags</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
 }
 
