@@ -791,7 +791,7 @@ runner = &quot;wine&quot;
 <p>cargo-nextest also sets these environment variables at runtime, matching the behavior of cargo test:</p>
 <ul>
 <li><code>CARGO</code> — Path to the <code>cargo</code> binary performing the build.</li>
-<li><code>CARGO_MANIFEST_DIR</code> — The directory containing the manifest of your package.</li>
+<li><code>CARGO_MANIFEST_DIR</code> — The directory containing the manifest of your package. If <a href="book/reusing-builds.html#new-options"><code>--workspace-remap</code></a> is passed in, this is set to the remapped manifest directory. You can obtain the non-remapped directory using the value of this variable at compile-time, e.g. <code>env!(&quot;CARGO_MANIFEST_DIR&quot;)</code>.</li>
 <li><code>CARGO_PKG_VERSION</code> — The full version of your package.</li>
 <li><code>CARGO_PKG_VERSION_MAJOR</code> — The major version of your package.</li>
 <li><code>CARGO_PKG_VERSION_MINOR</code> — The minor version of your package.</li>
