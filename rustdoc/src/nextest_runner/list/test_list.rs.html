@@ -872,13 +872,71 @@
 <span id="867">867</span>
 <span id="868">868</span>
 <span id="869">869</span>
+<span id="870">870</span>
+<span id="871">871</span>
+<span id="872">872</span>
+<span id="873">873</span>
+<span id="874">874</span>
+<span id="875">875</span>
+<span id="876">876</span>
+<span id="877">877</span>
+<span id="878">878</span>
+<span id="879">879</span>
+<span id="880">880</span>
+<span id="881">881</span>
+<span id="882">882</span>
+<span id="883">883</span>
+<span id="884">884</span>
+<span id="885">885</span>
+<span id="886">886</span>
+<span id="887">887</span>
+<span id="888">888</span>
+<span id="889">889</span>
+<span id="890">890</span>
+<span id="891">891</span>
+<span id="892">892</span>
+<span id="893">893</span>
+<span id="894">894</span>
+<span id="895">895</span>
+<span id="896">896</span>
+<span id="897">897</span>
+<span id="898">898</span>
+<span id="899">899</span>
+<span id="900">900</span>
+<span id="901">901</span>
+<span id="902">902</span>
+<span id="903">903</span>
+<span id="904">904</span>
+<span id="905">905</span>
+<span id="906">906</span>
+<span id="907">907</span>
+<span id="908">908</span>
+<span id="909">909</span>
+<span id="910">910</span>
+<span id="911">911</span>
+<span id="912">912</span>
+<span id="913">913</span>
+<span id="914">914</span>
+<span id="915">915</span>
+<span id="916">916</span>
+<span id="917">917</span>
+<span id="918">918</span>
+<span id="919">919</span>
+<span id="920">920</span>
+<span id="921">921</span>
+<span id="922">922</span>
+<span id="923">923</span>
+<span id="924">924</span>
+<span id="925">925</span>
+<span id="926">926</span>
+<span id="927">927</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">errors</span>::{<span class="ident">FromMessagesError</span>, <span class="ident">ParseTestListError</span>, <span class="ident">WriteTestListError</span>},
     <span class="ident">helpers</span>::{<span class="ident">dylib_path</span>, <span class="ident">dylib_path_envvar</span>, <span class="ident">write_test_name</span>},
-    <span class="ident">list</span>::{<span class="ident">BinaryList</span>, <span class="ident">BinaryListState</span>, <span class="ident">OutputFormat</span>, <span class="ident">RustBuildMeta</span>, <span class="ident">Styles</span>, <span class="ident">TestListState</span>},
+    <span class="ident">list</span>::{<span class="ident">BinaryList</span>, <span class="ident">OutputFormat</span>, <span class="ident">RustBuildMeta</span>, <span class="ident">Styles</span>, <span class="ident">TestListState</span>},
     <span class="ident">reuse_build::PathMapper</span>,
     <span class="ident">target_runner</span>::{<span class="ident">PlatformRunner</span>, <span class="ident">TargetRunner</span>},
     <span class="ident">test_filter::TestFilterBuilder</span>,
@@ -890,13 +948,13 @@
     <span class="ident">PackageId</span>,
 };
 <span class="kw">use</span> <span class="ident">nextest_metadata</span>::{
-    <span class="ident">BuildPlatform</span>, <span class="ident">RustTestBinarySummary</span>, <span class="ident">RustTestCaseSummary</span>, <span class="ident">RustTestSuiteSummary</span>,
-    <span class="ident">TestListSummary</span>,
+    <span class="ident">BuildPlatform</span>, <span class="ident">RustTestBinaryKind</span>, <span class="ident">RustTestBinarySummary</span>, <span class="ident">RustTestCaseSummary</span>,
+    <span class="ident">RustTestSuiteSummary</span>, <span class="ident">TestListSummary</span>,
 };
 <span class="kw">use</span> <span class="ident">once_cell::sync::OnceCell</span>;
 <span class="kw">use</span> <span class="ident">owo_colors::OwoColorize</span>;
 <span class="kw">use</span> <span class="ident">std</span>::{
-    <span class="ident">collections::BTreeMap</span>,
+    <span class="ident">collections</span>::{<span class="ident">BTreeMap</span>, <span class="ident">BTreeSet</span>},
     <span class="ident">ffi</span>::{<span class="ident">OsStr</span>, <span class="ident">OsString</span>},
     <span class="ident">io</span>,
     <span class="ident">io::Write</span>,
@@ -922,8 +980,13 @@
     <span class="doccomment">/// The unique binary name defined in `Cargo.toml` or inferred by the filename.</span>
     <span class="kw">pub</span> <span class="ident">binary_name</span>: <span class="ident">String</span>,
 
-    <span class="doccomment">/// The working directory that this test should be executed in. If None, the current directory</span>
-    <span class="doccomment">/// will not be changed.</span>
+    <span class="doccomment">/// The kind of Rust test binary this is.</span>
+    <span class="kw">pub</span> <span class="ident">kind</span>: <span class="ident">RustTestBinaryKind</span>,
+
+    <span class="doccomment">/// Non-test binaries to be exposed to this artifact at runtime (name, path).</span>
+    <span class="kw">pub</span> <span class="ident">non_test_binaries</span>: <span class="ident">BTreeSet</span><span class="op">&lt;</span>(<span class="ident">String</span>, <span class="ident">Utf8PathBuf</span>)<span class="op">&gt;</span>,
+
+    <span class="doccomment">/// The working directory that this test should be executed in.</span>
     <span class="kw">pub</span> <span class="ident">cwd</span>: <span class="ident">Utf8PathBuf</span>,
 
     <span class="doccomment">/// The platform for which this test artifact was built.</span>
@@ -935,6 +998,7 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_binary_list</span>(
         <span class="ident">graph</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;g</span> <span class="ident">PackageGraph</span>,
         <span class="ident">binary_list</span>: <span class="ident">BinaryList</span>,
+        <span class="ident">rust_build_meta</span>: <span class="kw-2">&amp;</span><span class="ident">RustBuildMeta</span><span class="op">&lt;</span><span class="ident">TestListState</span><span class="op">&gt;</span>,
         <span class="ident">path_mapper</span>: <span class="kw-2">&amp;</span><span class="ident">PathMapper</span>,
         <span class="ident">platform_filter</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">BuildPlatform</span><span class="op">&gt;</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">FromMessagesError</span><span class="op">&gt;</span> {
@@ -966,12 +1030,37 @@
             <span class="kw">let</span> <span class="ident">binary_path</span> <span class="op">=</span> <span class="ident">path_mapper</span>.<span class="ident">map_binary</span>(<span class="ident">binary</span>.<span class="ident">path</span>);
             <span class="kw">let</span> <span class="ident">cwd</span> <span class="op">=</span> <span class="ident">path_mapper</span>.<span class="ident">map_cwd</span>(<span class="ident">cwd</span>);
 
+            <span class="comment">// Non-test binaries are only exposed to integration tests and benchmarks.</span>
+            <span class="kw">let</span> <span class="ident">non_test_binaries</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">binary</span>.<span class="ident">kind</span> <span class="op">==</span> <span class="ident">RustTestBinaryKind::TEST</span>
+                <span class="op">|</span><span class="op">|</span> <span class="ident">binary</span>.<span class="ident">kind</span> <span class="op">==</span> <span class="ident">RustTestBinaryKind::BENCH</span>
+            {
+                <span class="comment">// Note we must use the TestListState rust_build_meta here to ensure we get remapped</span>
+                <span class="comment">// paths.</span>
+                <span class="kw">match</span> <span class="ident">rust_build_meta</span>.<span class="ident">non_test_binaries</span>.<span class="ident">get</span>(<span class="ident">package_id</span>.<span class="ident">repr</span>()) {
+                    <span class="prelude-val">Some</span>(<span class="ident">binaries</span>) =&gt; <span class="ident">binaries</span>
+                        .<span class="ident">iter</span>()
+                        .<span class="ident">map</span>(<span class="op">|</span><span class="ident">binary</span><span class="op">|</span> {
+                            <span class="comment">// Convert relative paths to absolute ones here.</span>
+                            (
+                                <span class="ident">binary</span>.<span class="ident">name</span>.<span class="ident">clone</span>(),
+                                <span class="ident">rust_build_meta</span>.<span class="ident">target_directory</span>.<span class="ident">join</span>(<span class="kw-2">&amp;</span><span class="ident">binary</span>.<span class="ident">path</span>),
+                            )
+                        })
+                        .<span class="ident">collect</span>(),
+                    <span class="prelude-val">None</span> =&gt; <span class="ident">BTreeSet::new</span>(),
+                }
+            } <span class="kw">else</span> {
+                <span class="ident">BTreeSet::new</span>()
+            };
+
             <span class="ident">binaries</span>.<span class="ident">push</span>(<span class="ident">RustTestArtifact</span> {
                 <span class="ident">binary_id</span>: <span class="ident">binary</span>.<span class="ident">id</span>,
                 <span class="ident">package</span>,
                 <span class="ident">binary_path</span>,
                 <span class="ident">binary_name</span>: <span class="ident">binary</span>.<span class="ident">name</span>,
+                <span class="ident">kind</span>: <span class="ident">binary</span>.<span class="ident">kind</span>,
                 <span class="ident">cwd</span>,
+                <span class="ident">non_test_binaries</span>,
                 <span class="ident">build_platform</span>: <span class="ident">binary</span>.<span class="ident">build_platform</span>,
             })
         }
@@ -1005,12 +1094,18 @@
     <span class="doccomment">/// The unique binary name defined in `Cargo.toml` or inferred by the filename.</span>
     <span class="kw">pub</span> <span class="ident">binary_name</span>: <span class="ident">String</span>,
 
+    <span class="doccomment">/// The kind of Rust test binary this is.</span>
+    <span class="kw">pub</span> <span class="ident">kind</span>: <span class="ident">RustTestBinaryKind</span>,
+
     <span class="doccomment">/// The working directory that this test binary will be executed in. If None, the current directory</span>
     <span class="doccomment">/// will not be changed.</span>
     <span class="kw">pub</span> <span class="ident">cwd</span>: <span class="ident">Utf8PathBuf</span>,
 
     <span class="doccomment">/// The platform the test suite is for (host or target).</span>
     <span class="kw">pub</span> <span class="ident">build_platform</span>: <span class="ident">BuildPlatform</span>,
+
+    <span class="doccomment">/// Non-test binaries corresponding to this test suite (name, path).</span>
+    <span class="kw">pub</span> <span class="ident">non_test_binaries</span>: <span class="ident">BTreeSet</span><span class="op">&lt;</span>(<span class="ident">String</span>, <span class="ident">Utf8PathBuf</span>)<span class="op">&gt;</span>,
 
     <span class="doccomment">/// Test case names and other information about them.</span>
     <span class="kw">pub</span> <span class="ident">testcases</span>: <span class="ident">BTreeMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">RustTestCaseSummary</span><span class="op">&gt;</span>,
@@ -1020,13 +1115,11 @@
     <span class="doccomment">/// Creates a new test list by running the given command and applying the specified filter.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(
         <span class="ident">test_artifacts</span>: <span class="kw">impl</span> <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">RustTestArtifact</span><span class="op">&lt;</span><span class="lifetime">&#39;g</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-        <span class="ident">rust_build_meta</span>: <span class="kw-2">&amp;</span><span class="ident">RustBuildMeta</span><span class="op">&lt;</span><span class="ident">BinaryListState</span><span class="op">&gt;</span>,
-        <span class="ident">path_mapper</span>: <span class="kw-2">&amp;</span><span class="ident">PathMapper</span>,
+        <span class="ident">rust_build_meta</span>: <span class="ident">RustBuildMeta</span><span class="op">&lt;</span><span class="ident">TestListState</span><span class="op">&gt;</span>,
         <span class="ident">filter</span>: <span class="kw-2">&amp;</span><span class="ident">TestFilterBuilder</span>,
         <span class="ident">runner</span>: <span class="kw-2">&amp;</span><span class="ident">TargetRunner</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">ParseTestListError</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">test_count</span> <span class="op">=</span> <span class="number">0</span>;
-        <span class="kw">let</span> <span class="ident">rust_build_meta</span> <span class="op">=</span> <span class="ident">rust_build_meta</span>.<span class="ident">map_paths</span>(<span class="ident">path_mapper</span>);
         <span class="kw">let</span> <span class="ident">updated_dylib_path</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::create_dylib_path</span>(<span class="kw-2">&amp;</span><span class="ident">rust_build_meta</span>)<span class="question-mark">?</span>;
 
         <span class="kw">let</span> <span class="ident">test_artifacts</span> <span class="op">=</span> <span class="ident">test_artifacts</span>
@@ -1058,11 +1151,12 @@
         <span class="ident">test_bin_outputs</span>: <span class="kw">impl</span> <span class="ident">IntoIterator</span><span class="op">&lt;</span>
             <span class="ident">Item</span> <span class="op">=</span> (<span class="ident">RustTestArtifact</span><span class="op">&lt;</span><span class="lifetime">&#39;g</span><span class="op">&gt;</span>, <span class="kw">impl</span> <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">str</span><span class="op">&gt;</span>, <span class="kw">impl</span> <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">str</span><span class="op">&gt;</span>),
         <span class="op">&gt;</span>,
-        <span class="ident">rust_build_meta</span>: <span class="kw-2">&amp;</span><span class="ident">RustBuildMeta</span><span class="op">&lt;</span><span class="ident">BinaryListState</span><span class="op">&gt;</span>,
-        <span class="ident">path_mapper</span>: <span class="kw-2">&amp;</span><span class="ident">PathMapper</span>,
+        <span class="ident">rust_build_meta</span>: <span class="ident">RustBuildMeta</span><span class="op">&lt;</span><span class="ident">TestListState</span><span class="op">&gt;</span>,
         <span class="ident">filter</span>: <span class="kw-2">&amp;</span><span class="ident">TestFilterBuilder</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">ParseTestListError</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">test_count</span> <span class="op">=</span> <span class="number">0</span>;
+
+        <span class="kw">let</span> <span class="ident">updated_dylib_path</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::create_dylib_path</span>(<span class="kw-2">&amp;</span><span class="ident">rust_build_meta</span>)<span class="question-mark">?</span>;
 
         <span class="kw">let</span> <span class="ident">test_artifacts</span> <span class="op">=</span> <span class="ident">test_bin_outputs</span>
             .<span class="ident">into_iter</span>()
@@ -1077,9 +1171,6 @@
                 <span class="prelude-val">Ok</span>((<span class="ident">bin</span>, <span class="ident">info</span>))
             })
             .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">BTreeMap</span><span class="op">&lt;</span><span class="kw">_</span>, <span class="kw">_</span><span class="op">&gt;</span>, <span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>()<span class="question-mark">?</span>;
-
-        <span class="kw">let</span> <span class="ident">rust_build_meta</span> <span class="op">=</span> <span class="ident">rust_build_meta</span>.<span class="ident">map_paths</span>(<span class="ident">path_mapper</span>);
-        <span class="kw">let</span> <span class="ident">updated_dylib_path</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::create_dylib_path</span>(<span class="kw-2">&amp;</span><span class="ident">rust_build_meta</span>)<span class="question-mark">?</span>;
 
         <span class="prelude-val">Ok</span>(<span class="self">Self</span> {
             <span class="ident">rust_suites</span>: <span class="ident">test_artifacts</span>,
@@ -1147,6 +1238,7 @@
                     <span class="ident">binary</span>: <span class="ident">RustTestBinarySummary</span> {
                         <span class="ident">binary_name</span>: <span class="ident">info</span>.<span class="ident">binary_name</span>.<span class="ident">clone</span>(),
                         <span class="ident">package_id</span>: <span class="ident">info</span>.<span class="ident">package</span>.<span class="ident">id</span>().<span class="ident">repr</span>().<span class="ident">to_owned</span>(),
+                        <span class="ident">kind</span>: <span class="ident">info</span>.<span class="ident">kind</span>.<span class="ident">clone</span>(),
                         <span class="ident">binary_path</span>: <span class="ident">binary_path</span>.<span class="ident">clone</span>(),
                         <span class="ident">binary_id</span>: <span class="ident">info</span>.<span class="ident">binary_id</span>.<span class="ident">clone</span>(),
                         <span class="ident">build_platform</span>: <span class="ident">platform</span>,
@@ -1280,6 +1372,8 @@
             <span class="ident">package</span>,
             <span class="ident">binary_path</span>,
             <span class="ident">binary_name</span>,
+            <span class="ident">kind</span>,
+            <span class="ident">non_test_binaries</span>,
             <span class="ident">cwd</span>,
             <span class="ident">build_platform</span>: <span class="ident">platform</span>,
         } <span class="op">=</span> <span class="ident">test_binary</span>;
@@ -1290,6 +1384,8 @@
                 <span class="ident">binary_id</span>,
                 <span class="ident">package</span>,
                 <span class="ident">binary_name</span>,
+                <span class="ident">kind</span>,
+                <span class="ident">non_test_binaries</span>,
                 <span class="ident">testcases</span>: <span class="ident">tests</span>,
                 <span class="ident">cwd</span>,
                 <span class="ident">build_platform</span>: <span class="ident">platform</span>,
@@ -1405,8 +1501,15 @@
             <span class="ident">argv</span>.<span class="ident">push</span>(<span class="string">&quot;--ignored&quot;</span>);
         }
 
-        <span class="kw">let</span> <span class="ident">cmd</span> <span class="op">=</span> <span class="ident">make_test_expression</span>(<span class="ident">program</span>, <span class="ident">argv</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">cwd</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">package</span>, <span class="ident">dylib_path</span>)
-            .<span class="ident">stdout_capture</span>();
+        <span class="kw">let</span> <span class="ident">cmd</span> <span class="op">=</span> <span class="ident">make_test_expression</span>(
+            <span class="ident">program</span>,
+            <span class="ident">argv</span>,
+            <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">cwd</span>,
+            <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">package</span>,
+            <span class="ident">dylib_path</span>,
+            <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">non_test_binaries</span>,
+        )
+        .<span class="ident">stdout_capture</span>();
 
         <span class="ident">cmd</span>.<span class="ident">read</span>().<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">error</span><span class="op">|</span> {
             <span class="ident">ParseTestListError::command</span>(
@@ -1487,6 +1590,7 @@
             <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">bin_info</span>.<span class="ident">cwd</span>,
             <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">bin_info</span>.<span class="ident">package</span>,
             <span class="ident">test_list</span>.<span class="ident">updated_dylib_path</span>(),
+            <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">bin_info</span>.<span class="ident">non_test_binaries</span>,
         )
     }
 }
@@ -1498,8 +1602,9 @@
     <span class="ident">cwd</span>: <span class="kw-2">&amp;</span><span class="ident">Utf8PathBuf</span>,
     <span class="ident">package</span>: <span class="kw-2">&amp;</span><span class="ident">PackageMetadata</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
     <span class="ident">dylib_path</span>: <span class="kw-2">&amp;</span><span class="ident">OsStr</span>,
+    <span class="ident">non_test_binaries</span>: <span class="kw-2">&amp;</span><span class="ident">BTreeSet</span><span class="op">&lt;</span>(<span class="ident">String</span>, <span class="ident">Utf8PathBuf</span>)<span class="op">&gt;</span>,
 ) -&gt; <span class="ident">duct::Expression</span> {
-    <span class="kw">let</span> <span class="ident">cmd</span> <span class="op">=</span> <span class="ident">duct::cmd</span>(<span class="ident">program</span>, <span class="ident">args</span>)
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">cmd</span> <span class="op">=</span> <span class="ident">duct::cmd</span>(<span class="ident">program</span>, <span class="ident">args</span>)
         .<span class="ident">dir</span>(<span class="ident">cwd</span>)
         <span class="comment">// This environment variable is set to indicate that tests are being run under nextest.</span>
         .<span class="ident">env</span>(<span class="string">&quot;NEXTEST&quot;</span>, <span class="string">&quot;1&quot;</span>)
@@ -1553,6 +1658,12 @@
         )
         .<span class="ident">env</span>(<span class="ident">dylib_path_envvar</span>(), <span class="ident">dylib_path</span>);
 
+    <span class="comment">// Expose paths to non-test binaries at runtime so that relocated paths work.</span>
+    <span class="comment">// These paths aren&#39;t exposed by Cargo at runtime, so use a NEXTEST_BIN_EXE prefix.</span>
+    <span class="kw">for</span> (<span class="ident">name</span>, <span class="ident">path</span>) <span class="kw">in</span> <span class="ident">non_test_binaries</span> {
+        <span class="ident">cmd</span> <span class="op">=</span> <span class="ident">cmd</span>.<span class="ident">env</span>(<span class="macro">format!</span>(<span class="string">&quot;NEXTEST_BIN_EXE_{}&quot;</span>, <span class="ident">name</span>), <span class="kw-2">&amp;</span><span class="ident">path</span>);
+    }
+
     <span class="ident">cmd</span>
 }
 
@@ -1592,13 +1703,14 @@
             <span class="ident">package</span>: <span class="ident">package_metadata</span>(),
             <span class="ident">binary_name</span>: <span class="ident">fake_binary_name</span>.<span class="ident">clone</span>(),
             <span class="ident">binary_id</span>: <span class="ident">fake_binary_id</span>.<span class="ident">clone</span>(),
+            <span class="ident">kind</span>: <span class="ident">RustTestBinaryKind::LIB</span>,
+            <span class="ident">non_test_binaries</span>: <span class="ident">BTreeSet::new</span>(),
             <span class="ident">build_platform</span>: <span class="ident">BuildPlatform::Target</span>,
         };
-        <span class="kw">let</span> <span class="ident">rust_build_meta</span> <span class="op">=</span> <span class="ident">RustBuildMeta::new</span>(<span class="string">&quot;/fake&quot;</span>);
+        <span class="kw">let</span> <span class="ident">rust_build_meta</span> <span class="op">=</span> <span class="ident">RustBuildMeta::new</span>(<span class="string">&quot;/fake&quot;</span>).<span class="ident">map_paths</span>(<span class="kw-2">&amp;</span><span class="ident">PathMapper::noop</span>());
         <span class="kw">let</span> <span class="ident">test_list</span> <span class="op">=</span> <span class="ident">TestList::new_with_outputs</span>(
             <span class="ident">iter::once</span>((<span class="ident">test_binary</span>, <span class="kw-2">&amp;</span><span class="ident">non_ignored_output</span>, <span class="kw-2">&amp;</span><span class="ident">ignored_output</span>)),
-            <span class="kw-2">&amp;</span><span class="ident">rust_build_meta</span>,
-            <span class="kw-2">&amp;</span><span class="ident">PathMapper::noop</span>(),
+            <span class="ident">rust_build_meta</span>,
             <span class="kw-2">&amp;</span><span class="ident">test_filter</span>,
         )
         .<span class="ident">expect</span>(<span class="string">&quot;valid output&quot;</span>);
@@ -1629,6 +1741,8 @@
                     <span class="ident">package</span>: <span class="ident">package_metadata</span>(),
                     <span class="ident">binary_name</span>: <span class="ident">fake_binary_name</span>,
                     <span class="ident">binary_id</span>: <span class="ident">fake_binary_id</span>,
+                    <span class="ident">kind</span>: <span class="ident">RustTestBinaryKind::LIB</span>,
+                    <span class="ident">non_test_binaries</span>: <span class="ident">BTreeSet::new</span>(),
                 }
             }
         );
@@ -1656,6 +1770,7 @@
               &quot;rust-build-meta&quot;: {
                 &quot;target-directory&quot;: &quot;/fake&quot;,
                 &quot;base-output-directories&quot;: [],
+                &quot;non-test-binaries&quot;: {},
                 &quot;linked-paths&quot;: []
               },
               &quot;test-count&quot;: 4,
@@ -1665,6 +1780,7 @@
                   &quot;binary-id&quot;: &quot;fake-package::fake-binary&quot;,
                   &quot;binary-name&quot;: &quot;fake-binary&quot;,
                   &quot;package-id&quot;: &quot;metadata-helper 0.1.0 (path+file:///Users/fakeuser/local/testcrates/metadata/metadata-helper)&quot;,
+                  &quot;kind&quot;: &quot;lib&quot;,
                   &quot;binary-path&quot;: &quot;/fake/binary&quot;,
                   &quot;build-platform&quot;: &quot;target&quot;,
                   &quot;cwd&quot;: &quot;/fake/cwd&quot;,

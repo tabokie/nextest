@@ -112,6 +112,17 @@
 <span id="107">107</span>
 <span id="108">108</span>
 <span id="109">109</span>
+<span id="110">110</span>
+<span id="111">111</span>
+<span id="112">112</span>
+<span id="113">113</span>
+<span id="114">114</span>
+<span id="115">115</span>
+<span id="116">116</span>
+<span id="117">117</span>
+<span id="118">118</span>
+<span id="119">119</span>
+<span id="120">120</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -120,8 +131,11 @@
     <span class="ident">reuse_build::PathMapper</span>,
 };
 <span class="kw">use</span> <span class="ident">camino::Utf8PathBuf</span>;
-<span class="kw">use</span> <span class="ident">nextest_metadata::RustBuildMetaSummary</span>;
-<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">collections::BTreeSet</span>, <span class="ident">marker::PhantomData</span>};
+<span class="kw">use</span> <span class="ident">nextest_metadata</span>::{<span class="ident">RustBuildMetaSummary</span>, <span class="ident">RustNonTestBinarySummary</span>};
+<span class="kw">use</span> <span class="ident">std</span>::{
+    <span class="ident">collections</span>::{<span class="ident">BTreeMap</span>, <span class="ident">BTreeSet</span>},
+    <span class="ident">marker::PhantomData</span>,
+};
 
 <span class="doccomment">/// Rust-related metadata used for builds and test runs.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>)]</span>
@@ -132,6 +146,9 @@
     <span class="doccomment">/// A list of base output directories, relative to the target directory. These directories</span>
     <span class="doccomment">/// and their &quot;deps&quot; subdirectories are added to the dynamic library path.</span>
     <span class="kw">pub</span> <span class="ident">base_output_directories</span>: <span class="ident">BTreeSet</span><span class="op">&lt;</span><span class="ident">Utf8PathBuf</span><span class="op">&gt;</span>,
+
+    <span class="doccomment">/// Information about non-test executables, keyed by package ID.</span>
+    <span class="kw">pub</span> <span class="ident">non_test_binaries</span>: <span class="ident">BTreeMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">BTreeSet</span><span class="op">&lt;</span><span class="ident">RustNonTestBinarySummary</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 
     <span class="doccomment">/// A list of linked paths, relative to the target directory. These directories are</span>
     <span class="doccomment">/// added to the dynamic library path.</span>
@@ -146,6 +163,7 @@
         <span class="self">Self</span> {
             <span class="ident">target_directory</span>: <span class="ident">target_directory</span>.<span class="ident">into</span>(),
             <span class="ident">base_output_directories</span>: <span class="ident">BTreeSet::new</span>(),
+            <span class="ident">non_test_binaries</span>: <span class="ident">BTreeMap::new</span>(),
             <span class="ident">linked_paths</span>: <span class="ident">BTreeSet::new</span>(),
             <span class="ident">state</span>: <span class="ident">PhantomData</span>,
         }
@@ -160,6 +178,7 @@
                 .<span class="ident">to_path_buf</span>(),
             <span class="comment">// Since these are relative paths, they don&#39;t need to be mapped.</span>
             <span class="ident">base_output_directories</span>: <span class="self">self</span>.<span class="ident">base_output_directories</span>.<span class="ident">clone</span>(),
+            <span class="ident">non_test_binaries</span>: <span class="self">self</span>.<span class="ident">non_test_binaries</span>.<span class="ident">clone</span>(),
             <span class="ident">linked_paths</span>: <span class="self">self</span>.<span class="ident">linked_paths</span>.<span class="ident">clone</span>(),
             <span class="ident">state</span>: <span class="ident">PhantomData</span>,
         }
@@ -173,6 +192,7 @@
         <span class="self">Self</span> {
             <span class="ident">target_directory</span>: <span class="ident">Utf8PathBuf::new</span>(),
             <span class="ident">base_output_directories</span>: <span class="ident">BTreeSet::new</span>(),
+            <span class="ident">non_test_binaries</span>: <span class="ident">BTreeMap::new</span>(),
             <span class="ident">linked_paths</span>: <span class="ident">BTreeSet::new</span>(),
             <span class="ident">state</span>: <span class="ident">PhantomData</span>,
         }
@@ -207,6 +227,7 @@
         <span class="self">Self</span> {
             <span class="ident">target_directory</span>: <span class="ident">summary</span>.<span class="ident">target_directory</span>,
             <span class="ident">base_output_directories</span>: <span class="ident">summary</span>.<span class="ident">base_output_directories</span>,
+            <span class="ident">non_test_binaries</span>: <span class="ident">summary</span>.<span class="ident">non_test_binaries</span>,
             <span class="ident">linked_paths</span>: <span class="ident">summary</span>.<span class="ident">linked_paths</span>,
             <span class="ident">state</span>: <span class="ident">PhantomData</span>,
         }
@@ -217,6 +238,7 @@
         <span class="ident">RustBuildMetaSummary</span> {
             <span class="ident">target_directory</span>: <span class="self">self</span>.<span class="ident">target_directory</span>.<span class="ident">clone</span>(),
             <span class="ident">base_output_directories</span>: <span class="self">self</span>.<span class="ident">base_output_directories</span>.<span class="ident">clone</span>(),
+            <span class="ident">non_test_binaries</span>: <span class="self">self</span>.<span class="ident">non_test_binaries</span>.<span class="ident">clone</span>(),
             <span class="ident">linked_paths</span>: <span class="self">self</span>.<span class="ident">linked_paths</span>.<span class="ident">clone</span>(),
         }
     }
