@@ -283,14 +283,6 @@
 <span id="278">278</span>
 <span id="279">279</span>
 <span id="280">280</span>
-<span id="281">281</span>
-<span id="282">282</span>
-<span id="283">283</span>
-<span id="284">284</span>
-<span id="285">285</span>
-<span id="286">286</span>
-<span id="287">287</span>
-<span id="288">288</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -334,7 +326,7 @@
         <span class="ident">err</span>: <span class="ident">guppy::Error</span>,
     },
     <span class="ident">BuildFailed</span> {
-        <span class="ident">escaped_command</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+        <span class="ident">command</span>: <span class="ident">String</span>,
         <span class="ident">exit_code</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>,
     },
     <span class="ident">TestRunFailed</span>,
@@ -403,10 +395,7 @@
         <span class="ident">exit_code</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>,
     ) -&gt; <span class="self">Self</span> {
         <span class="ident"><span class="self">Self</span>::BuildFailed</span> {
-            <span class="ident">escaped_command</span>: <span class="ident">command</span>
-                .<span class="ident">into_iter</span>()
-                .<span class="ident">map</span>(<span class="op">|</span><span class="ident">arg</span><span class="op">|</span> <span class="ident">shellwords::escape</span>(<span class="ident">arg</span>.<span class="ident">as_ref</span>()))
-                .<span class="ident">collect</span>(),
+            <span class="ident">command</span>: <span class="ident">shell_words::join</span>(<span class="ident">command</span>),
             <span class="ident">exit_code</span>,
         }
     }
@@ -498,10 +487,7 @@
                 <span class="macro">log::error!</span>(<span class="string">&quot;error parsing Cargo metadata{}&quot;</span>, <span class="ident">metadata_source</span>);
                 <span class="prelude-val">Some</span>(<span class="ident">err</span> <span class="kw">as</span> <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">Error</span>)
             }
-            <span class="ident"><span class="self">Self</span>::BuildFailed</span> {
-                <span class="ident">escaped_command</span>,
-                <span class="ident">exit_code</span>,
-            } =&gt; {
+            <span class="ident"><span class="self">Self</span>::BuildFailed</span> { <span class="ident">command</span>, <span class="ident">exit_code</span> } =&gt; {
                 <span class="kw">let</span> <span class="ident">with_code_str</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">exit_code</span> {
                     <span class="prelude-val">Some</span>(<span class="ident">code</span>) =&gt; {
                         <span class="macro">format!</span>(
@@ -513,10 +499,8 @@
                 };
 
                 <span class="macro">log::error!</span>(
-                    <span class="string">&quot;command {} exited{}&quot;</span>,
-                    <span class="ident">escaped_command</span>
-                        .<span class="ident">join</span>(<span class="string">&quot; &quot;</span>)
-                        .<span class="ident">if_supports_color</span>(<span class="ident">Stream::Stderr</span>, <span class="op">|</span><span class="ident">x</span><span class="op">|</span> <span class="ident">x</span>.<span class="ident">bold</span>()),
+                    <span class="string">&quot;command `{}` exited{}&quot;</span>,
+                    <span class="ident">command</span>.<span class="ident">if_supports_color</span>(<span class="ident">Stream::Stderr</span>, <span class="op">|</span><span class="ident">x</span><span class="op">|</span> <span class="ident">x</span>.<span class="ident">bold</span>()),
                     <span class="ident">with_code_str</span>,
                 );
 
