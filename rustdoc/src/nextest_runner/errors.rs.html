@@ -682,6 +682,7 @@
 <span id="677">677</span>
 <span id="678">678</span>
 <span id="679">679</span>
+<span id="680">680</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -881,7 +882,7 @@
 
 <span class="kw">impl</span> <span class="ident">error::Error</span> <span class="kw">for</span> <span class="ident">PartitionerBuilderParseError</span> {}
 
-<span class="doccomment">/// An error occurred in [`PathMapper::new`](crate::test_list::PathMapper::new).</span>
+<span class="doccomment">/// An error occurred in [`PathMapper::new`](crate::reuse_build::PathMapper::new).</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">PathMapperConstructError</span> {
     <span class="doccomment">/// An error occurred while canonicalizing a directory.</span>
@@ -971,7 +972,7 @@
 }
 
 <span class="doccomment">/// The kind of directory that failed to be read in</span>
-<span class="doccomment">/// [`PathMapper::new`](crate::test_list::PathMapper::new).</span>
+<span class="doccomment">/// [`PathMapper::new`](crate::reuse_build::PathMapper::new).</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// Returned as part of [`PathMapperConstructError`].</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Copy</span>, <span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
@@ -992,7 +993,8 @@
     }
 }
 
-<span class="doccomment">/// An error that occurs in [`RustTestArtifact::from_messages`](crate::test_list::RustTestArtifact::from_messages).</span>
+<span class="doccomment">/// An error that occurs in [`BinaryList::from_messages`](crate::list::BinaryList::from_messages) or</span>
+<span class="doccomment">/// [`RustTestArtifact::from_binary_list`](crate::list::RustTestArtifact::from_binary_list).</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
 <span class="attribute">#[<span class="ident">non_exhaustive</span>]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">FromMessagesError</span> {

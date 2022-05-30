@@ -930,6 +930,8 @@
 <span id="925">925</span>
 <span id="926">926</span>
 <span id="927">927</span>
+<span id="928">928</span>
+<span id="929">929</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -948,8 +950,8 @@
     <span class="ident">PackageId</span>,
 };
 <span class="kw">use</span> <span class="ident">nextest_metadata</span>::{
-    <span class="ident">BuildPlatform</span>, <span class="ident">RustTestBinaryKind</span>, <span class="ident">RustTestBinarySummary</span>, <span class="ident">RustTestCaseSummary</span>,
-    <span class="ident">RustTestSuiteSummary</span>, <span class="ident">TestListSummary</span>,
+    <span class="ident">BuildPlatform</span>, <span class="ident">RustNonTestBinaryKind</span>, <span class="ident">RustTestBinaryKind</span>, <span class="ident">RustTestBinarySummary</span>,
+    <span class="ident">RustTestCaseSummary</span>, <span class="ident">RustTestSuiteSummary</span>, <span class="ident">TestListSummary</span>,
 };
 <span class="kw">use</span> <span class="ident">once_cell::sync::OnceCell</span>;
 <span class="kw">use</span> <span class="ident">owo_colors::OwoColorize</span>;
@@ -1039,12 +1041,13 @@
                 <span class="kw">match</span> <span class="ident">rust_build_meta</span>.<span class="ident">non_test_binaries</span>.<span class="ident">get</span>(<span class="ident">package_id</span>.<span class="ident">repr</span>()) {
                     <span class="prelude-val">Some</span>(<span class="ident">binaries</span>) =&gt; <span class="ident">binaries</span>
                         .<span class="ident">iter</span>()
-                        .<span class="ident">map</span>(<span class="op">|</span><span class="ident">binary</span><span class="op">|</span> {
-                            <span class="comment">// Convert relative paths to absolute ones here.</span>
-                            (
-                                <span class="ident">binary</span>.<span class="ident">name</span>.<span class="ident">clone</span>(),
-                                <span class="ident">rust_build_meta</span>.<span class="ident">target_directory</span>.<span class="ident">join</span>(<span class="kw-2">&amp;</span><span class="ident">binary</span>.<span class="ident">path</span>),
-                            )
+                        .<span class="ident">filter_map</span>(<span class="op">|</span><span class="ident">binary</span><span class="op">|</span> {
+                            <span class="comment">// Only expose BIN_EXE non-test files.</span>
+                            (<span class="ident">binary</span>.<span class="ident">kind</span> <span class="op">==</span> <span class="ident">RustNonTestBinaryKind::BIN_EXE</span>).<span class="ident">then</span>(<span class="op">|</span><span class="op">|</span> {
+                                <span class="comment">// Convert relative paths to absolute ones by joining with the target directory.</span>
+                                <span class="kw">let</span> <span class="ident">abs_path</span> <span class="op">=</span> <span class="ident">rust_build_meta</span>.<span class="ident">target_directory</span>.<span class="ident">join</span>(<span class="kw-2">&amp;</span><span class="ident">binary</span>.<span class="ident">path</span>);
+                                (<span class="ident">binary</span>.<span class="ident">name</span>.<span class="ident">clone</span>(), <span class="ident">abs_path</span>)
+                            })
                         })
                         .<span class="ident">collect</span>(),
                     <span class="prelude-val">None</span> =&gt; <span class="ident">BTreeSet::new</span>(),
@@ -1697,6 +1700,7 @@
         <span class="kw">let</span> <span class="ident">fake_cwd</span>: <span class="ident">Utf8PathBuf</span> <span class="op">=</span> <span class="string">&quot;/fake/cwd&quot;</span>.<span class="ident">into</span>();
         <span class="kw">let</span> <span class="ident">fake_binary_name</span> <span class="op">=</span> <span class="string">&quot;fake-binary&quot;</span>.<span class="ident">to_owned</span>();
         <span class="kw">let</span> <span class="ident">fake_binary_id</span> <span class="op">=</span> <span class="string">&quot;fake-package::fake-binary&quot;</span>.<span class="ident">to_owned</span>();
+
         <span class="kw">let</span> <span class="ident">test_binary</span> <span class="op">=</span> <span class="ident">RustTestArtifact</span> {
             <span class="ident">binary_path</span>: <span class="string">&quot;/fake/binary&quot;</span>.<span class="ident">into</span>(),
             <span class="ident">cwd</span>: <span class="ident">fake_cwd</span>.<span class="ident">clone</span>(),
