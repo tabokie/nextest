@@ -733,7 +733,56 @@ option.</p>
 </li>
 </ul>
 <h2 id="options-and-arguments-for-cargo-nextest-archive"><a class="header" href="#options-and-arguments-for-cargo-nextest-archive">Options and arguments for <code>cargo nextest archive</code></a></h2>
-<pre><code>{{#include ../../help-text/archive-help.txt}}
+<pre><code>cargo-nextest-archive 
+Build and archive tests
+
+USAGE:
+    cargo nextest archive [OPTIONS] --archive-file &lt;PATH&gt;
+
+OPTIONS:
+        --manifest-path &lt;PATH&gt;    Path to Cargo.toml
+    -v, --verbose                 Verbose output [env: NEXTEST_VERBOSE=]
+        --color &lt;WHEN&gt;            Produce color output: auto, always, never [env: CARGO_TERM_COLOR=]
+                                  [default: auto]
+        --config-file &lt;PATH&gt;      Config file [default: workspace-root/.config/nextest.toml]
+    -h, --help                    Print help information
+
+CARGO OPTIONS:
+        --lib                       Test only this package's library unit tests
+        --bin &lt;BIN&gt;                 Test only the specified binary
+        --bins                      Test all binaries
+        --test &lt;TEST&gt;               Test only the specified test target
+        --tests                     Test all targets
+        --bench &lt;BENCH&gt;             Test only the specified bench target
+        --benches                   Test all benches
+        --all-targets               Test all targets
+    -p, --package &lt;PACKAGES&gt;        Package to test
+        --workspace                 Build all packages in the workspace
+        --exclude &lt;EXCLUDE&gt;         Exclude packages from the test
+        --all                       Alias for workspace (deprecated)
+    -r, --release                   Build artifacts in release mode, with optimizations
+        --cargo-profile &lt;NAME&gt;      Build artifacts with the specified Cargo profile
+        --build-jobs &lt;JOBS&gt;         Number of build jobs to run
+        --features &lt;FEATURES&gt;       Space or comma separated list of features to activate
+        --all-features              Activate all available features
+        --no-default-features       Do not activate the `default` feature
+        --target &lt;TRIPLE&gt;           Build for the target triple
+        --target-dir &lt;DIR&gt;          Directory for all generated artifacts
+        --ignore-rust-version       Ignore `rust-version` specification in packages
+        --unit-graph                Output build graph in JSON (unstable)
+        --future-incompat-report    Outputs a future incompatibility report at the end of the build
+        --frozen                    Require Cargo.lock and cache are up to date
+        --locked                    Require Cargo.lock is up to date
+        --offline                   Run without accessing the network
+        --config &lt;KEY=VALUE&gt;        Override a configuration value (unstable)
+    -Z &lt;FLAG&gt;                       Unstable (nightly-only) flags to Cargo, see 'cargo -Z help'
+                                    for details
+
+ARCHIVE OPTIONS:
+        --archive-file &lt;PATH&gt;        File to write archive to
+        --archive-format &lt;FORMAT&gt;    Archive format [default: auto] [possible values: auto, tar-zst]
+        --zstd-level &lt;LEVEL&gt;         Zstandard compression level (-7 to 22, higher is more
+                                     compressed + slower) [default: 0]
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="partitioning-test-runs-in-ci"><a class="header" href="#partitioning-test-runs-in-ci">Partitioning test runs in CI</a></h1>
 <p>For CI scenarios where test runs take too long on a single machine, nextest supports automatically <em>partitioning</em> or <em>sharding</em> tests into buckets, using the <code>--partition</code> option.</p>
