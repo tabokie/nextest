@@ -265,10 +265,8 @@ $tmp | Remove-Item
 </code></pre>
 <blockquote>
 <p><strong>Tip:</strong> GitHub Actions supports ANSI color codes. To get color support for nextest (and Cargo), add this to your workflow:</p>
-<pre><code class="language-yml">jobs:
-  my-test-job:
-    env:
-      CARGO_TERM_COLOR: always
+<pre><code class="language-yml">env:
+  CARGO_TERM_COLOR: always
 </code></pre>
 <p>For a full list of environment variables supported by nextest, see <a href="book/env-vars.html">Environment variables</a>.</p>
 </blockquote>
