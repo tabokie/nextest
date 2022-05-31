@@ -336,6 +336,11 @@
 <span id="331">331</span>
 <span id="332">332</span>
 <span id="333">333</span>
+<span id="334">334</span>
+<span id="335">335</span>
+<span id="336">336</span>
+<span id="337">337</span>
+<span id="338">338</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -351,6 +356,7 @@
 <span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">fs</span>,
     <span class="ident">io</span>::{<span class="self">self</span>, <span class="ident">Read</span>, <span class="ident">Seek</span>},
+    <span class="ident">time::Instant</span>,
 };
 <span class="kw">use</span> <span class="ident">tempfile::TempDir</span>;
 
@@ -475,6 +481,8 @@
             }
         };
 
+        <span class="kw">let</span> <span class="ident">start_time</span> <span class="op">=</span> <span class="ident">Instant::now</span>();
+
         <span class="comment">// Read archive and validate it.</span>
         <span class="kw">let</span> <span class="ident">archive_info</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">get_info</span>().<span class="ident">map_err</span>(<span class="ident">ArchiveExtractError::Read</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">file_count</span> <span class="op">=</span> <span class="ident">archive_info</span>.<span class="ident">file_count</span>;
@@ -539,10 +547,12 @@
         <span class="kw">let</span> (<span class="ident">cargo_metadata_json</span>, <span class="ident">graph</span>) <span class="op">=</span>
             <span class="ident">cargo_metadata</span>.<span class="ident">expect</span>(<span class="string">&quot;get_info already verified that Cargo metadata exists&quot;</span>);
 
+        <span class="kw">let</span> <span class="ident">elapsed</span> <span class="op">=</span> <span class="ident">start_time</span>.<span class="ident">elapsed</span>();
         <span class="comment">// Report end extraction.</span>
         <span class="ident">callback</span>(<span class="ident">ArchiveEvent::Extracted</span> {
             <span class="ident">file_count</span>,
             <span class="ident">dest_dir</span>: <span class="kw-2">&amp;</span><span class="ident">dest_dir</span>,
+            <span class="ident">elapsed</span>,
         })
         .<span class="ident">map_err</span>(<span class="ident">ArchiveExtractError::ReporterIo</span>)<span class="question-mark">?</span>;
 
