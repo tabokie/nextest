@@ -159,22 +159,25 @@
 <p>To produce a list of tests in the JSON output format <code>cargo nextest list --message-format json</code> (or <code>json-pretty</code> for nicely formatted output). Here's some example output for the <a href="https://github.com/tokio-rs/tokio">tokio repository</a>:</p>
 <pre><code class="language-json">% cargo nextest list -p tokio-util --features full --lib --message-format json-pretty
 {
-  &quot;test-count&quot;: 4,
   &quot;rust-build-meta&quot;: {
     &quot;target-directory&quot;: &quot;/home/rain/dev/tokio/target&quot;,
     &quot;base-output-directories&quot;: [
       &quot;debug&quot;
     ],
+    &quot;non-test-binaries&quot;: {},
     &quot;linked-paths&quot;: []
   },
+  &quot;test-count&quot;: 4,
   &quot;rust-suites&quot;: {
     &quot;tokio-util&quot;: {
       &quot;package-name&quot;: &quot;tokio-util&quot;,
+      &quot;binary-id&quot;: &quot;tokio-util&quot;,
       &quot;binary-name&quot;: &quot;tokio-util&quot;,
-      &quot;package-id&quot;: &quot;tokio-util 0.7.0 (path+file:///home/me/dev/tokio/tokio-util)&quot;,
-      &quot;binary-path&quot;: &quot;/home/me/dev/tokio/target/debug/deps/tokio_util-def0ee51cb418fe8&quot;,
-      &quot;cwd&quot;: &quot;/home/rain/dev/tokio/tokio-util&quot;,
+      &quot;package-id&quot;: &quot;tokio-util 0.7.0 (path+file:///home/rain/dev/tokio/tokio-util)&quot;,
+      &quot;kind&quot;: &quot;lib&quot;,
+      &quot;binary-path&quot;: &quot;/home/me/dev/tokio/target/debug/deps/tokio_util-ab2fb640a9e5e856&quot;,
       &quot;build-platform&quot;: &quot;target&quot;,
+      &quot;cwd&quot;: &quot;/home/rain/dev/tokio/tokio-util&quot;,
       &quot;testcases&quot;: {
         &quot;either::tests::either_is_async_read&quot;: {
           &quot;ignored&quot;: false,
