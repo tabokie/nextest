@@ -932,6 +932,7 @@
 <span id="927">927</span>
 <span id="928">928</span>
 <span id="929">929</span>
+<span id="930">930</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -961,6 +962,7 @@
     <span class="ident">io</span>,
     <span class="ident">io::Write</span>,
     <span class="ident">path::PathBuf</span>,
+    <span class="ident">sync::Arc</span>,
 };
 
 <span class="doccomment">/// A Rust test binary built by Cargo. This artifact hasn&#39;t been run yet so there&#39;s no information</span>
@@ -999,20 +1001,20 @@
     <span class="doccomment">/// Constructs a list of test binaries from the list of built binaries.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_binary_list</span>(
         <span class="ident">graph</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;g</span> <span class="ident">PackageGraph</span>,
-        <span class="ident">binary_list</span>: <span class="ident">BinaryList</span>,
+        <span class="ident">binary_list</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">BinaryList</span><span class="op">&gt;</span>,
         <span class="ident">rust_build_meta</span>: <span class="kw-2">&amp;</span><span class="ident">RustBuildMeta</span><span class="op">&lt;</span><span class="ident">TestListState</span><span class="op">&gt;</span>,
         <span class="ident">path_mapper</span>: <span class="kw-2">&amp;</span><span class="ident">PathMapper</span>,
         <span class="ident">platform_filter</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">BuildPlatform</span><span class="op">&gt;</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">FromMessagesError</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">binaries</span> <span class="op">=</span> <span class="macro">vec!</span>[];
 
-        <span class="kw">for</span> <span class="ident">binary</span> <span class="kw">in</span> <span class="ident">binary_list</span>.<span class="ident">rust_binaries</span> {
+        <span class="kw">for</span> <span class="ident">binary</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">binary_list</span>.<span class="ident">rust_binaries</span> {
             <span class="kw">if</span> <span class="ident">platform_filter</span>.<span class="ident">is_some</span>() <span class="op">&amp;&amp;</span> <span class="ident">platform_filter</span> <span class="op">!</span><span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">binary</span>.<span class="ident">build_platform</span>) {
                 <span class="kw">continue</span>;
             }
 
             <span class="comment">// Look up the executable by package ID.</span>
-            <span class="kw">let</span> <span class="ident">package_id</span> <span class="op">=</span> <span class="ident">PackageId::new</span>(<span class="ident">binary</span>.<span class="ident">package_id</span>);
+            <span class="kw">let</span> <span class="ident">package_id</span> <span class="op">=</span> <span class="ident">PackageId::new</span>(<span class="ident">binary</span>.<span class="ident">package_id</span>.<span class="ident">clone</span>());
             <span class="kw">let</span> <span class="ident">package</span> <span class="op">=</span> <span class="ident">graph</span>
                 .<span class="ident">metadata</span>(<span class="kw-2">&amp;</span><span class="ident">package_id</span>)
                 .<span class="ident">map_err</span>(<span class="ident">FromMessagesError::PackageGraph</span>)<span class="question-mark">?</span>;
@@ -1029,7 +1031,7 @@
                 })
                 .<span class="ident">to_path_buf</span>();
 
-            <span class="kw">let</span> <span class="ident">binary_path</span> <span class="op">=</span> <span class="ident">path_mapper</span>.<span class="ident">map_binary</span>(<span class="ident">binary</span>.<span class="ident">path</span>);
+            <span class="kw">let</span> <span class="ident">binary_path</span> <span class="op">=</span> <span class="ident">path_mapper</span>.<span class="ident">map_binary</span>(<span class="ident">binary</span>.<span class="ident">path</span>.<span class="ident">clone</span>());
             <span class="kw">let</span> <span class="ident">cwd</span> <span class="op">=</span> <span class="ident">path_mapper</span>.<span class="ident">map_cwd</span>(<span class="ident">cwd</span>);
 
             <span class="comment">// Non-test binaries are only exposed to integration tests and benchmarks.</span>
@@ -1057,11 +1059,11 @@
             };
 
             <span class="ident">binaries</span>.<span class="ident">push</span>(<span class="ident">RustTestArtifact</span> {
-                <span class="ident">binary_id</span>: <span class="ident">binary</span>.<span class="ident">id</span>,
+                <span class="ident">binary_id</span>: <span class="ident">binary</span>.<span class="ident">id</span>.<span class="ident">clone</span>(),
                 <span class="ident">package</span>,
                 <span class="ident">binary_path</span>,
-                <span class="ident">binary_name</span>: <span class="ident">binary</span>.<span class="ident">name</span>,
-                <span class="ident">kind</span>: <span class="ident">binary</span>.<span class="ident">kind</span>,
+                <span class="ident">binary_name</span>: <span class="ident">binary</span>.<span class="ident">name</span>.<span class="ident">clone</span>(),
+                <span class="ident">kind</span>: <span class="ident">binary</span>.<span class="ident">kind</span>.<span class="ident">clone</span>(),
                 <span class="ident">cwd</span>,
                 <span class="ident">non_test_binaries</span>,
                 <span class="ident">build_platform</span>: <span class="ident">binary</span>.<span class="ident">build_platform</span>,

@@ -33,6 +33,9 @@
 <span id="28">28</span>
 <span id="29">29</span>
 <span id="30">30</span>
+<span id="31">31</span>
+<span id="32">32</span>
+<span id="33">33</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -53,6 +56,9 @@
 
     <span class="doccomment">/// One or more tests failed.</span>
     <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">TEST_RUN_FAILED</span>: <span class="ident">i32</span> <span class="op">=</span> <span class="number">100</span>;
+
+    <span class="doccomment">/// Creating an archive produced an error.</span>
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ARCHIVE_CREATION_FAILED</span>: <span class="ident">i32</span> <span class="op">=</span> <span class="number">103</span>;
 
     <span class="doccomment">/// A user issue happened while setting up a nextest invocation.</span>
     <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">SETUP_ERROR</span>: <span class="ident">i32</span> <span class="op">=</span> <span class="number">96</span>;
