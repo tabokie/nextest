@@ -918,6 +918,33 @@
 <span id="913">913</span>
 <span id="914">914</span>
 <span id="915">915</span>
+<span id="916">916</span>
+<span id="917">917</span>
+<span id="918">918</span>
+<span id="919">919</span>
+<span id="920">920</span>
+<span id="921">921</span>
+<span id="922">922</span>
+<span id="923">923</span>
+<span id="924">924</span>
+<span id="925">925</span>
+<span id="926">926</span>
+<span id="927">927</span>
+<span id="928">928</span>
+<span id="929">929</span>
+<span id="930">930</span>
+<span id="931">931</span>
+<span id="932">932</span>
+<span id="933">933</span>
+<span id="934">934</span>
+<span id="935">935</span>
+<span id="936">936</span>
+<span id="937">937</span>
+<span id="938">938</span>
+<span id="939">939</span>
+<span id="940">940</span>
+<span id="941">941</span>
+<span id="942">942</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -925,11 +952,12 @@
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">reporter</span>::{<span class="ident">StatusLevel</span>, <span class="ident">TestOutputDisplay</span>},
+    <span class="ident">reuse_build::ArchiveFormat</span>,
     <span class="ident">test_filter::RunIgnored</span>,
 };
 <span class="kw">use</span> <span class="ident">camino</span>::{<span class="ident">FromPathBufError</span>, <span class="ident">Utf8Path</span>, <span class="ident">Utf8PathBuf</span>};
 <span class="kw">use</span> <span class="ident">config::ConfigError</span>;
-<span class="kw">use</span> <span class="ident">itertools::Either</span>;
+<span class="kw">use</span> <span class="ident">itertools</span>::{<span class="ident">Either</span>, <span class="ident">Itertools</span>};
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">borrow::Cow</span>, <span class="ident">env::JoinPathsError</span>, <span class="ident">error</span>, <span class="ident">fmt</span>};
 
 <span class="doccomment">/// An error that occurred while parsing the config.</span>
@@ -1403,6 +1431,32 @@
         }
     }
 }
+
+<span class="doccomment">/// Represents an unknown archive format.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Returned by [`ArchiveFormat::autodetect`].</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">UnknownArchiveFormat</span> {
+    <span class="doccomment">/// The name of the archive file without any leading components.</span>
+    <span class="kw">pub</span> <span class="ident">file_name</span>: <span class="ident">String</span>,
+}
+
+<span class="kw">impl</span> <span class="ident">fmt::Display</span> <span class="kw">for</span> <span class="ident">UnknownArchiveFormat</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">fmt::Formatter</span>) -&gt; <span class="ident">fmt::Result</span> {
+        <span class="kw">let</span> <span class="ident">supported_extensions</span> <span class="op">=</span> <span class="ident">ArchiveFormat::SUPPORTED_FORMATS</span>
+            .<span class="ident">iter</span>()
+            .<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">extension</span>, <span class="kw">_</span>)<span class="op">|</span> <span class="kw-2">*</span><span class="ident">extension</span>)
+            .<span class="ident">join</span>(<span class="string">&quot;, &quot;</span>);
+        <span class="macro">write!</span>(
+            <span class="ident">f</span>,
+            <span class="string">&quot;could not detect archive format from file name `{}` \
+            (supported extensions: {supported_extensions})&quot;</span>,
+            <span class="self">self</span>.<span class="ident">file_name</span>
+        )
+    }
+}
+
+<span class="kw">impl</span> <span class="ident">error::Error</span> <span class="kw">for</span> <span class="ident">UnknownArchiveFormat</span> {}
 
 <span class="doccomment">/// An error that occurs while archiving data.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>

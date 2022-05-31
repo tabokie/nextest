@@ -1058,13 +1058,36 @@
 <span id="1053">1053</span>
 <span id="1054">1054</span>
 <span id="1055">1055</span>
+<span id="1056">1056</span>
+<span id="1057">1057</span>
+<span id="1058">1058</span>
+<span id="1059">1059</span>
+<span id="1060">1060</span>
+<span id="1061">1061</span>
+<span id="1062">1062</span>
+<span id="1063">1063</span>
+<span id="1064">1064</span>
+<span id="1065">1065</span>
+<span id="1066">1066</span>
+<span id="1067">1067</span>
+<span id="1068">1068</span>
+<span id="1069">1069</span>
+<span id="1070">1070</span>
+<span id="1071">1071</span>
+<span id="1072">1072</span>
+<span id="1073">1073</span>
+<span id="1074">1074</span>
+<span id="1075">1075</span>
+<span id="1076">1076</span>
+<span id="1077">1077</span>
+<span id="1078">1078</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">cargo_cli</span>::{<span class="ident">CargoCli</span>, <span class="ident">CargoOptions</span>},
     <span class="ident">output</span>::{<span class="ident">OutputContext</span>, <span class="ident">OutputOpts</span>, <span class="ident">OutputWriter</span>},
-    <span class="ident">reuse_build</span>::{<span class="ident">make_path_mapper</span>, <span class="ident">ReuseBuildOpts</span>},
+    <span class="ident">reuse_build</span>::{<span class="ident">make_path_mapper</span>, <span class="ident">ArchiveFormatOpt</span>, <span class="ident">ReuseBuildOpts</span>},
     <span class="ident">ExpectedError</span>,
 };
 <span class="kw">use</span> <span class="ident">camino</span>::{<span class="ident">Utf8Path</span>, <span class="ident">Utf8PathBuf</span>};
@@ -1196,8 +1219,9 @@
             }
             <span class="ident">Command::Archive</span> {
                 <span class="ident">cargo_options</span>,
-                <span class="ident">file</span>,
-                <span class="ident">compression_level</span>,
+                <span class="ident">archive_file</span>,
+                <span class="ident">archive_format</span>,
+                <span class="ident">zstd_level</span>,
             } =&gt; {
                 <span class="kw">let</span> <span class="ident">app</span> <span class="op">=</span> <span class="ident">BaseApp::new</span>(
                     <span class="self">self</span>.<span class="ident">output</span>,
@@ -1208,7 +1232,7 @@
                     <span class="bool-val">true</span>,
                     <span class="ident">output_writer</span>,
                 )<span class="question-mark">?</span>;
-                <span class="ident">app</span>.<span class="ident">exec_archive</span>(<span class="kw-2">&amp;</span><span class="ident">file</span>, <span class="ident">compression_level</span>, <span class="ident">output_writer</span>)
+                <span class="ident">app</span>.<span class="ident">exec_archive</span>(<span class="kw-2">&amp;</span><span class="ident">archive_file</span>, <span class="ident">archive_format</span>, <span class="ident">zstd_level</span>, <span class="ident">output_writer</span>)
             }
         }
     }
@@ -1307,23 +1331,31 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// This command builds test binaries and archives them to a file. The archive can then be</span>
     <span class="doccomment">/// transferred to another machine, and tests within it can be run with `cargo nextest run</span>
-    <span class="doccomment">/// --archive`.</span>
+    <span class="doccomment">/// --archive-file`.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// The archive is a tarball compressed with Zstandard (.tar.zst).</span>
     <span class="ident">Archive</span> {
         <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">flatten</span>)]</span>
         <span class="ident">cargo_options</span>: <span class="ident">CargoOptions</span>,
 
-        <span class="doccomment">/// Write archive to file</span>
+        <span class="doccomment">/// File to write archive to</span>
+        <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">help_heading</span> <span class="op">=</span> <span class="string">&quot;ARCHIVE OPTIONS&quot;</span>, <span class="ident">value_name</span> <span class="op">=</span> <span class="string">&quot;PATH&quot;</span>)]</span>
+        <span class="ident">archive_file</span>: <span class="ident">Utf8PathBuf</span>,
+
+        <span class="doccomment">/// Archive format</span>
+        <span class="doccomment">///</span>
+        <span class="doccomment">/// `auto` uses the file extension to determine the archive format. Currently supported is</span>
+        <span class="doccomment">/// `.tar.zst`.</span>
         <span class="attribute">#[<span class="ident">clap</span>(
             <span class="ident">long</span>,
-            <span class="ident">short</span> <span class="op">=</span> <span class="string">&#39;f&#39;</span>,
+            <span class="ident">arg_enum</span>,
             <span class="ident">help_heading</span> <span class="op">=</span> <span class="string">&quot;ARCHIVE OPTIONS&quot;</span>,
-            <span class="ident">default_value</span> <span class="op">=</span> <span class="string">&quot;nextest-archive.tar.zst&quot;</span>
+            <span class="ident">value_name</span> <span class="op">=</span> <span class="string">&quot;FORMAT&quot;</span>,
+            <span class="ident">default_value_t</span>
         )]</span>
-        <span class="ident">file</span>: <span class="ident">Utf8PathBuf</span>,
+        <span class="ident">archive_format</span>: <span class="ident">ArchiveFormatOpt</span>,
 
-        <span class="doccomment">/// Compression level (-7 to 22, higher is more compressed + slower)</span>
+        <span class="doccomment">/// Zstandard compression level (-7 to 22, higher is more compressed + slower)</span>
         <span class="attribute">#[<span class="ident">clap</span>(
             <span class="ident">long</span>,
             <span class="ident">help_heading</span> <span class="op">=</span> <span class="string">&quot;ARCHIVE OPTIONS&quot;</span>,
@@ -1331,7 +1363,7 @@
             <span class="ident">default_value_t</span> <span class="op">=</span> <span class="number">0</span>,
             <span class="ident">allow_hyphen_values</span> <span class="op">=</span> <span class="bool-val">true</span>
         )]</span>
-        <span class="ident">compression_level</span>: <span class="ident">i32</span>,
+        <span class="ident">zstd_level</span>: <span class="ident">i32</span>,
         <span class="comment">// ReuseBuildOpts, while it can theoretically work, is way too confusing so skip it.</span>
     },
 }
@@ -1670,9 +1702,12 @@
     <span class="kw">fn</span> <span class="ident">exec_archive</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">output_file</span>: <span class="kw-2">&amp;</span><span class="ident">Utf8Path</span>,
-        <span class="ident">compression_level</span>: <span class="ident">i32</span>,
+        <span class="ident">format</span>: <span class="ident">ArchiveFormatOpt</span>,
+        <span class="ident">zstd_level</span>: <span class="ident">i32</span>,
         <span class="ident">output_writer</span>: <span class="kw-2">&amp;mut</span> <span class="ident">OutputWriter</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        <span class="comment">// Do format detection first so we fail immediately.</span>
+        <span class="kw">let</span> <span class="ident">format</span> <span class="op">=</span> <span class="ident">format</span>.<span class="ident">to_archive_format</span>(<span class="ident">output_file</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">binary_list</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">build_binary_list</span>()<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">path_mapper</span> <span class="op">=</span> <span class="ident">PathMapper::noop</span>();
 
@@ -1688,7 +1723,8 @@
             <span class="comment">// Note that path_mapper is currently a no-op -- we don&#39;t support reusing builds for</span>
             <span class="comment">// archive creation because it&#39;s too confusing.</span>
             <span class="kw-2">&amp;</span><span class="ident">path_mapper</span>,
-            <span class="ident">compression_level</span>,
+            <span class="ident">format</span>,
+            <span class="ident">zstd_level</span>,
             <span class="ident">output_file</span>,
             <span class="op">|</span><span class="ident">event</span><span class="op">|</span> {
                 <span class="ident">reporter</span>.<span class="ident">report_event</span>(<span class="ident">event</span>, <span class="kw-2">&amp;mut</span> <span class="ident">writer</span>)<span class="question-mark">?</span>;
@@ -1985,13 +2021,15 @@
             <span class="string">&quot;cargo nextest run --binaries-metadata=foo --target-dir-remap=bar&quot;</span>,
             <span class="string">&quot;cargo nextest list --cargo-metadata path&quot;</span>,
             <span class="string">&quot;cargo nextest run --cargo-metadata=path --workspace-remap remapped-path&quot;</span>,
-            <span class="string">&quot;cargo nextest archive&quot;</span>,
-            <span class="string">&quot;cargo nextest archive --file my-archive.tar.zst --compression-level -1&quot;</span>,
-            <span class="string">&quot;cargo nextest list --archive my-archive.tar.zst&quot;</span>,
-            <span class="string">&quot;cargo nextest list --archive my-archive.tar.zst --extract-to my-path&quot;</span>,
-            <span class="string">&quot;cargo nextest list --archive my-archive.tar.zst --extract-to my-path --extract-overwrite&quot;</span>,
-            <span class="string">&quot;cargo nextest list --archive my-archive.tar.zst --persist-extract-dir&quot;</span>,
-            <span class="string">&quot;cargo nextest list --archive my-archive.tar.zst --workspace-remap foo&quot;</span>,
+            <span class="string">&quot;cargo nextest archive --archive-file my-archive.tar.zst --zstd-level -1&quot;</span>,
+            <span class="string">&quot;cargo nextest archive --archive-file my-archive.foo --archive-format tar-zst&quot;</span>,
+            <span class="string">&quot;cargo nextest archive --archive-file my-archive.foo --archive-format tar-zstd&quot;</span>,
+            <span class="string">&quot;cargo nextest list --archive-file my-archive.tar.zst&quot;</span>,
+            <span class="string">&quot;cargo nextest list --archive-file my-archive.tar.zst --archive-format tar-zst&quot;</span>,
+            <span class="string">&quot;cargo nextest list --archive-file my-archive.tar.zst --extract-to my-path&quot;</span>,
+            <span class="string">&quot;cargo nextest list --archive-file my-archive.tar.zst --extract-to my-path --extract-overwrite&quot;</span>,
+            <span class="string">&quot;cargo nextest list --archive-file my-archive.tar.zst --persist-extract-tempdir&quot;</span>,
+            <span class="string">&quot;cargo nextest list --archive-file my-archive.tar.zst --workspace-remap foo&quot;</span>,
             <span class="comment">// ---</span>
             <span class="comment">// Filter expressions</span>
             <span class="comment">// ---</span>
@@ -2046,11 +2084,19 @@
             <span class="comment">// Archive options</span>
             <span class="comment">// ---</span>
             (
+                <span class="string">&quot;cargo nextest run --archive-format tar-zst&quot;</span>,
+                <span class="ident">MissingRequiredArgument</span>,
+            ),
+            (
+                <span class="string">&quot;cargo nextest run --archive-file foo --archive-format no&quot;</span>,
+                <span class="ident">InvalidValue</span>,
+            ),
+            (
                 <span class="string">&quot;cargo nextest run --extract-to foo&quot;</span>,
                 <span class="ident">MissingRequiredArgument</span>,
             ),
             (
-                <span class="string">&quot;cargo nextest run --archive foo --extract-overwrite&quot;</span>,
+                <span class="string">&quot;cargo nextest run --archive-file foo --extract-overwrite&quot;</span>,
                 <span class="ident">MissingRequiredArgument</span>,
             ),
             (
@@ -2058,23 +2104,23 @@
                 <span class="ident">MissingRequiredArgument</span>,
             ),
             (
-                <span class="string">&quot;cargo nextest run --persist-extract-dir&quot;</span>,
+                <span class="string">&quot;cargo nextest run --persist-extract-tempdir&quot;</span>,
                 <span class="ident">MissingRequiredArgument</span>,
             ),
             (
-                <span class="string">&quot;cargo nextest run --archive foo --extract-to bar --persist-extract-dir&quot;</span>,
+                <span class="string">&quot;cargo nextest run --archive-file foo --extract-to bar --persist-extract-tempdir&quot;</span>,
                 <span class="ident">ArgumentConflict</span>,
             ),
             (
-                <span class="string">&quot;cargo nextest run --archive foo --cargo-metadata bar&quot;</span>,
+                <span class="string">&quot;cargo nextest run --archive-file foo --cargo-metadata bar&quot;</span>,
                 <span class="ident">ArgumentConflict</span>,
             ),
             (
-                <span class="string">&quot;cargo nextest run --archive foo --binaries-metadata bar&quot;</span>,
+                <span class="string">&quot;cargo nextest run --archive-file foo --binaries-metadata bar&quot;</span>,
                 <span class="ident">ArgumentConflict</span>,
             ),
             (
-                <span class="string">&quot;cargo nextest run --archive foo --target-dir-remap bar&quot;</span>,
+                <span class="string">&quot;cargo nextest run --archive-file foo --target-dir-remap bar&quot;</span>,
                 <span class="ident">ArgumentConflict</span>,
             ),
         ];

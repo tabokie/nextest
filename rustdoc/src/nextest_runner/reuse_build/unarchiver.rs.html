@@ -324,10 +324,15 @@
 <span id="319">319</span>
 <span id="320">320</span>
 <span id="321">321</span>
+<span id="322">322</span>
+<span id="323">323</span>
+<span id="324">324</span>
+<span id="325">325</span>
+<span id="326">326</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
-<span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">ArchiveEvent</span>, <span class="ident">BINARIES_METADATA_FILE_NAME</span>, <span class="ident">CARGO_METADATA_FILE_NAME</span>};
+<span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">ArchiveEvent</span>, <span class="ident">ArchiveFormat</span>, <span class="ident">BINARIES_METADATA_FILE_NAME</span>, <span class="ident">CARGO_METADATA_FILE_NAME</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">errors</span>::{<span class="ident">ArchiveExtractError</span>, <span class="ident">ArchiveReadError</span>},
     <span class="ident">list::BinaryList</span>,
@@ -346,11 +351,12 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct</span> <span class="ident">Unarchiver</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
     <span class="ident">file</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> <span class="ident">fs::File</span>,
+    <span class="ident">format</span>: <span class="ident">ArchiveFormat</span>,
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Unarchiver</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">file</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> <span class="ident">fs::File</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">Self</span> { <span class="ident">file</span> }
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">file</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> <span class="ident">fs::File</span>, <span class="ident">format</span>: <span class="ident">ArchiveFormat</span>) -&gt; <span class="self">Self</span> {
+        <span class="self">Self</span> { <span class="ident">file</span>, <span class="ident">format</span> }
     }
 
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">extract</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
@@ -415,7 +421,7 @@
             .<span class="ident">seek</span>(<span class="ident">io::SeekFrom::Start</span>(<span class="number">0</span>))
             .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">error</span><span class="op">|</span> <span class="ident">ArchiveExtractError::Read</span>(<span class="ident">ArchiveReadError::Io</span>(<span class="ident">error</span>)))<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">archive_reader</span> <span class="op">=</span>
-            <span class="ident">ArchiveReader::new</span>(<span class="self">self</span>.<span class="ident">file</span>).<span class="ident">map_err</span>(<span class="ident">ArchiveExtractError::Read</span>)<span class="question-mark">?</span>;
+            <span class="ident">ArchiveReader::new</span>(<span class="self">self</span>.<span class="ident">file</span>, <span class="self">self</span>.<span class="ident">format</span>).<span class="ident">map_err</span>(<span class="ident">ArchiveExtractError::Read</span>)<span class="question-mark">?</span>;
 
         <span class="comment">// Will be filled out by the for loop below\</span>
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">binary_list</span> <span class="op">=</span> <span class="prelude-val">None</span>;
@@ -555,9 +561,13 @@
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">ArchiveReader</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">file</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> <span class="ident">fs::File</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">ArchiveReadError</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">decoder</span> <span class="op">=</span> <span class="ident">zstd::Decoder::new</span>(<span class="ident">file</span>).<span class="ident">map_err</span>(<span class="ident">ArchiveReadError::Io</span>)<span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="ident">archive</span> <span class="op">=</span> <span class="ident">tar::Archive::new</span>(<span class="ident">decoder</span>);
+    <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">file</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> <span class="ident">fs::File</span>, <span class="ident">format</span>: <span class="ident">ArchiveFormat</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">ArchiveReadError</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">archive</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">format</span> {
+            <span class="ident">ArchiveFormat::TarZst</span> =&gt; {
+                <span class="kw">let</span> <span class="ident">decoder</span> <span class="op">=</span> <span class="ident">zstd::Decoder::new</span>(<span class="ident">file</span>).<span class="ident">map_err</span>(<span class="ident">ArchiveReadError::Io</span>)<span class="question-mark">?</span>;
+                <span class="ident">tar::Archive::new</span>(<span class="ident">decoder</span>)
+            }
+        };
         <span class="prelude-val">Ok</span>(<span class="self">Self</span> { <span class="ident">archive</span> })
     }
 
