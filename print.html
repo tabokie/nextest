@@ -817,8 +817,7 @@ runner = &quot;wine&quot;
 <pre><code>cargo nextest run --target x86_64-pc-windows-msvc
 </code></pre>
 <blockquote>
-<p><strong>Note:</strong> If your target runner is a shell script, it might malfunction on macOS due to System Integrity Protection's environment sanitization. This is a system limitation with macOS and not a bug in nextest.</p>
-<p>See the discussion in <a href="https://github.com/nextest-rs/nextest/pull/84">PR #84</a> for more.</p>
+<p><strong>Note:</strong> If your target runner is a shell script, it might malfunction on macOS due to System Integrity Protection's environment sanitization. Nextest provides the <code>NEXTEST_LD_*</code> and <code>NEXTEST_DYLD_*</code> environment variables as workarounds: see <a href="book/env-vars.html#environment-variables-nextest-sets">Environment variables nextest sets</a> for more.</p>
 </blockquote>
 <h2 id="cross-compiling"><a class="header" href="#cross-compiling">Cross-compiling</a></h2>
 <p>While cross-compiling code, some tests may need to be run on the host platform. (See the note about <a href="book/running.html#filtering-by-build-platform">Filtering by build platform</a> for more.)</p>
@@ -867,13 +866,25 @@ runner = &quot;wine&quot;
 <h2 id="environment-variables-nextest-sets"><a class="header" href="#environment-variables-nextest-sets">Environment variables nextest sets</a></h2>
 <p>cargo-nextest exposes these environment variables to your tests <em>at runtime only</em>. They are not set at build time because cargo-nextest may reuse builds done outside of the nextest environment.</p>
 <ul>
-<li><code>NEXTEST</code> — always set to <code>&quot;1&quot;</code>.</li>
-<li><code>NEXTEST_EXECUTION_MODE</code> — currently, always set to <code>process-per-test</code>. More options may be added in the future if nextest gains the ability to run all tests within the same process (<a href="https://github.com/nextest-rs/nextest/issues/27">#27</a>).</li>
-<li><code>NEXTEST_BIN_EXE_&lt;name&gt;</code>: The absolute path to a binary target's executable. This is only set when running an <a href="https://doc.rust-lang.org/cargo/reference/cargo-targets.html#integration-tests">integration test</a> or benchmark. The <code>&lt;name&gt;</code> is the name of the binary target, exactly as-is. For example, <code>NEXTEST_BIN_EXE_my-program</code> for a binary named <code>my-program</code>.
+<li>
+<p><code>NEXTEST</code> — always set to <code>&quot;1&quot;</code>.</p>
+</li>
+<li>
+<p><code>NEXTEST_EXECUTION_MODE</code> — currently, always set to <code>process-per-test</code>. More options may be added in the future if nextest gains the ability to run all tests within the same process (<a href="https://github.com/nextest-rs/nextest/issues/27">#27</a>).</p>
+</li>
+<li>
+<p><code>NEXTEST_BIN_EXE_&lt;name&gt;</code> — The absolute path to a binary target's executable. This is only set when running an <a href="https://doc.rust-lang.org/cargo/reference/cargo-targets.html#integration-tests">integration test</a> or benchmark. The <code>&lt;name&gt;</code> is the name of the binary target, exactly as-is. For example, <code>NEXTEST_BIN_EXE_my- program</code> for a binary named <code>my-program</code>.</p>
 <ul>
 <li>Binaries are automatically built when the test is built, unless the binary has required features that are not enabled.</li>
 <li>When <a href="book/reusing-builds.html">reusing builds</a> from an archive, this is set to the remapped path within the target directory.</li>
 </ul>
+</li>
+<li>
+<p><code>NEXTEST_LD_*</code> and <code>NEXTEST_DYLD_*</code> — These replicate the values of any environment variables that start with the prefixes <code>LD_*</code> and <code>DYLD_*</code>, such as <code>LD_LIBRARY_PATH</code> or <code>DYLD_LIBRARY_PATH</code>.</p>
+<p>This is a workaround for <a href="https://developer.apple.com/library/archive/documentation/Security/Conceptual/System_Integrity_Protection_Guide/RuntimeProtections/RuntimeProtections.html">macOS's System Integrity Protection</a> sanitizing dynamic linker environment variables for processes like the system <code>bash</code>, and is particularly relevant for <a href="book/target-runners.html">target runners</a>. See <a href="https://briandfoy.github.io/macos-s-system-integrity-protection-sanitizes-your-environment/">this blog post</a> for more about how sanitization works.</p>
+<blockquote>
+<p>Note: The <code>NEXTEST_LD_*</code> and <code>NEXTEST_DYLD_*</code> variables are set on all platforms, not just macOS.</p>
+</blockquote>
 </li>
 </ul>
 <h3 id="cargo-related-environment-variables-nextest-sets"><a class="header" href="#cargo-related-environment-variables-nextest-sets">Cargo-related environment variables nextest sets</a></h3>
@@ -1412,8 +1423,23 @@ my-test-2: test
 <div style="break-before: page; page-break-before: always;"></div><h1 id="changelog"><a class="header" href="#changelog">Changelog</a></h1>
 <p>This page documents new features and bugfixes for cargo-nextest. Please see the <a href="book/stability.html">stability
 policy</a> for how versioning works with cargo-nextest.</p>
-<h2 id="0915---2022-05-31"><a class="header" href="#0915---2022-05-31"><a href="https://github.com/nextest-rs/nextest/releases/tag/cargo-nextest-0.9.15">0.9.15</a> - 2022-05-31</a></h2>
+<h2 id="0916---2022-06-02"><a class="header" href="#0916---2022-06-02"><a href="https://github.com/nextest-rs/nextest/releases/tag/cargo-nextest-0.9.16">0.9.16</a> - 2022-06-02</a></h2>
 <h3 id="added"><a class="header" href="#added">Added</a></h3>
+<ul>
+<li>Nextest now <a href="https://nexte.st/book/env-vars.html#environment-variables-nextest-sets">sets <code>NEXTEST_LD_*</code> and <code>NEXTEST_DYLD_*</code> environment
+variables</a> to work around
+macOS System Integrity Protection sanitization.</li>
+</ul>
+<h3 id="fixed"><a class="header" href="#fixed">Fixed</a></h3>
+<ul>
+<li>While <a href="https://nexte.st/book/reusing-builds">archiving build artifacts</a>, work around some libraries producing linked paths that don't exist (<a href="https://github.com/nextest-rs/nextest/issues/247">#247</a>). Print a warning for those paths instead of failing.</li>
+</ul>
+<h3 id="changed"><a class="header" href="#changed">Changed</a></h3>
+<ul>
+<li>Build artifact archives no longer recurse into linked path subdirectories. This is not a behavioral change because <code>LD_LIBRARY_PATH</code> and other similar variables do not recurse into subdirectories either.</li>
+</ul>
+<h2 id="0915---2022-05-31"><a class="header" href="#0915---2022-05-31"><a href="https://github.com/nextest-rs/nextest/releases/tag/cargo-nextest-0.9.15">0.9.15</a> - 2022-05-31</a></h2>
+<h3 id="added-1"><a class="header" href="#added-1">Added</a></h3>
 <ul>
 <li>Improved support for <a href="https://nexte.st/book/reusing-builds">reusing builds</a>:
 <ul>
@@ -1425,20 +1451,20 @@ files after building tests. Currently the <code>.tar.zst</code> format is suppor
 </ul>
 </li>
 </ul>
-<h3 id="fixed"><a class="header" href="#fixed">Fixed</a></h3>
+<h3 id="fixed-1"><a class="header" href="#fixed-1">Fixed</a></h3>
 <p>Fix for experimental feature <a href="https://nexte.st/book/filter-expressions.html">filter expressions</a>:</p>
 <ul>
 <li>Fix test filtering when expression filters are set but name-based filters aren't.</li>
 </ul>
 <h2 id="0914---2022-04-18"><a class="header" href="#0914---2022-04-18"><a href="https://github.com/nextest-rs/nextest/releases/tag/cargo-nextest-0.9.14">0.9.14</a> - 2022-04-18</a></h2>
-<h3 id="fixed-1"><a class="header" href="#fixed-1">Fixed</a></h3>
+<h3 id="fixed-2"><a class="header" href="#fixed-2">Fixed</a></h3>
 <p>Fixes related to path remapping:</p>
 <ul>
 <li>Directories passed into <code>--workspace-remap</code> and <code>--target-dir-remap</code> are now canonicalized.</li>
 <li>If the workspace directory is remapped, <code>CARGO_MANIFEST_DIR</code> in tests' runtime environment is set to the new directory.</li>
 </ul>
 <h2 id="0913---2022-04-16"><a class="header" href="#0913---2022-04-16"><a href="https://github.com/nextest-rs/nextest/releases/tag/cargo-nextest-0.9.13">0.9.13</a> - 2022-04-16</a></h2>
-<h3 id="added-1"><a class="header" href="#added-1">Added</a></h3>
+<h3 id="added-2"><a class="header" href="#added-2">Added</a></h3>
 <ul>
 <li>
 <p>Support for <a href="https://nexte.st/book/reusing-builds">reusing builds</a> is now production-ready. Build on one machine and run tests on another, including cross-compiling and test partitioning.</p>
@@ -1450,17 +1476,17 @@ files after building tests. Currently the <code>.tar.zst</code> format is suppor
 </ul>
 <p>Thanks to <a href="https://github.com/Guiguiprim">Guiguiprim</a> for their fantastic work implementing both of these.</p>
 <h2 id="0912---2022-03-22"><a class="header" href="#0912---2022-03-22"><a href="https://github.com/nextest-rs/nextest/releases/tag/cargo-nextest-0.9.12">0.9.12</a> - 2022-03-22</a></h2>
-<h3 id="added-2"><a class="header" href="#added-2">Added</a></h3>
+<h3 id="added-3"><a class="header" href="#added-3">Added</a></h3>
 <ul>
 <li>Support for reading some configuration as <a href="https://nexte.st/book/env-vars#environment-variables-nextest-reads">environment variables</a>. (Thanks <a href="https://github.com/ymgyt">ymgyt</a> and <a href="https://github.com/iskyzh">iskyzh</a> for their pull requests!)</li>
 <li><a href="https://nexte.st/book/machine-readable">Machine-readable output</a> for <code>cargo nextest list</code> now contains a <code>rust-build-meta</code> key. This key currently contains the target directory, the base output directories, and paths to <a href="https://nexte.st/book/env-vars#dynamic-library-paths">search for dynamic libraries in</a> relative to the target directory.</li>
 </ul>
-<h3 id="fixed-2"><a class="header" href="#fixed-2">Fixed</a></h3>
+<h3 id="fixed-3"><a class="header" href="#fixed-3">Fixed</a></h3>
 <ul>
 <li>Test binaries that link to dynamic libraries built by Cargo now work correctly (<a href="https://github.com/nextest-rs/nextest/issues/82">#82</a>).</li>
 <li>Crates with no tests are now skipped while computing padding widths in the reporter (<a href="https://github.com/nextest-rs/nextest/issues/125">#125</a>).</li>
 </ul>
-<h3 id="changed"><a class="header" href="#changed">Changed</a></h3>
+<h3 id="changed-1"><a class="header" href="#changed-1">Changed</a></h3>
 <ul>
 <li>MSRV updated to Rust 1.56.</li>
 <li>For experimental feature <a href="https://nexte.st/book/reusing-builds">reusing builds</a>:
@@ -1471,14 +1497,14 @@ files after building tests. Currently the <code>.tar.zst</code> format is suppor
 </li>
 </ul>
 <h2 id="0911---2022-03-09"><a class="header" href="#0911---2022-03-09"><a href="https://github.com/nextest-rs/nextest/releases/tag/cargo-nextest-0.9.11">0.9.11</a> - 2022-03-09</a></h2>
-<h3 id="fixed-3"><a class="header" href="#fixed-3">Fixed</a></h3>
+<h3 id="fixed-4"><a class="header" href="#fixed-4">Fixed</a></h3>
 <ul>
 <li>Update <code>regex</code> to 1.5.5 to address <a href="https://github.com/rust-lang/regex/security/advisories/GHSA-m5pq-gvj9-9vr8">GHSA-m5pq-gvj9-9vr8
 (CVE-2022-24713)</a>.</li>
 </ul>
 <h2 id="0910---2022-03-07"><a class="header" href="#0910---2022-03-07"><a href="https://github.com/nextest-rs/nextest/releases/tag/cargo-nextest-0.9.10">0.9.10</a> - 2022-03-07</a></h2>
 <p>Thanks to <a href="https://github.com/Guiguiprim">Guiguiprim</a> for their contributions to this release!</p>
-<h3 id="added-3"><a class="header" href="#added-3">Added</a></h3>
+<h3 id="added-4"><a class="header" href="#added-4">Added</a></h3>
 <ul>
 <li>A new <code>--platform-filter</code> option filters tests by the platform they run on (target or host).</li>
 <li><code>cargo nextest list</code> has a new <code>--list-type</code> option, with values <code>full</code> (the default, same as today) and <code>binaries-only</code> (list out binaries without querying them for the tests they contain).</li>
@@ -1488,12 +1514,12 @@ files after building tests. Currently the <code>.tar.zst</code> format is suppor
 <ul>
 <li>Nextest can now reuse builds across invocations and machines. This is an experimental feature, and feedback is welcome in <a href="https://github.com/nextest-rs/nextest/issues/98">#98</a>!</li>
 </ul>
-<h3 id="changed-1"><a class="header" href="#changed-1">Changed</a></h3>
+<h3 id="changed-2"><a class="header" href="#changed-2">Changed</a></h3>
 <ul>
 <li>The target runner is now build-platform-specific; test binaries built for the host platform will be run by the target runner variable defined for the host, and similarly for the target platform.</li>
 </ul>
 <h2 id="099---2022-03-03"><a class="header" href="#099---2022-03-03"><a href="https://github.com/nextest-rs/nextest/releases/tag/cargo-nextest-0.9.9">0.9.9</a> - 2022-03-03</a></h2>
-<h3 id="added-4"><a class="header" href="#added-4">Added</a></h3>
+<h3 id="added-5"><a class="header" href="#added-5">Added</a></h3>
 <ul>
 <li>Updates for Rust 1.59:
 <ul>
@@ -1504,13 +1530,13 @@ files after building tests. Currently the <code>.tar.zst</code> format is suppor
 </li>
 </ul>
 <h2 id="098---2022-02-23"><a class="header" href="#098---2022-02-23"><a href="https://github.com/nextest-rs/nextest/releases/tag/cargo-nextest-0.9.8">0.9.8</a> - 2022-02-23</a></h2>
-<h3 id="fixed-4"><a class="header" href="#fixed-4">Fixed</a></h3>
+<h3 id="fixed-5"><a class="header" href="#fixed-5">Fixed</a></h3>
 <ul>
 <li>Target runners of the form <code>runner = [&quot;bin-name&quot;, &quot;--arg1&quot;, ...]</code> are now parsed correctly (<a href="https://github.com/nextest-rs/nextest/pull/75">#75</a>).</li>
 <li>Binary IDs for <code>[[bin]]</code> and <code>[[example]]</code> tests are now unique, in the format <code>&lt;crate-name&gt;::bin/&lt;binary-name&gt;</code> and <code>&lt;crate-name&gt;::test/&lt;binary-name&gt;</code> respectively (<a href="https://github.com/nextest-rs/nextest/pull/76">#76</a>).</li>
 </ul>
 <h2 id="097---2022-02-23"><a class="header" href="#097---2022-02-23"><a href="https://github.com/nextest-rs/nextest/releases/tag/cargo-nextest-0.9.7">0.9.7</a> - 2022-02-23</a></h2>
-<h3 id="fixed-5"><a class="header" href="#fixed-5">Fixed</a></h3>
+<h3 id="fixed-6"><a class="header" href="#fixed-6">Fixed</a></h3>
 <ul>
 <li>If parsing target runner configuration fails, warn and proceed without a target runner rather than erroring out.</li>
 </ul>
@@ -1519,46 +1545,46 @@ files after building tests. Currently the <code>.tar.zst</code> format is suppor
 <li>Parsing an array of strings for the target runner currently fails: <a href="https://github.com/nextest-rs/nextest/issues/73">#73</a>. A fix is being worked on in <a href="https://github.com/nextest-rs/nextest/pull/75">#75</a>.</li>
 </ul>
 <h2 id="096---2022-02-22"><a class="header" href="#096---2022-02-22"><a href="https://github.com/nextest-rs/nextest/releases/tag/cargo-nextest-0.9.6">0.9.6</a> - 2022-02-22</a></h2>
-<h3 id="added-5"><a class="header" href="#added-5">Added</a></h3>
+<h3 id="added-6"><a class="header" href="#added-6">Added</a></h3>
 <ul>
 <li>Support Cargo configuration for <a href="https://nexte.st/book/target-runners">target runners</a>.</li>
 </ul>
 <h2 id="095---2022-02-20"><a class="header" href="#095---2022-02-20"><a href="https://github.com/nextest-rs/nextest/releases/tag/cargo-nextest-0.9.5">0.9.5</a> - 2022-02-20</a></h2>
-<h3 id="fixed-6"><a class="header" href="#fixed-6">Fixed</a></h3>
+<h3 id="fixed-7"><a class="header" href="#fixed-7">Fixed</a></h3>
 <ul>
 <li>Updated nextest-runner to 0.1.2, fixing cyan coloring of module paths (<a href="https://github.com/nextest-rs/nextest/issues/52">#52</a>).</li>
 </ul>
 <h2 id="094---2022-02-16"><a class="header" href="#094---2022-02-16"><a href="https://github.com/nextest-rs/nextest/releases/tag/cargo-nextest-0.9.4">0.9.4</a> - 2022-02-16</a></h2>
 <p>The big new change is that release binaries are now available! Head over to <a href="https://nexte.st/book/pre-built-binaries">Pre-built binaries</a> for more.</p>
-<h3 id="added-6"><a class="header" href="#added-6">Added</a></h3>
+<h3 id="added-7"><a class="header" href="#added-7">Added</a></h3>
 <ul>
 <li>In test output, module paths are now colored cyan (<a href="https://github.com/nextest-rs/nextest/pull/42">#42</a>).</li>
 </ul>
-<h3 id="fixed-7"><a class="header" href="#fixed-7">Fixed</a></h3>
+<h3 id="fixed-8"><a class="header" href="#fixed-8">Fixed</a></h3>
 <ul>
 <li>While querying binaries to list tests, lines ending with &quot;: benchmark&quot; will now be ignored (<a href="https://github.com/nextest-rs/nextest/issues/46">#46</a>).</li>
 </ul>
 <h2 id="093---2022-02-14"><a class="header" href="#093---2022-02-14"><a href="https://github.com/nextest-rs/nextest/releases/tag/cargo-nextest-0.9.3">0.9.3</a> - 2022-02-14</a></h2>
-<h3 id="fixed-8"><a class="header" href="#fixed-8">Fixed</a></h3>
+<h3 id="fixed-9"><a class="header" href="#fixed-9">Fixed</a></h3>
 <ul>
 <li>Add a <code>BufWriter</code> around stderr for the reporter, reducing the number of syscalls and fixing
 issues around output overlap on Windows (<a href="https://github.com/nextest-rs/nextest/issues/35">#35</a>). Thanks <a href="https://github.com/fdncred">@fdncred</a> for reporting this!</li>
 </ul>
 <h2 id="092---2022-02-14"><a class="header" href="#092---2022-02-14"><a href="https://github.com/nextest-rs/nextest/releases/tag/cargo-nextest-0.9.2">0.9.2</a> - 2022-02-14</a></h2>
-<h3 id="fixed-9"><a class="header" href="#fixed-9">Fixed</a></h3>
+<h3 id="fixed-10"><a class="header" href="#fixed-10">Fixed</a></h3>
 <ul>
 <li>Running cargo nextest from within a crate now runs tests for just that crate, similar to cargo
 test. Thanks <a href="https://twitter.com/RealWittenstein/status/1493291441384210437">Yaron Wittenstein</a>
 for reporting this!</li>
 </ul>
 <h2 id="091---2022-02-14"><a class="header" href="#091---2022-02-14"><a href="https://github.com/nextest-rs/nextest/releases/tag/cargo-nextest-0.9.1">0.9.1</a> - 2022-02-14</a></h2>
-<h3 id="fixed-10"><a class="header" href="#fixed-10">Fixed</a></h3>
+<h3 id="fixed-11"><a class="header" href="#fixed-11">Fixed</a></h3>
 <ul>
 <li>Updated nextest-runner to 0.1.1, fixing builds on Rust 1.54.</li>
 </ul>
 <h2 id="090---2022-02-14"><a class="header" href="#090---2022-02-14"><a href="https://github.com/nextest-rs/nextest/releases/tag/cargo-nextest-0.9.0">0.9.0</a> - 2022-02-14</a></h2>
 <p><strong>Initial release.</strong> Happy Valentine's day!</p>
-<h3 id="added-7"><a class="header" href="#added-7">Added</a></h3>
+<h3 id="added-8"><a class="header" href="#added-8">Added</a></h3>
 <p>Supported in this initial release:</p>
 <ul>
 <li><a href="book/listing.html">Listing tests</a></li>

@@ -176,13 +176,25 @@
 <h2 id="environment-variables-nextest-sets"><a class="header" href="#environment-variables-nextest-sets">Environment variables nextest sets</a></h2>
 <p>cargo-nextest exposes these environment variables to your tests <em>at runtime only</em>. They are not set at build time because cargo-nextest may reuse builds done outside of the nextest environment.</p>
 <ul>
-<li><code>NEXTEST</code> — always set to <code>&quot;1&quot;</code>.</li>
-<li><code>NEXTEST_EXECUTION_MODE</code> — currently, always set to <code>process-per-test</code>. More options may be added in the future if nextest gains the ability to run all tests within the same process (<a href="https://github.com/nextest-rs/nextest/issues/27">#27</a>).</li>
-<li><code>NEXTEST_BIN_EXE_&lt;name&gt;</code>: The absolute path to a binary target's executable. This is only set when running an <a href="https://doc.rust-lang.org/cargo/reference/cargo-targets.html#integration-tests">integration test</a> or benchmark. The <code>&lt;name&gt;</code> is the name of the binary target, exactly as-is. For example, <code>NEXTEST_BIN_EXE_my-program</code> for a binary named <code>my-program</code>.
+<li>
+<p><code>NEXTEST</code> — always set to <code>&quot;1&quot;</code>.</p>
+</li>
+<li>
+<p><code>NEXTEST_EXECUTION_MODE</code> — currently, always set to <code>process-per-test</code>. More options may be added in the future if nextest gains the ability to run all tests within the same process (<a href="https://github.com/nextest-rs/nextest/issues/27">#27</a>).</p>
+</li>
+<li>
+<p><code>NEXTEST_BIN_EXE_&lt;name&gt;</code> — The absolute path to a binary target's executable. This is only set when running an <a href="https://doc.rust-lang.org/cargo/reference/cargo-targets.html#integration-tests">integration test</a> or benchmark. The <code>&lt;name&gt;</code> is the name of the binary target, exactly as-is. For example, <code>NEXTEST_BIN_EXE_my- program</code> for a binary named <code>my-program</code>.</p>
 <ul>
 <li>Binaries are automatically built when the test is built, unless the binary has required features that are not enabled.</li>
 <li>When <a href="reusing-builds.html">reusing builds</a> from an archive, this is set to the remapped path within the target directory.</li>
 </ul>
+</li>
+<li>
+<p><code>NEXTEST_LD_*</code> and <code>NEXTEST_DYLD_*</code> — These replicate the values of any environment variables that start with the prefixes <code>LD_*</code> and <code>DYLD_*</code>, such as <code>LD_LIBRARY_PATH</code> or <code>DYLD_LIBRARY_PATH</code>.</p>
+<p>This is a workaround for <a href="https://developer.apple.com/library/archive/documentation/Security/Conceptual/System_Integrity_Protection_Guide/RuntimeProtections/RuntimeProtections.html">macOS's System Integrity Protection</a> sanitizing dynamic linker environment variables for processes like the system <code>bash</code>, and is particularly relevant for <a href="target-runners.html">target runners</a>. See <a href="https://briandfoy.github.io/macos-s-system-integrity-protection-sanitizes-your-environment/">this blog post</a> for more about how sanitization works.</p>
+<blockquote>
+<p>Note: The <code>NEXTEST_LD_*</code> and <code>NEXTEST_DYLD_*</code> variables are set on all platforms, not just macOS.</p>
+</blockquote>
 </li>
 </ul>
 <h3 id="cargo-related-environment-variables-nextest-sets"><a class="header" href="#cargo-related-environment-variables-nextest-sets">Cargo-related environment variables nextest sets</a></h3>

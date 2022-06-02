@@ -172,8 +172,7 @@ runner = &quot;wine&quot;
 <pre><code>cargo nextest run --target x86_64-pc-windows-msvc
 </code></pre>
 <blockquote>
-<p><strong>Note:</strong> If your target runner is a shell script, it might malfunction on macOS due to System Integrity Protection's environment sanitization. This is a system limitation with macOS and not a bug in nextest.</p>
-<p>See the discussion in <a href="https://github.com/nextest-rs/nextest/pull/84">PR #84</a> for more.</p>
+<p><strong>Note:</strong> If your target runner is a shell script, it might malfunction on macOS due to System Integrity Protection's environment sanitization. Nextest provides the <code>NEXTEST_LD_*</code> and <code>NEXTEST_DYLD_*</code> environment variables as workarounds: see <a href="env-vars.html#environment-variables-nextest-sets">Environment variables nextest sets</a> for more.</p>
 </blockquote>
 <h2 id="cross-compiling"><a class="header" href="#cross-compiling">Cross-compiling</a></h2>
 <p>While cross-compiling code, some tests may need to be run on the host platform. (See the note about <a href="running.html#filtering-by-build-platform">Filtering by build platform</a> for more.)</p>
