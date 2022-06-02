@@ -933,6 +933,46 @@
 <span id="928">928</span>
 <span id="929">929</span>
 <span id="930">930</span>
+<span id="931">931</span>
+<span id="932">932</span>
+<span id="933">933</span>
+<span id="934">934</span>
+<span id="935">935</span>
+<span id="936">936</span>
+<span id="937">937</span>
+<span id="938">938</span>
+<span id="939">939</span>
+<span id="940">940</span>
+<span id="941">941</span>
+<span id="942">942</span>
+<span id="943">943</span>
+<span id="944">944</span>
+<span id="945">945</span>
+<span id="946">946</span>
+<span id="947">947</span>
+<span id="948">948</span>
+<span id="949">949</span>
+<span id="950">950</span>
+<span id="951">951</span>
+<span id="952">952</span>
+<span id="953">953</span>
+<span id="954">954</span>
+<span id="955">955</span>
+<span id="956">956</span>
+<span id="957">957</span>
+<span id="958">958</span>
+<span id="959">959</span>
+<span id="960">960</span>
+<span id="961">961</span>
+<span id="962">962</span>
+<span id="963">963</span>
+<span id="964">964</span>
+<span id="965">965</span>
+<span id="966">966</span>
+<span id="967">967</span>
+<span id="968">968</span>
+<span id="969">969</span>
+<span id="970">970</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -954,10 +994,10 @@
     <span class="ident">BuildPlatform</span>, <span class="ident">RustNonTestBinaryKind</span>, <span class="ident">RustTestBinaryKind</span>, <span class="ident">RustTestBinarySummary</span>,
     <span class="ident">RustTestCaseSummary</span>, <span class="ident">RustTestSuiteSummary</span>, <span class="ident">TestListSummary</span>,
 };
-<span class="kw">use</span> <span class="ident">once_cell::sync::OnceCell</span>;
+<span class="kw">use</span> <span class="ident">once_cell::sync</span>::{<span class="ident">Lazy</span>, <span class="ident">OnceCell</span>};
 <span class="kw">use</span> <span class="ident">owo_colors::OwoColorize</span>;
 <span class="kw">use</span> <span class="ident">std</span>::{
-    <span class="ident">collections</span>::{<span class="ident">BTreeMap</span>, <span class="ident">BTreeSet</span>},
+    <span class="ident">collections</span>::{<span class="ident">BTreeMap</span>, <span class="ident">BTreeSet</span>, <span class="ident">HashMap</span>},
     <span class="ident">ffi</span>::{<span class="ident">OsStr</span>, <span class="ident">OsString</span>},
     <span class="ident">io</span>,
     <span class="ident">io::Write</span>,
@@ -1609,6 +1649,36 @@
     <span class="ident">dylib_path</span>: <span class="kw-2">&amp;</span><span class="ident">OsStr</span>,
     <span class="ident">non_test_binaries</span>: <span class="kw-2">&amp;</span><span class="ident">BTreeSet</span><span class="op">&lt;</span>(<span class="ident">String</span>, <span class="ident">Utf8PathBuf</span>)<span class="op">&gt;</span>,
 ) -&gt; <span class="ident">duct::Expression</span> {
+    <span class="comment">// This is a workaround for a macOS SIP issue:</span>
+    <span class="comment">// https://github.com/nextest-rs/nextest/pull/84</span>
+    <span class="comment">//</span>
+    <span class="comment">// Basically, if SIP is enabled, macOS removes any environment variables that start with</span>
+    <span class="comment">// &quot;LD_&quot; or &quot;DYLD_&quot; when spawning system-protected processes. This unfortunately includes</span>
+    <span class="comment">// processes like bash -- this means that if nextest invokes a shell script, paths might</span>
+    <span class="comment">// end up getting sanitized.</span>
+    <span class="comment">//</span>
+    <span class="comment">// This is particularly relevant for target runners, which are often shell scripts.</span>
+    <span class="comment">//</span>
+    <span class="comment">// To work around this, re-export any variables that begin with LD_ or DYLD_ as &quot;NEXTEST_LD_&quot;</span>
+    <span class="comment">// or &quot;NEXTEST_DYLD_&quot;. Do this on all platforms for uniformity.</span>
+    <span class="comment">//</span>
+    <span class="comment">// Nextest never changes these environment variables within its own process, so caching them is</span>
+    <span class="comment">// valid.</span>
+    <span class="kw">fn</span> <span class="ident">is_sip_sanitized</span>(<span class="ident">var</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="ident">bool</span> {
+        <span class="comment">// Is this the correct set of environment variables? The exact list isn&#39;t documented anywhere</span>
+        <span class="comment">// but it seems like this would be a good heuristic.</span>
+        <span class="ident">var</span>.<span class="ident">starts_with</span>(<span class="string">&quot;LD_&quot;</span>) <span class="op">|</span><span class="op">|</span> <span class="ident">var</span>.<span class="ident">starts_with</span>(<span class="string">&quot;DYLD_&quot;</span>)
+    }
+
+    <span class="kw">static</span> <span class="ident">LD_DYLD_ENV_VARS</span>: <span class="ident">Lazy</span><span class="op">&lt;</span><span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">OsString</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Lazy::new</span>(<span class="op">|</span><span class="op">|</span> {
+        <span class="ident">std::env::vars_os</span>()
+            .<span class="ident">filter_map</span>(<span class="op">|</span>(<span class="ident">k</span>, <span class="ident">v</span>)<span class="op">|</span> <span class="kw">match</span> <span class="ident">k</span>.<span class="ident">into_string</span>() {
+                <span class="prelude-val">Ok</span>(<span class="ident">k</span>) =&gt; <span class="ident">is_sip_sanitized</span>(<span class="kw-2">&amp;</span><span class="ident">k</span>).<span class="ident">then</span>(<span class="op">|</span><span class="op">|</span> (<span class="ident">k</span>, <span class="ident">v</span>)),
+                <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="prelude-val">None</span>,
+            })
+            .<span class="ident">collect</span>()
+    });
+
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">cmd</span> <span class="op">=</span> <span class="ident">duct::cmd</span>(<span class="ident">program</span>, <span class="ident">args</span>)
         .<span class="ident">dir</span>(<span class="ident">cwd</span>)
         <span class="comment">// This environment variable is set to indicate that tests are being run under nextest.</span>
@@ -1662,6 +1732,16 @@
             <span class="ident">package</span>.<span class="ident">repository</span>().<span class="ident">unwrap_or_default</span>(),
         )
         .<span class="ident">env</span>(<span class="ident">dylib_path_envvar</span>(), <span class="ident">dylib_path</span>);
+
+    <span class="kw">for</span> (<span class="ident">k</span>, <span class="ident">v</span>) <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="ident">LD_DYLD_ENV_VARS</span> {
+        <span class="kw">if</span> <span class="ident">k</span> <span class="op">!</span><span class="op">=</span> <span class="ident">dylib_path_envvar</span>() {
+            <span class="ident">cmd</span> <span class="op">=</span> <span class="ident">cmd</span>.<span class="ident">env</span>(<span class="string">&quot;NEXTEST_&quot;</span>.<span class="ident">to_owned</span>() <span class="op">+</span> <span class="ident">k</span>, <span class="ident">v</span>);
+        }
+    }
+    <span class="comment">// Also add the dylib path envvar under the NEXTEST_ prefix.</span>
+    <span class="kw">if</span> <span class="ident">is_sip_sanitized</span>(<span class="ident">dylib_path_envvar</span>()) {
+        <span class="ident">cmd</span> <span class="op">=</span> <span class="ident">cmd</span>.<span class="ident">env</span>(<span class="string">&quot;NEXTEST_&quot;</span>.<span class="ident">to_owned</span>() <span class="op">+</span> <span class="ident">dylib_path_envvar</span>(), <span class="ident">dylib_path</span>);
+    }
 
     <span class="comment">// Expose paths to non-test binaries at runtime so that relocated paths work.</span>
     <span class="comment">// These paths aren&#39;t exposed by Cargo at runtime, so use a NEXTEST_BIN_EXE prefix.</span>
