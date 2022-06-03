@@ -873,7 +873,7 @@ runner = &quot;wine&quot;
 <p><code>NEXTEST_EXECUTION_MODE</code> — currently, always set to <code>process-per-test</code>. More options may be added in the future if nextest gains the ability to run all tests within the same process (<a href="https://github.com/nextest-rs/nextest/issues/27">#27</a>).</p>
 </li>
 <li>
-<p><code>NEXTEST_BIN_EXE_&lt;name&gt;</code> — The absolute path to a binary target's executable. This is only set when running an <a href="https://doc.rust-lang.org/cargo/reference/cargo-targets.html#integration-tests">integration test</a> or benchmark. The <code>&lt;name&gt;</code> is the name of the binary target, exactly as-is. For example, <code>NEXTEST_BIN_EXE_my- program</code> for a binary named <code>my-program</code>.</p>
+<p><code>NEXTEST_BIN_EXE_&lt;name&gt;</code> — The absolute path to a binary target's executable. This is only set when running an <a href="https://doc.rust-lang.org/cargo/reference/cargo-targets.html#integration-tests">integration test</a> or benchmark. The <code>&lt;name&gt;</code> is the name of the binary target, exactly as-is. For example, <code>NEXTEST_BIN_EXE_my-program</code> for a binary named <code>my-program</code>.</p>
 <ul>
 <li>Binaries are automatically built when the test is built, unless the binary has required features that are not enabled.</li>
 <li>When <a href="book/reusing-builds.html">reusing builds</a> from an archive, this is set to the remapped path within the target directory.</li>
