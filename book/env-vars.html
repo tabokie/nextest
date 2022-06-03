@@ -190,7 +190,7 @@
 </ul>
 </li>
 <li>
-<p><code>NEXTEST_LD_*</code> and <code>NEXTEST_DYLD_*</code> — These replicate the values of any environment variables that start with the prefixes <code>LD_*</code> and <code>DYLD_*</code>, such as <code>LD_LIBRARY_PATH</code> or <code>DYLD_LIBRARY_PATH</code>.</p>
+<p><code>NEXTEST_LD_*</code> and <code>NEXTEST_DYLD_*</code> — These replicate the values of any environment variables that start with the prefixes <code>LD_</code> and <code>DYLD_</code>, such as <code>LD_PRELOAD</code> or <code>DYLD_LIBRARY_PATH</code>.</p>
 <p>This is a workaround for <a href="https://developer.apple.com/library/archive/documentation/Security/Conceptual/System_Integrity_Protection_Guide/RuntimeProtections/RuntimeProtections.html">macOS's System Integrity Protection</a> sanitizing dynamic linker environment variables for processes like the system <code>bash</code>, and is particularly relevant for <a href="target-runners.html">target runners</a>. See <a href="https://briandfoy.github.io/macos-s-system-integrity-protection-sanitizes-your-environment/">this blog post</a> for more about how sanitization works.</p>
 <blockquote>
 <p>Note: The <code>NEXTEST_LD_*</code> and <code>NEXTEST_DYLD_*</code> variables are set on all platforms, not just macOS.</p>
