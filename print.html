@@ -862,9 +862,9 @@ runner = &quot;wine&quot;
 <li><code>CARGO_TERM_COLOR</code> — The default color mode: <code>always</code>, <code>auto</code> or <code>never</code>.</li>
 </ul>
 <h3 id="cargo-related-environment-variables-nextest-reads"><a class="header" href="#cargo-related-environment-variables-nextest-reads">Cargo-related environment variables nextest reads</a></h3>
-<p>cargo-nextest delegates to Cargo for the build, which recognizes a number of environment variables. See <a href="https://doc.rust-lang.org/cargo/reference/environment-variables.html#environment-variables-cargo-reads">Environment variables Cargo reads</a> for a full list.</p>
+<p>Nextest delegates to Cargo for the build, which recognizes a number of environment variables. See <a href="https://doc.rust-lang.org/cargo/reference/environment-variables.html#environment-variables-cargo-reads">Environment variables Cargo reads</a> for a full list.</p>
 <h2 id="environment-variables-nextest-sets"><a class="header" href="#environment-variables-nextest-sets">Environment variables nextest sets</a></h2>
-<p>cargo-nextest exposes these environment variables to your tests <em>at runtime only</em>. They are not set at build time because cargo-nextest may reuse builds done outside of the nextest environment.</p>
+<p>Nextest exposes these environment variables to your tests <em>at runtime only</em>. They are not set at build time because cargo-nextest may reuse builds done outside of the nextest environment.</p>
 <ul>
 <li>
 <p><code>NEXTEST</code> — always set to <code>&quot;1&quot;</code>.</p>
@@ -880,7 +880,7 @@ runner = &quot;wine&quot;
 </ul>
 </li>
 <li>
-<p><code>NEXTEST_LD_*</code> and <code>NEXTEST_DYLD_*</code> — These replicate the values of any environment variables that start with the prefixes <code>LD_</code> and <code>DYLD_</code>, such as <code>LD_PRELOAD</code> or <code>DYLD_LIBRARY_PATH</code>.</p>
+<p><code>NEXTEST_LD_*</code> and <code>NEXTEST_DYLD_*</code> — These replicate the values of any environment variables that start with the prefixes <code>LD_</code> or <code>DYLD_</code>, such as <code>LD_PRELOAD</code> or <code>DYLD_FALLBACK_LIBRARY_PATH</code>.</p>
 <p>This is a workaround for <a href="https://developer.apple.com/library/archive/documentation/Security/Conceptual/System_Integrity_Protection_Guide/RuntimeProtections/RuntimeProtections.html">macOS's System Integrity Protection</a> sanitizing dynamic linker environment variables for processes like the system <code>bash</code>, and is particularly relevant for <a href="book/target-runners.html">target runners</a>. See <a href="https://briandfoy.github.io/macos-s-system-integrity-protection-sanitizes-your-environment/">this blog post</a> for more about how sanitization works.</p>
 <blockquote>
 <p>Note: The <code>NEXTEST_LD_*</code> and <code>NEXTEST_DYLD_*</code> variables are set on all platforms, not just macOS.</p>
@@ -888,8 +888,8 @@ runner = &quot;wine&quot;
 </li>
 </ul>
 <h3 id="cargo-related-environment-variables-nextest-sets"><a class="header" href="#cargo-related-environment-variables-nextest-sets">Cargo-related environment variables nextest sets</a></h3>
-<p>cargo-nextest delegates to Cargo for the build, which controls the environment variables that are set. See <a href="https://doc.rust-lang.org/cargo/reference/environment-variables.html#environment-variables-cargo-sets-for-crates">Environment variables Cargo sets for crates</a> for a full list.</p>
-<p>cargo-nextest also sets these environment variables at runtime, matching the behavior of cargo test:</p>
+<p>Nextest delegates to Cargo for the build, which controls the environment variables that are set. See <a href="https://doc.rust-lang.org/cargo/reference/environment-variables.html#environment-variables-cargo-sets-for-crates">Environment variables Cargo sets for crates</a> for a full list.</p>
+<p>Nextest also sets these environment variables at runtime, matching the behavior of cargo test:</p>
 <ul>
 <li><code>CARGO</code> — Path to the <code>cargo</code> binary performing the build.</li>
 <li><code>CARGO_MANIFEST_DIR</code> — The directory containing the manifest of your package. If <a href="book/reusing-builds.html#specifying-a-new-location-for-the-workspace"><code>--workspace-remap</code></a> is passed in, this is set to the remapped manifest directory. You can obtain the non-remapped directory using the value of this variable at compile-time, e.g. <code>env!(&quot;CARGO_MANIFEST_DIR&quot;)</code>.</li>
