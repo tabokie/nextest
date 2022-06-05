@@ -1067,6 +1067,26 @@
 <span id="1062">1062</span>
 <span id="1063">1063</span>
 <span id="1064">1064</span>
+<span id="1065">1065</span>
+<span id="1066">1066</span>
+<span id="1067">1067</span>
+<span id="1068">1068</span>
+<span id="1069">1069</span>
+<span id="1070">1070</span>
+<span id="1071">1071</span>
+<span id="1072">1072</span>
+<span id="1073">1073</span>
+<span id="1074">1074</span>
+<span id="1075">1075</span>
+<span id="1076">1076</span>
+<span id="1077">1077</span>
+<span id="1078">1078</span>
+<span id="1079">1079</span>
+<span id="1080">1080</span>
+<span id="1081">1081</span>
+<span id="1082">1082</span>
+<span id="1083">1083</span>
+<span id="1084">1084</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -1092,7 +1112,7 @@
 <span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">fmt</span>::{<span class="self">self</span>, <span class="ident">Write</span> <span class="kw">as</span> <span class="kw">_</span>},
     <span class="ident">io</span>,
-    <span class="ident">io::Write</span>,
+    <span class="ident">io</span>::{<span class="ident">BufWriter</span>, <span class="ident">Write</span>},
     <span class="ident">str::FromStr</span>,
     <span class="ident">time</span>::{<span class="ident">Duration</span>, <span class="ident">SystemTime</span>},
 };
@@ -1340,8 +1360,8 @@
                 .<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">profile</span>.<span class="ident">success_output</span>()),
         };
 
-        <span class="kw">let</span> <span class="ident">stderr</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">output</span> {
-            <span class="ident">ReporterStderr::Terminal</span> =&gt; {
+        <span class="kw">let</span> <span class="ident">stderr</span> <span class="op">=</span> <span class="kw">match</span> (<span class="ident">output</span>, <span class="self">self</span>.<span class="ident">no_capture</span>) {
+            (<span class="ident">ReporterStderr::Terminal</span>, <span class="bool-val">false</span>) =&gt; {
                 <span class="kw">let</span> <span class="ident">progress_bar</span> <span class="op">=</span> <span class="ident">ProgressBar::new</span>(<span class="ident">test_list</span>.<span class="ident">test_count</span>() <span class="kw">as</span> <span class="ident">u64</span>);
                 <span class="comment">// Emulate Cargo&#39;s style.</span>
                 <span class="kw">let</span> <span class="ident">test_count_width</span> <span class="op">=</span> <span class="macro">format!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">test_list</span>.<span class="ident">test_count</span>()).<span class="ident">len</span>();
@@ -1370,9 +1390,20 @@
                 <span class="comment">// Since we only update the progress bar on a steady tick, there&#39;s no need to buffer in</span>
                 <span class="comment">// ProgressDrawTarget.</span>
                 <span class="ident">progress_bar</span>.<span class="ident">set_draw_target</span>(<span class="ident">ProgressDrawTarget::stderr_nohz</span>());
-                <span class="ident">ReporterStderrImpl::Terminal</span>(<span class="ident">progress_bar</span>)
+                <span class="ident">ReporterStderrImpl::TerminalWithBar</span>(<span class="ident">progress_bar</span>)
             }
-            <span class="ident">ReporterStderr::Buffer</span>(<span class="ident">buf</span>) =&gt; <span class="ident">ReporterStderrImpl::Buffer</span>(<span class="ident">buf</span>),
+            (<span class="ident">ReporterStderr::Terminal</span>, <span class="bool-val">true</span>) =&gt; {
+                <span class="comment">// Do not use a progress bar if --no-capture is passed in. This is required since we</span>
+                <span class="comment">// pass down stderr to the child process.</span>
+                <span class="comment">//</span>
+                <span class="comment">// In the future, we could potentially switch to using a pty, in which case we could</span>
+                <span class="comment">// still potentially use the progress bar as a status bar. However, that brings</span>
+                <span class="comment">// about its own complications: what if a test&#39;s output doesn&#39;t include a newline?</span>
+                <span class="comment">// We might have to use a curses-like UI which would be a lot of work for not much</span>
+                <span class="comment">// gain.</span>
+                <span class="ident">ReporterStderrImpl::TerminalWithoutBar</span>
+            }
+            (<span class="ident">ReporterStderr::Buffer</span>(<span class="ident">buf</span>), <span class="kw">_</span>) =&gt; <span class="ident">ReporterStderrImpl::Buffer</span>(<span class="ident">buf</span>),
         };
 
         <span class="ident">TestReporter</span> {
@@ -1394,7 +1425,8 @@
 }
 
 <span class="kw">enum</span> <span class="ident">ReporterStderrImpl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="ident">Terminal</span>(<span class="ident">ProgressBar</span>),
+    <span class="ident">TerminalWithBar</span>(<span class="ident">ProgressBar</span>),
+    <span class="ident">TerminalWithoutBar</span>,
     <span class="ident">Buffer</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>),
 }
 
@@ -1423,7 +1455,7 @@
     <span class="doccomment">/// Report this test event to the given writer.</span>
     <span class="kw">fn</span> <span class="ident">write_event</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">event</span>: <span class="ident">TestEvent</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">WriteEventError</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">stderr</span> {
-            <span class="ident">ReporterStderrImpl::Terminal</span>(<span class="ident">progress_bar</span>) =&gt; {
+            <span class="ident">ReporterStderrImpl::TerminalWithBar</span>(<span class="ident">progress_bar</span>) =&gt; {
                 <span class="comment">// Write to a string that will be printed as a log line.</span>
                 <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
                 <span class="self">self</span>.<span class="ident">inner</span>
@@ -1433,6 +1465,14 @@
                 <span class="ident">progress_bar</span>.<span class="ident">println</span>(<span class="kw-2">&amp;</span><span class="ident">s</span>);
 
                 <span class="ident">update_progress_bar</span>(<span class="kw-2">&amp;</span><span class="ident">event</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">styles</span>, <span class="ident">progress_bar</span>);
+            }
+            <span class="ident">ReporterStderrImpl::TerminalWithoutBar</span> =&gt; {
+                <span class="comment">// Write to a buffered stderr.</span>
+                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">writer</span> <span class="op">=</span> <span class="ident">BufWriter::new</span>(<span class="ident">std::io::stderr</span>());
+                <span class="self">self</span>.<span class="ident">inner</span>
+                    .<span class="ident">write_event_impl</span>(<span class="kw-2">&amp;</span><span class="ident">event</span>, <span class="kw-2">&amp;mut</span> <span class="ident">writer</span>)
+                    .<span class="ident">map_err</span>(<span class="ident">WriteEventError::Io</span>)<span class="question-mark">?</span>;
+                <span class="ident">writer</span>.<span class="ident">flush</span>().<span class="ident">map_err</span>(<span class="ident">WriteEventError::Io</span>)<span class="question-mark">?</span>;
             }
             <span class="ident">ReporterStderrImpl::Buffer</span>(<span class="ident">buf</span>) =&gt; {
                 <span class="self">self</span>.<span class="ident">inner</span>
