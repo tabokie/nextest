@@ -1013,7 +1013,10 @@ retries = 0
 # Can be overridden through the `--status-level` flag.
 status-level = &quot;pass&quot;
 
-# &quot;failure-output&quot; defines when test failures are output to standard output.
+# Similar to status-level, show these test statuses at the end of the run.
+final-status-level = &quot;none&quot;
+
+# &quot;failure-output&quot; defines when standard output and standard error for failing tests are produced.
 # Accepted values are
 # * &quot;immediate&quot;: output failures as soon as they happen
 # * &quot;final&quot;: output failures at the end of the test run
@@ -1026,8 +1029,8 @@ status-level = &quot;pass&quot;
 # Can be overridden through the `--failure-output` option.
 failure-output = &quot;immediate&quot;
 
-# &quot;success-output&quot; controls output on success. This should generally be set to
-# &quot;never&quot;.
+# &quot;success-output&quot; controls production of standard output and standard error on success. This should
+# generally be set to &quot;never&quot;.
 success-output = &quot;never&quot;
 
 # Cancel the test run on the first failure. For CI runs, consider setting this

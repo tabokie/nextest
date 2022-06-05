@@ -904,6 +904,19 @@
 <span id="899">899</span>
 <span id="900">900</span>
 <span id="901">901</span>
+<span id="902">902</span>
+<span id="903">903</span>
+<span id="904">904</span>
+<span id="905">905</span>
+<span id="906">906</span>
+<span id="907">907</span>
+<span id="908">908</span>
+<span id="909">909</span>
+<span id="910">910</span>
+<span id="911">911</span>
+<span id="912">912</span>
+<span id="913">913</span>
+<span id="914">914</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -1372,6 +1385,7 @@
 <span class="doccomment">/// A description of test executions obtained from `ExecuteStatuses`.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// This can be used to quickly determine whether a test passed, failed or was flaky.</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Copy</span>, <span class="ident">Clone</span>, <span class="ident">Debug</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ExecutionDescription</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
     <span class="doccomment">/// The test was run once and was successful.</span>
     <span class="ident">Success</span> {
@@ -1408,8 +1422,20 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">status_level</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">StatusLevel</span> {
         <span class="kw">match</span> <span class="self">self</span> {
             <span class="ident">ExecutionDescription::Success</span> { .. } =&gt; <span class="ident">StatusLevel::Pass</span>,
+            <span class="comment">// A flaky test implies that we print out retry information for it.</span>
             <span class="ident">ExecutionDescription::Flaky</span> { .. } =&gt; <span class="ident">StatusLevel::Retry</span>,
             <span class="ident">ExecutionDescription::Failure</span> { .. } =&gt; <span class="ident">StatusLevel::Fail</span>,
+        }
+    }
+
+    <span class="doccomment">/// Returns the last run status.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">last_status</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">ExecuteStatus</span> {
+        <span class="kw">match</span> <span class="self">self</span> {
+            <span class="ident">ExecutionDescription::Success</span> {
+                <span class="ident">single_status</span>: <span class="ident">last_status</span>,
+            }
+            <span class="op">|</span> <span class="ident">ExecutionDescription::Flaky</span> { <span class="ident">last_status</span>, .. }
+            <span class="op">|</span> <span class="ident">ExecutionDescription::Failure</span> { <span class="ident">last_status</span>, .. } =&gt; <span class="ident">last_status</span>,
         }
     }
 }

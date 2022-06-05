@@ -1081,6 +1081,18 @@
 <span id="1076">1076</span>
 <span id="1077">1077</span>
 <span id="1078">1078</span>
+<span id="1079">1079</span>
+<span id="1080">1080</span>
+<span id="1081">1081</span>
+<span id="1082">1082</span>
+<span id="1083">1083</span>
+<span id="1084">1084</span>
+<span id="1085">1085</span>
+<span id="1086">1086</span>
+<span id="1087">1087</span>
+<span id="1088">1088</span>
+<span id="1089">1089</span>
+<span id="1090">1090</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -1608,6 +1620,15 @@
         <span class="ident">env</span> <span class="op">=</span> <span class="string">&quot;NEXTEST_STATUS_LEVEL&quot;</span>,
     )]</span>
     <span class="ident">status_level</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">StatusLevel</span><span class="op">&gt;</span>,
+
+    <span class="doccomment">/// Test statuses to output at the end of the run.</span>
+    <span class="attribute">#[<span class="ident">clap</span>(
+        <span class="ident">long</span>,
+        <span class="ident">possible_values</span> <span class="op">=</span> <span class="ident">StatusLevel::variants</span>(),
+        <span class="ident">value_name</span> <span class="op">=</span> <span class="string">&quot;LEVEL&quot;</span>,
+        <span class="ident">env</span> <span class="op">=</span> <span class="string">&quot;NEXTEST_FINAL_STATUS_LEVEL&quot;</span>,
+    )]</span>
+    <span class="ident">final_status_level</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">StatusLevel</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">TestReporterOpts</span> {
@@ -1622,6 +1643,9 @@
         }
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">status_level</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">status_level</span> {
             <span class="ident">builder</span>.<span class="ident">set_status_level</span>(<span class="ident">status_level</span>);
+        }
+        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">final_status_level</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">final_status_level</span> {
+            <span class="ident">builder</span>.<span class="ident">set_final_status_level</span>(<span class="ident">final_status_level</span>);
         }
         <span class="ident">builder</span>
     }

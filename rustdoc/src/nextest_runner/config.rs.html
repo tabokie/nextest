@@ -341,6 +341,16 @@
 <span id="336">336</span>
 <span id="337">337</span>
 <span id="338">338</span>
+<span id="339">339</span>
+<span id="340">340</span>
+<span id="341">341</span>
+<span id="342">342</span>
+<span id="343">343</span>
+<span id="344">344</span>
+<span id="345">345</span>
+<span id="346">346</span>
+<span id="347">347</span>
+<span id="348">348</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -516,6 +526,13 @@
             .<span class="ident">unwrap_or</span>(<span class="self">self</span>.<span class="ident">default_profile</span>.<span class="ident">status_level</span>)
     }
 
+    <span class="doccomment">/// Returns the test status level at the end of the run.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">final_status_level</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">StatusLevel</span> {
+        <span class="self">self</span>.<span class="ident">custom_profile</span>
+            .<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">profile</span><span class="op">|</span> <span class="ident">profile</span>.<span class="ident">final_status_level</span>)
+            .<span class="ident">unwrap_or</span>(<span class="self">self</span>.<span class="ident">default_profile</span>.<span class="ident">final_status_level</span>)
+    }
+
     <span class="doccomment">/// Returns the failure output config for this profile.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">failure_output</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">TestOutputDisplay</span> {
         <span class="self">self</span>.<span class="ident">custom_profile</span>
@@ -623,6 +640,7 @@
 <span class="kw">struct</span> <span class="ident">DefaultProfileImpl</span> {
     <span class="ident">retries</span>: <span class="ident">usize</span>,
     <span class="ident">status_level</span>: <span class="ident">StatusLevel</span>,
+    <span class="ident">final_status_level</span>: <span class="ident">StatusLevel</span>,
     <span class="ident">failure_output</span>: <span class="ident">TestOutputDisplay</span>,
     <span class="ident">success_output</span>: <span class="ident">TestOutputDisplay</span>,
     <span class="ident">fail_fast</span>: <span class="ident">bool</span>,
@@ -646,6 +664,8 @@
     <span class="ident">retries</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>,
     <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span>)]</span>
     <span class="ident">status_level</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">StatusLevel</span><span class="op">&gt;</span>,
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span>)]</span>
+    <span class="ident">final_status_level</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">StatusLevel</span><span class="op">&gt;</span>,
     <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span>)]</span>
     <span class="ident">failure_output</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">TestOutputDisplay</span><span class="op">&gt;</span>,
     <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span>)]</span>
