@@ -507,14 +507,17 @@ FILTER OPTIONS:
                                         &lt;https://nexte.st/book/filter-expressions&gt;)
 
 REPORTER OPTIONS:
-        --failure-output &lt;WHEN&gt;    Output stdout and stderr on failure [env:
-                                   NEXTEST_FAILURE_OUTPUT=] [possible values: immediate,
-                                   immediate-final, final, never]
-        --success-output &lt;WHEN&gt;    Output stdout and stderr on success [env:
-                                   NEXTEST_SUCCESS_OUTPUT=] [possible values: immediate,
-                                   immediate-final, final, never]
-        --status-level &lt;LEVEL&gt;     Test statuses to output [env: NEXTEST_STATUS_LEVEL=] [possible
-                                   values: none, fail, retry, slow, pass, skip, all]
+        --failure-output &lt;WHEN&gt;         Output stdout and stderr on failure [env:
+                                        NEXTEST_FAILURE_OUTPUT=] [possible values: immediate,
+                                        immediate-final, final, never]
+        --success-output &lt;WHEN&gt;         Output stdout and stderr on success [env:
+                                        NEXTEST_SUCCESS_OUTPUT=] [possible values: immediate,
+                                        immediate-final, final, never]
+        --status-level &lt;LEVEL&gt;          Test statuses to output [env: NEXTEST_STATUS_LEVEL=]
+                                        [possible values: none, fail, retry, slow, pass, skip, all]
+        --final-status-level &lt;LEVEL&gt;    Test statuses to output at the end of the run [env:
+                                        NEXTEST_FINAL_STATUS_LEVEL=] [possible values: none, fail,
+                                        retry, slow, pass, skip, all]
 
 REUSE BUILD OPTIONS:
         --archive-file &lt;PATH&gt;         Path to nextest archive
@@ -841,6 +844,7 @@ runner = &quot;wine&quot;
 </ul>
 </li>
 <li><code>--status-level</code>: which test statuses (<strong>PASS</strong>, <strong>FAIL</strong> etc) to display. There are 7 status levels: <code>none, fail, retry, slow, pass, skip, all</code>. Each status level causes all earlier status levels to be displayed as well (similar to log levels). (For example, setting <code>status-level</code> to <code>skip</code> will show failing, retried, slow and passing tests along with skipped tests.) The default is <code>pass</code>.</li>
+<li><code>--final-status-level</code>: which test statuses to display at the end of a test run. For example, this can be set to <code>fail</code> to print out a list of failing tests at the end of a test run. The default is <code>none</code>.</li>
 </ul>
 <p>For a full list of options, see <a href="book/running.html#options-and-arguments">Options and arguments</a>.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="environment-variables"><a class="header" href="#environment-variables">Environment variables</a></h1>
@@ -852,6 +856,7 @@ runner = &quot;wine&quot;
 <li><code>NEXTEST_TEST_THREADS</code> — Number of tests to run simultaneously.</li>
 <li><code>NEXTEST_FAILURE_OUTPUT</code> and <code>NEXTEST_SUCCESS_OUTPUT</code> — When standard output and standard error are displayed for failing and passing tests, respectively. See <a href="book/other-options.html#reporter-options">Reporter options</a> for possible values.</li>
 <li><code>NEXTEST_STATUS_LEVEL</code> — Which test statuses (<strong>PASS</strong>, <strong>FAIL</strong> etc) to display. See <a href="book/other-options.html#reporter-options">Reporter options</a> for possible values.</li>
+<li><code>NEXTEST_FINAL_STATUS_LEVEL</code> — Which test statuses (<strong>PASS</strong>, <strong>FAIL</strong> etc) to display at the end of a test run. See <a href="book/other-options.html#reporter-options">Reporter options</a> for possible values.</li>
 <li><code>NEXTEST_VERBOSE</code> — Verbose output.</li>
 </ul>
 <p>Nextest also reads the following environment variables to emulate Cargo's behavior.</p>

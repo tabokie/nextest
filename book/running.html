@@ -272,14 +272,17 @@ FILTER OPTIONS:
                                         &lt;https://nexte.st/book/filter-expressions&gt;)
 
 REPORTER OPTIONS:
-        --failure-output &lt;WHEN&gt;    Output stdout and stderr on failure [env:
-                                   NEXTEST_FAILURE_OUTPUT=] [possible values: immediate,
-                                   immediate-final, final, never]
-        --success-output &lt;WHEN&gt;    Output stdout and stderr on success [env:
-                                   NEXTEST_SUCCESS_OUTPUT=] [possible values: immediate,
-                                   immediate-final, final, never]
-        --status-level &lt;LEVEL&gt;     Test statuses to output [env: NEXTEST_STATUS_LEVEL=] [possible
-                                   values: none, fail, retry, slow, pass, skip, all]
+        --failure-output &lt;WHEN&gt;         Output stdout and stderr on failure [env:
+                                        NEXTEST_FAILURE_OUTPUT=] [possible values: immediate,
+                                        immediate-final, final, never]
+        --success-output &lt;WHEN&gt;         Output stdout and stderr on success [env:
+                                        NEXTEST_SUCCESS_OUTPUT=] [possible values: immediate,
+                                        immediate-final, final, never]
+        --status-level &lt;LEVEL&gt;          Test statuses to output [env: NEXTEST_STATUS_LEVEL=]
+                                        [possible values: none, fail, retry, slow, pass, skip, all]
+        --final-status-level &lt;LEVEL&gt;    Test statuses to output at the end of the run [env:
+                                        NEXTEST_FINAL_STATUS_LEVEL=] [possible values: none, fail,
+                                        retry, slow, pass, skip, all]
 
 REUSE BUILD OPTIONS:
         --archive-file &lt;PATH&gt;         Path to nextest archive
