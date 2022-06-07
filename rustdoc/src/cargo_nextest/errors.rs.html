@@ -325,6 +325,15 @@
 <span id="320">320</span>
 <span id="321">321</span>
 <span id="322">322</span>
+<span id="323">323</span>
+<span id="324">324</span>
+<span id="325">325</span>
+<span id="326">326</span>
+<span id="327">327</span>
+<span id="328">328</span>
+<span id="329">329</span>
+<span id="330">330</span>
+<span id="331">331</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -332,8 +341,8 @@
 <span class="kw">use</span> <span class="ident">nextest_filtering::errors::FilterExpressionParseErrors</span>;
 <span class="kw">use</span> <span class="ident">nextest_metadata::NextestExitCode</span>;
 <span class="kw">use</span> <span class="ident">nextest_runner::errors</span>::{
-    <span class="ident">ArchiveCreateError</span>, <span class="ident">ArchiveExtractError</span>, <span class="ident">ConfigParseError</span>, <span class="ident">PathMapperConstructError</span>,
-    <span class="ident">ProfileNotFound</span>, <span class="ident">UnknownArchiveFormat</span>,
+    <span class="ident">ArchiveCreateError</span>, <span class="ident">ArchiveExtractError</span>, <span class="ident">ConfigParseError</span>, <span class="ident">ParseTestListError</span>,
+    <span class="ident">PathMapperConstructError</span>, <span class="ident">ProfileNotFound</span>, <span class="ident">UnknownArchiveFormat</span>,
 };
 <span class="kw">use</span> <span class="ident">owo_colors</span>::{<span class="ident">OwoColorize</span>, <span class="ident">Stream</span>};
 <span class="kw">use</span> <span class="ident">std</span>::{
@@ -381,6 +390,9 @@
     <span class="ident">CargoMetadataParseError</span> {
         <span class="ident">file_name</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Utf8PathBuf</span><span class="op">&gt;</span>,
         <span class="ident">err</span>: <span class="ident">guppy::Error</span>,
+    },
+    <span class="ident">ParseTestListError</span> {
+        <span class="ident">err</span>: <span class="ident">ParseTestListError</span>,
     },
     <span class="ident">BuildFailed</span> {
         <span class="ident">command</span>: <span class="ident">String</span>,
@@ -479,6 +491,7 @@
             <span class="op">|</span> <span class="ident"><span class="self">Self</span>::PathMapperConstructError</span> { .. }
             <span class="op">|</span> <span class="ident"><span class="self">Self</span>::ArgumentJsonParseError</span> { .. }
             <span class="op">|</span> <span class="ident"><span class="self">Self</span>::CargoMetadataParseError</span> { .. } =&gt; <span class="ident">NextestExitCode::SETUP_ERROR</span>,
+            <span class="ident"><span class="self">Self</span>::ParseTestListError</span> { .. } =&gt; <span class="ident">NextestExitCode::PARSE_TEST_LIST_FAILED</span>,
             <span class="ident"><span class="self">Self</span>::BuildFailed</span> { .. } =&gt; <span class="ident">NextestExitCode::BUILD_FAILED</span>,
             <span class="ident"><span class="self">Self</span>::TestRunFailed</span> =&gt; <span class="ident">NextestExitCode::TEST_RUN_FAILED</span>,
             <span class="ident"><span class="self">Self</span>::ArchiveCreateError</span> { .. } =&gt; <span class="ident">NextestExitCode::ARCHIVE_CREATION_FAILED</span>,
@@ -568,6 +581,10 @@
                 <span class="macro">log::error!</span>(<span class="string">&quot;error parsing Cargo metadata{}&quot;</span>, <span class="ident">metadata_source</span>);
                 <span class="prelude-val">Some</span>(<span class="ident">err</span> <span class="kw">as</span> <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">Error</span>)
             }
+            <span class="ident"><span class="self">Self</span>::ParseTestListError</span> { <span class="ident">err</span> } =&gt; {
+                <span class="macro">log::error!</span>(<span class="string">&quot;building test list failed&quot;</span>);
+                <span class="prelude-val">Some</span>(<span class="ident">err</span> <span class="kw">as</span> <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">Error</span>)
+            }
             <span class="ident"><span class="self">Self</span>::BuildFailed</span> { <span class="ident">command</span>, <span class="ident">exit_code</span> } =&gt; {
                 <span class="kw">let</span> <span class="ident">with_code_str</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">exit_code</span> {
                     <span class="prelude-val">Some</span>(<span class="ident">code</span>) =&gt; {
@@ -634,6 +651,7 @@
             <span class="ident"><span class="self">Self</span>::PathMapperConstructError</span> { .. } =&gt; <span class="macro">writeln!</span>(<span class="ident">f</span>, <span class="string">&quot;path mapper construct error&quot;</span>),
             <span class="ident"><span class="self">Self</span>::ArgumentJsonParseError</span> { .. } =&gt; <span class="macro">writeln!</span>(<span class="ident">f</span>, <span class="string">&quot;argument json decode error&quot;</span>),
             <span class="ident"><span class="self">Self</span>::CargoMetadataParseError</span> { .. } =&gt; <span class="macro">writeln!</span>(<span class="ident">f</span>, <span class="string">&quot;cargo metadata parse error&quot;</span>),
+            <span class="ident"><span class="self">Self</span>::ParseTestListError</span> { .. } =&gt; <span class="macro">writeln!</span>(<span class="ident">f</span>, <span class="string">&quot;parse test list error&quot;</span>),
             <span class="ident"><span class="self">Self</span>::BuildFailed</span> { .. } =&gt; <span class="macro">writeln!</span>(<span class="ident">f</span>, <span class="string">&quot;build failed&quot;</span>),
             <span class="ident"><span class="self">Self</span>::TestRunFailed</span> =&gt; <span class="macro">writeln!</span>(<span class="ident">f</span>, <span class="string">&quot;test run failed&quot;</span>),
             <span class="ident"><span class="self">Self</span>::ExperimentalFeatureNotEnabled</span> { .. } =&gt; {

@@ -327,6 +327,7 @@
 <span id="322">322</span>
 <span id="323">323</span>
 <span id="324">324</span>
+<span id="325">325</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// Copyright (c) The cargo-guppy Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
@@ -405,8 +406,9 @@
         }
 
         <span class="ident">INIT_LOGGER</span>.<span class="ident">call_once</span>(<span class="op">|</span><span class="op">|</span> {
-            <span class="ident">env_logger::Builder::from_env</span>(<span class="string">&quot;NEXTEST_LOG&quot;</span>)
-                .<span class="ident">filter_level</span>(<span class="ident">LevelFilter::Warn</span>)
+            <span class="ident">env_logger::Builder::new</span>()
+                .<span class="ident">filter_level</span>(<span class="ident">LevelFilter::Info</span>)
+                .<span class="ident">parse_env</span>(<span class="string">&quot;NEXTEST_LOG&quot;</span>)
                 .<span class="ident">format</span>(<span class="ident">format_fn</span>)
                 .<span class="ident">init</span>();
 

@@ -971,14 +971,42 @@
 <span id="966">966</span>
 <span id="967">967</span>
 <span id="968">968</span>
+<span id="969">969</span>
+<span id="970">970</span>
+<span id="971">971</span>
+<span id="972">972</span>
+<span id="973">973</span>
+<span id="974">974</span>
+<span id="975">975</span>
+<span id="976">976</span>
+<span id="977">977</span>
+<span id="978">978</span>
+<span id="979">979</span>
+<span id="980">980</span>
+<span id="981">981</span>
+<span id="982">982</span>
+<span id="983">983</span>
+<span id="984">984</span>
+<span id="985">985</span>
+<span id="986">986</span>
+<span id="987">987</span>
+<span id="988">988</span>
+<span id="989">989</span>
+<span id="990">990</span>
+<span id="991">991</span>
+<span id="992">992</span>
+<span id="993">993</span>
+<span id="994">994</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
 <span class="doccomment">//! Errors produced by nextest.</span>
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
+    <span class="ident">helpers::dylib_path_envvar</span>,
     <span class="ident">reporter</span>::{<span class="ident">StatusLevel</span>, <span class="ident">TestOutputDisplay</span>},
     <span class="ident">reuse_build::ArchiveFormat</span>,
+    <span class="ident">target_runner::PlatformRunnerSource</span>,
     <span class="ident">test_filter::RunIgnored</span>,
 };
 <span class="kw">use</span> <span class="ident">camino</span>::{<span class="ident">FromPathBufError</span>, <span class="ident">Utf8Path</span>, <span class="ident">Utf8PathBuf</span>};
@@ -1342,8 +1370,11 @@
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ParseTestListError</span> {
     <span class="doccomment">/// Running a command to gather the list of tests failed.</span>
     <span class="ident">Command</span> {
+        <span class="doccomment">/// The binary ID for which gathering the list of tests failed.</span>
+        <span class="ident">binary_id</span>: <span class="ident">String</span>,
+
         <span class="doccomment">/// The command that was run.</span>
-        <span class="ident">command</span>: <span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="ident">str</span><span class="op">&gt;</span>,
+        <span class="ident">command</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
 
         <span class="doccomment">/// The underlying error.</span>
         <span class="ident">error</span>: <span class="ident">std::io::Error</span>,
@@ -1351,6 +1382,9 @@
 
     <span class="doccomment">/// An error occurred while parsing a line in the test output.</span>
     <span class="ident">ParseLine</span> {
+        <span class="doccomment">/// The binary ID for which parsing the list of tests failed.</span>
+        <span class="ident">binary_id</span>: <span class="ident">String</span>,
+
         <span class="doccomment">/// A descriptive message.</span>
         <span class="ident">message</span>: <span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="ident">str</span><span class="op">&gt;</span>,
 
@@ -1369,46 +1403,63 @@
 }
 
 <span class="kw">impl</span> <span class="ident">ParseTestListError</span> {
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">command</span>(<span class="ident">command</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="ident">str</span><span class="op">&gt;</span><span class="op">&gt;</span>, <span class="ident">error</span>: <span class="ident">std::io::Error</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident">ParseTestListError::Command</span> {
-            <span class="ident">command</span>: <span class="ident">command</span>.<span class="ident">into</span>(),
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">command</span>(
+        <span class="ident">binary_id</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+        <span class="ident">command</span>: <span class="kw">impl</span> <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+        <span class="ident">error</span>: <span class="ident">std::io::Error</span>,
+    ) -&gt; <span class="self">Self</span> {
+        <span class="ident"><span class="self">Self</span>::Command</span> {
+            <span class="ident">binary_id</span>: <span class="ident">binary_id</span>.<span class="ident">into</span>(),
+            <span class="ident">command</span>: <span class="ident">command</span>.<span class="ident">into_iter</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">s</span><span class="op">|</span> <span class="ident">s</span>.<span class="ident">into</span>()).<span class="ident">collect</span>(),
             <span class="ident">error</span>,
         }
     }
 
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">parse_line</span>(
+        <span class="ident">binary_id</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
         <span class="ident">message</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="ident">str</span><span class="op">&gt;</span><span class="op">&gt;</span>,
         <span class="ident">full_output</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
     ) -&gt; <span class="self">Self</span> {
-        <span class="ident">ParseTestListError::ParseLine</span> {
+        <span class="ident"><span class="self">Self</span>::ParseLine</span> {
+            <span class="ident">binary_id</span>: <span class="ident">binary_id</span>.<span class="ident">into</span>(),
             <span class="ident">message</span>: <span class="ident">message</span>.<span class="ident">into</span>(),
             <span class="ident">full_output</span>: <span class="ident">full_output</span>.<span class="ident">into</span>(),
         }
     }
 
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">dylib_join_paths</span>(<span class="ident">new_paths</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Utf8PathBuf</span><span class="op">&gt;</span>, <span class="ident">error</span>: <span class="ident">JoinPathsError</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident">ParseTestListError::DylibJoinPaths</span> { <span class="ident">new_paths</span>, <span class="ident">error</span> }
+        <span class="ident"><span class="self">Self</span>::DylibJoinPaths</span> { <span class="ident">new_paths</span>, <span class="ident">error</span> }
     }
 }
 
 <span class="kw">impl</span> <span class="ident">fmt::Display</span> <span class="kw">for</span> <span class="ident">ParseTestListError</span> {
     <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">fmt::Formatter</span>) -&gt; <span class="ident">fmt::Result</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">ParseTestListError::Command</span> { <span class="ident">command</span>, .. } =&gt; {
-                <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;running &#39;{}&#39; failed&quot;</span>, <span class="ident">command</span>)
+            <span class="ident"><span class="self">Self</span>::Command</span> {
+                <span class="ident">binary_id</span>, <span class="ident">command</span>, ..
+            } =&gt; {
+                <span class="macro">write!</span>(
+                    <span class="ident">f</span>,
+                    <span class="string">&quot;for `{binary_id}`, running command `{}` failed&quot;</span>,
+                    <span class="ident">shell_words::join</span>(<span class="ident">command</span>)
+                )
             }
-            <span class="ident">ParseTestListError::ParseLine</span> {
+            <span class="ident"><span class="self">Self</span>::ParseLine</span> {
+                <span class="ident">binary_id</span>,
                 <span class="ident">message</span>,
                 <span class="ident">full_output</span>,
             } =&gt; {
-                <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;{}\nfull output:\n{}&quot;</span>, <span class="ident">message</span>, <span class="ident">full_output</span>)
+                <span class="macro">write!</span>(
+                    <span class="ident">f</span>,
+                    <span class="string">&quot;for `{binary_id}`, {message}\nfull output:\n{full_output}&quot;</span>
+                )
             }
-            <span class="ident">ParseTestListError::DylibJoinPaths</span> { <span class="ident">new_paths</span>, .. } =&gt; {
+            <span class="ident"><span class="self">Self</span>::DylibJoinPaths</span> { <span class="ident">new_paths</span>, .. } =&gt; {
                 <span class="kw">let</span> <span class="ident">new_paths_display</span> <span class="op">=</span> <span class="ident">itertools::join</span>(<span class="ident">new_paths</span>, <span class="string">&quot;, &quot;</span>);
                 <span class="macro">write!</span>(
                     <span class="ident">f</span>,
-                    <span class="string">&quot;error adding dynamic library paths: [{}]&quot;</span>,
-                    <span class="ident">new_paths_display</span>,
+                    <span class="string">&quot;error joining dynamic library paths for {}: [{new_paths_display}]&quot;</span>,
+                    <span class="ident">dylib_path_envvar</span>()
                 )
             }
         }
@@ -1418,9 +1469,9 @@
 <span class="kw">impl</span> <span class="ident">error::Error</span> <span class="kw">for</span> <span class="ident">ParseTestListError</span> {
     <span class="kw">fn</span> <span class="ident">source</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>(<span class="kw">dyn</span> <span class="ident">error::Error</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>)<span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">ParseTestListError::Command</span> { <span class="ident">error</span>, .. } =&gt; <span class="prelude-val">Some</span>(<span class="ident">error</span>),
-            <span class="ident">ParseTestListError::DylibJoinPaths</span> { <span class="ident">error</span>, .. } =&gt; <span class="prelude-val">Some</span>(<span class="ident">error</span>),
-            <span class="ident">ParseTestListError::ParseLine</span> { .. } =&gt; <span class="prelude-val">None</span>,
+            <span class="ident"><span class="self">Self</span>::Command</span> { <span class="ident">error</span>, .. } =&gt; <span class="prelude-val">Some</span>(<span class="ident">error</span>),
+            <span class="ident"><span class="self">Self</span>::DylibJoinPaths</span> { <span class="ident">error</span>, .. } =&gt; <span class="prelude-val">Some</span>(<span class="ident">error</span>),
+            <span class="ident"><span class="self">Self</span>::ParseLine</span> { .. } =&gt; <span class="prelude-val">None</span>,
         }
     }
 }
@@ -1831,8 +1882,9 @@
     <span class="doccomment">/// An environment variable or config key was found that matches the target</span>
     <span class="doccomment">/// triple, but it didn&#39;t actually contain a binary</span>
     <span class="ident">BinaryNotSpecified</span> {
-        <span class="doccomment">/// The environment variable or config key path</span>
-        <span class="ident">key</span>: <span class="ident">String</span>,
+        <span class="doccomment">/// The source under consideration.</span>
+        <span class="ident">source</span>: <span class="ident">PlatformRunnerSource</span>,
+
         <span class="doccomment">/// The value that was read from the key</span>
         <span class="ident">value</span>: <span class="ident">String</span>,
     },
@@ -1879,11 +1931,11 @@
             <span class="ident"><span class="self">Self</span>::InvalidEnvironmentVar</span>(<span class="ident">key</span>) =&gt; {
                 <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;environment variable &#39;{}&#39; contained non-utf8 data&quot;</span>, <span class="ident">key</span>)
             }
-            <span class="ident"><span class="self">Self</span>::BinaryNotSpecified</span> { <span class="ident">key</span>, <span class="ident">value</span> } =&gt; {
+            <span class="ident"><span class="self">Self</span>::BinaryNotSpecified</span> { <span class="ident">source</span>, <span class="ident">value</span> } =&gt; {
                 <span class="macro">write!</span>(
                     <span class="ident">f</span>,
                     <span class="string">&quot;runner &#39;{}&#39; = &#39;{}&#39; did not contain a runner binary&quot;</span>,
-                    <span class="ident">key</span>, <span class="ident">value</span>
+                    <span class="ident">source</span>, <span class="ident">value</span>
                 )
             }
             <span class="ident"><span class="self">Self</span>::UnableToReadDir</span>(<span class="ident">io</span>) =&gt; {
