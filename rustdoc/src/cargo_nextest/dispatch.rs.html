@@ -1534,7 +1534,7 @@
         );
         <span class="prelude-val">Ok</span>(
             <span class="ident">TestList::new</span>(<span class="ident">test_artifacts</span>, <span class="ident">rust_build_meta</span>, <span class="kw-2">&amp;</span><span class="ident">test_filter</span>, <span class="ident">runner</span>)
-                .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> <span class="ident">ExpectedError::ParseTestListError</span> { <span class="ident">err</span> })<span class="question-mark">?</span>,
+                .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> <span class="ident">ExpectedError::CreateTestListError</span> { <span class="ident">err</span> })<span class="question-mark">?</span>,
         )
     }
 }
