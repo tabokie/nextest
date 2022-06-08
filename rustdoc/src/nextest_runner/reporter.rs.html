@@ -1090,6 +1090,18 @@
 <span id="1085">1085</span>
 <span id="1086">1086</span>
 <span id="1087">1087</span>
+<span id="1088">1088</span>
+<span id="1089">1089</span>
+<span id="1090">1090</span>
+<span id="1091">1091</span>
+<span id="1092">1092</span>
+<span id="1093">1093</span>
+<span id="1094">1094</span>
+<span id="1095">1095</span>
+<span id="1096">1096</span>
+<span id="1097">1097</span>
+<span id="1098">1098</span>
+<span id="1099">1099</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -1587,6 +1599,15 @@
         )<span class="question-mark">?</span>;
     }
 
+    <span class="kw">if</span> <span class="ident">run_stats</span>.<span class="ident">timed_out</span> <span class="op">&gt;</span> <span class="number">0</span> {
+        <span class="macro">write!</span>(
+            <span class="ident">out</span>,
+            <span class="string">&quot;{} {}, &quot;</span>,
+            <span class="ident">run_stats</span>.<span class="ident">timed_out</span>.<span class="ident">style</span>(<span class="ident">styles</span>.<span class="ident">count</span>),
+            <span class="string">&quot;timed out&quot;</span>.<span class="ident">style</span>(<span class="ident">styles</span>.<span class="ident">fail</span>),
+        )<span class="question-mark">?</span>;
+    }
+
     <span class="macro">write!</span>(
         <span class="ident">out</span>,
         <span class="string">&quot;{} {}&quot;</span>,
@@ -1756,11 +1777,13 @@
                 <span class="ident">elapsed</span>,
                 <span class="ident">run_stats</span>,
             } =&gt; {
-                <span class="kw">let</span> <span class="ident">summary_style</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">run_stats</span>.<span class="ident">failed</span> <span class="op">&gt;</span> <span class="number">0</span> <span class="op">|</span><span class="op">|</span> <span class="ident">run_stats</span>.<span class="ident">exec_failed</span> <span class="op">&gt;</span> <span class="number">0</span> {
-                    <span class="self">self</span>.<span class="ident">styles</span>.<span class="ident">fail</span>
-                } <span class="kw">else</span> {
-                    <span class="self">self</span>.<span class="ident">styles</span>.<span class="ident">pass</span>
-                };
+                <span class="kw">let</span> <span class="ident">summary_style</span> <span class="op">=</span>
+                    <span class="kw">if</span> <span class="ident">run_stats</span>.<span class="ident">failed</span> <span class="op">&gt;</span> <span class="number">0</span> <span class="op">|</span><span class="op">|</span> <span class="ident">run_stats</span>.<span class="ident">exec_failed</span> <span class="op">&gt;</span> <span class="number">0</span> <span class="op">|</span><span class="op">|</span> <span class="ident">run_stats</span>.<span class="ident">timed_out</span> <span class="op">&gt;</span> <span class="number">0</span>
+                    {
+                        <span class="self">self</span>.<span class="ident">styles</span>.<span class="ident">fail</span>
+                    } <span class="kw">else</span> {
+                        <span class="self">self</span>.<span class="ident">styles</span>.<span class="ident">pass</span>
+                    };
                 <span class="macro">write!</span>(<span class="ident">writer</span>, <span class="string">&quot;{:&gt;12} &quot;</span>, <span class="string">&quot;Summary&quot;</span>.<span class="ident">style</span>(<span class="ident">summary_style</span>))<span class="question-mark">?</span>;
 
                 <span class="comment">// Next, print the total time taken.</span>
@@ -1844,6 +1867,7 @@
                     <span class="ident">ExecutionResult::Fail</span> =&gt; <span class="string">&quot;FAIL&quot;</span>,
                     <span class="ident">ExecutionResult::ExecFail</span> =&gt; <span class="string">&quot;XFAIL&quot;</span>,
                     <span class="ident">ExecutionResult::Pass</span> =&gt; <span class="macro">unreachable!</span>(<span class="string">&quot;this is a failing test&quot;</span>),
+                    <span class="ident">ExecutionResult::Timeout</span> =&gt; <span class="string">&quot;TIMEOUT&quot;</span>,
                 };
 
                 <span class="kw">if</span> <span class="ident">last_status</span>.<span class="ident">attempt</span> <span class="op">==</span> <span class="number">1</span> {

@@ -198,6 +198,7 @@
 <span id="193">193</span>
 <span id="194">194</span>
 <span id="195">195</span>
+<span id="196">196</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -271,6 +272,7 @@
                 <span class="kw">fn</span> <span class="ident">kind_ty</span>(<span class="ident">run_status</span>: <span class="kw-2">&amp;</span><span class="ident">ExecuteStatus</span>) -&gt; (<span class="ident">NonSuccessKind</span>, <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>) {
                     <span class="kw">match</span> <span class="ident">run_status</span>.<span class="ident">result</span> {
                         <span class="ident">ExecutionResult::Fail</span> =&gt; (<span class="ident">NonSuccessKind::Failure</span>, <span class="string">&quot;test failure&quot;</span>),
+                        <span class="ident">ExecutionResult::Timeout</span> =&gt; (<span class="ident">NonSuccessKind::Failure</span>, <span class="string">&quot;test timeout&quot;</span>),
                         <span class="ident">ExecutionResult::ExecFail</span> =&gt; (<span class="ident">NonSuccessKind::Error</span>, <span class="string">&quot;execution failure&quot;</span>),
                         <span class="ident">ExecutionResult::Pass</span> =&gt; <span class="macro">unreachable!</span>(<span class="string">&quot;this is a failure status&quot;</span>),
                     }
