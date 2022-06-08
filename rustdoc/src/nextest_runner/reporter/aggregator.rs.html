@@ -196,6 +196,8 @@
 <span id="191">191</span>
 <span id="192">192</span>
 <span id="193">193</span>
+<span id="194">194</span>
+<span id="195">195</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -203,7 +205,7 @@
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">config</span>::{<span class="ident">NextestJunitConfig</span>, <span class="ident">NextestProfile</span>},
-    <span class="ident">errors</span>::{<span class="ident">JunitError</span>, <span class="ident">WriteEventError</span>},
+    <span class="ident">errors::WriteEventError</span>,
     <span class="ident">list::TestInstance</span>,
     <span class="ident">reporter::TestEvent</span>,
     <span class="ident">runner</span>::{<span class="ident">ExecuteStatus</span>, <span class="ident">ExecutionDescription</span>, <span class="ident">ExecutionResult</span>},
@@ -367,10 +369,12 @@
                     <span class="ident">file</span>: <span class="ident">junit_path</span>.<span class="ident">to_path_buf</span>(),
                     <span class="ident">error</span>,
                 })<span class="question-mark">?</span>;
-                <span class="ident">report</span>.<span class="ident">serialize</span>(<span class="ident">f</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> <span class="ident">WriteEventError::Junit</span> {
-                    <span class="ident">file</span>: <span class="ident">junit_path</span>.<span class="ident">to_path_buf</span>(),
-                    <span class="ident">error</span>: <span class="ident">JunitError::new</span>(<span class="ident">err</span>),
-                })<span class="question-mark">?</span>;
+                <span class="ident">report</span>
+                    .<span class="ident">serialize</span>(<span class="ident">f</span>)
+                    .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">error</span><span class="op">|</span> <span class="ident">WriteEventError::Junit</span> {
+                        <span class="ident">file</span>: <span class="ident">junit_path</span>.<span class="ident">to_path_buf</span>(),
+                        <span class="ident">error</span>,
+                    })<span class="question-mark">?</span>;
             }
         }
 

@@ -744,9 +744,9 @@
                 <span class="comment">// based on the current working directory, _not_ the manifest path, this bug</span>
                 <span class="comment">// has existed for a while https://github.com/rust-lang/cargo/issues/2930</span>
                 <span class="kw">let</span> <span class="ident">dir</span> <span class="op">=</span> <span class="ident">std::env::current_dir</span>()
-                    .<span class="ident">map_err</span>(<span class="ident">TargetRunnerError::UnableToReadDir</span>)
+                    .<span class="ident">map_err</span>(<span class="ident">TargetRunnerError::GetCurrentDir</span>)
                     .<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">cwd</span><span class="op">|</span> {
-                        <span class="ident">Utf8PathBuf::from_path_buf</span>(<span class="ident">cwd</span>).<span class="ident">map_err</span>(<span class="ident">TargetRunnerError::NonUtf8Path</span>)
+                        <span class="ident">Utf8PathBuf::try_from</span>(<span class="ident">cwd</span>).<span class="ident">map_err</span>(<span class="ident">TargetRunnerError::NonUtf8Path</span>)
                     })<span class="question-mark">?</span>;
                 <span class="ident">Cow::Owned</span>(<span class="ident">dir</span>)
             }
@@ -810,7 +810,7 @@
                 <span class="ident">error</span>,
             })
             .<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">canon</span><span class="op">|</span> {
-                <span class="ident">Utf8PathBuf::from_path_buf</span>(<span class="ident">canon</span>).<span class="ident">map_err</span>(<span class="ident">TargetRunnerError::NonUtf8Path</span>)
+                <span class="ident">Utf8PathBuf::try_from</span>(<span class="ident">canon</span>).<span class="ident">map_err</span>(<span class="ident">TargetRunnerError::NonUtf8Path</span>)
             })<span class="question-mark">?</span>;
 
         <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="ident">dir</span>.<span class="ident">ancestors</span>().<span class="ident">count</span>() {
@@ -837,9 +837,9 @@
             <span class="comment">// Attempt lookup the $CARGO_HOME directory from the cwd, as that can</span>
             <span class="comment">// contain a default config.toml</span>
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">cargo_home_path</span> <span class="op">=</span> <span class="ident">home::cargo_home_with_cwd</span>(<span class="ident">start_search_at</span>.<span class="ident">as_std_path</span>())
-                .<span class="ident">map_err</span>(<span class="ident">TargetRunnerError::UnableToReadDir</span>)
+                .<span class="ident">map_err</span>(<span class="ident">TargetRunnerError::GetCargoHome</span>)
                 .<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">home</span><span class="op">|</span> {
-                    <span class="ident">Utf8PathBuf::from_path_buf</span>(<span class="ident">home</span>).<span class="ident">map_err</span>(<span class="ident">TargetRunnerError::NonUtf8Path</span>)
+                    <span class="ident">Utf8PathBuf::try_from</span>(<span class="ident">home</span>).<span class="ident">map_err</span>(<span class="ident">TargetRunnerError::NonUtf8Path</span>)
                 })<span class="question-mark">?</span>;
 
             <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">home_config</span>) <span class="op">=</span> <span class="ident">read_config_dir</span>(<span class="kw-2">&amp;mut</span> <span class="ident">cargo_home_path</span>) {
@@ -942,7 +942,7 @@
                     <span class="ident">runner_iter</span>
                         .<span class="ident">next</span>()
                         .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">TargetRunnerError::BinaryNotSpecified</span> {
-                            <span class="ident">source</span>: <span class="ident">source</span>.<span class="ident">clone</span>(),
+                            <span class="ident">key</span>: <span class="ident">source</span>.<span class="ident">clone</span>(),
                             <span class="ident">value</span>: <span class="ident">value</span>.<span class="ident">clone</span>(),
                         })<span class="question-mark">?</span>;
                 <span class="kw">let</span> <span class="ident">args</span> <span class="op">=</span> <span class="ident">runner_iter</span>.<span class="ident">map</span>(<span class="ident">String::from</span>).<span class="ident">collect</span>();
@@ -951,7 +951,7 @@
             <span class="ident">Runner::List</span>(<span class="kw-2">mut</span> <span class="ident">values</span>) =&gt; {
                 <span class="kw">if</span> <span class="ident">values</span>.<span class="ident">is_empty</span>() {
                     <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">TargetRunnerError::BinaryNotSpecified</span> {
-                        <span class="ident">source</span>,
+                        <span class="ident">key</span>: <span class="ident">source</span>,
                         <span class="ident">value</span>: <span class="ident">String::new</span>(),
                     });
                 } <span class="kw">else</span> {

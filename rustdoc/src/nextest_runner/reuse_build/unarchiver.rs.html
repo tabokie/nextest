@@ -339,7 +339,6 @@
 };
 <span class="kw">use</span> <span class="ident">camino</span>::{<span class="ident">Utf8Component</span>, <span class="ident">Utf8Path</span>, <span class="ident">Utf8PathBuf</span>};
 <span class="kw">use</span> <span class="ident">guppy</span>::{<span class="ident">graph::PackageGraph</span>, <span class="ident">CargoMetadata</span>};
-<span class="kw">use</span> <span class="ident">itertools::Either</span>;
 <span class="kw">use</span> <span class="ident">nextest_metadata::BinaryListSummary</span>;
 <span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">fs</span>,
@@ -606,9 +605,9 @@
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">header</span> <span class="op">=</span> <span class="ident">entry</span>.<span class="ident">header</span>().<span class="ident">clone</span>();
             <span class="kw">let</span> <span class="ident">actual_cksum</span> <span class="op">=</span> <span class="ident">header</span>
                 .<span class="ident">cksum</span>()
-                .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> <span class="ident">ArchiveReadError::InvalidChecksum</span> {
+                .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">error</span><span class="op">|</span> <span class="ident">ArchiveReadError::ChecksumRead</span> {
                     <span class="ident">path</span>: <span class="ident">path</span>.<span class="ident">clone</span>(),
-                    <span class="ident">payload</span>: <span class="ident">Either::Right</span>(<span class="ident">err</span>),
+                    <span class="ident">error</span>,
                 })<span class="question-mark">?</span>;
 
             <span class="ident">header</span>.<span class="ident">set_cksum</span>();
@@ -619,7 +618,8 @@
             <span class="kw">if</span> <span class="ident">expected_cksum</span> <span class="op">!</span><span class="op">=</span> <span class="ident">actual_cksum</span> {
                 <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ArchiveReadError::InvalidChecksum</span> {
                     <span class="ident">path</span>,
-                    <span class="ident">payload</span>: <span class="ident">Either::Left</span>((<span class="ident">expected_cksum</span>, <span class="ident">actual_cksum</span>)),
+                    <span class="ident">expected</span>: <span class="ident">expected_cksum</span>,
+                    <span class="ident">actual</span>: <span class="ident">actual_cksum</span>,
                 });
             }
 
