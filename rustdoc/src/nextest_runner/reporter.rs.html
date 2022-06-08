@@ -1100,8 +1100,6 @@
 <span id="1095">1095</span>
 <span id="1096">1096</span>
 <span id="1097">1097</span>
-<span id="1098">1098</span>
-<span id="1099">1099</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -1547,7 +1545,7 @@
     <span class="kw">fn</span> <span class="ident">progress_bar_prefix</span>(<span class="self">self</span>, <span class="ident">styles</span>: <span class="kw-2">&amp;</span><span class="ident">Styles</span>) -&gt; <span class="ident">String</span> {
         <span class="kw">let</span> (<span class="ident">prefix_str</span>, <span class="ident">prefix_style</span>) <span class="op">=</span> <span class="kw">match</span> <span class="self">self</span> {
             <span class="ident"><span class="self">Self</span>::Running</span>(<span class="ident">current_stats</span>) =&gt; {
-                <span class="kw">let</span> <span class="ident">prefix_style</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">current_stats</span>.<span class="ident">failed</span> <span class="op">&gt;</span> <span class="number">0</span> <span class="op">|</span><span class="op">|</span> <span class="ident">current_stats</span>.<span class="ident">exec_failed</span> <span class="op">&gt;</span> <span class="number">0</span> {
+                <span class="kw">let</span> <span class="ident">prefix_style</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">current_stats</span>.<span class="ident">any_failed</span>() {
                     <span class="ident">styles</span>.<span class="ident">fail</span>
                 } <span class="kw">else</span> {
                     <span class="ident">styles</span>.<span class="ident">pass</span>
@@ -1777,13 +1775,11 @@
                 <span class="ident">elapsed</span>,
                 <span class="ident">run_stats</span>,
             } =&gt; {
-                <span class="kw">let</span> <span class="ident">summary_style</span> <span class="op">=</span>
-                    <span class="kw">if</span> <span class="ident">run_stats</span>.<span class="ident">failed</span> <span class="op">&gt;</span> <span class="number">0</span> <span class="op">|</span><span class="op">|</span> <span class="ident">run_stats</span>.<span class="ident">exec_failed</span> <span class="op">&gt;</span> <span class="number">0</span> <span class="op">|</span><span class="op">|</span> <span class="ident">run_stats</span>.<span class="ident">timed_out</span> <span class="op">&gt;</span> <span class="number">0</span>
-                    {
-                        <span class="self">self</span>.<span class="ident">styles</span>.<span class="ident">fail</span>
-                    } <span class="kw">else</span> {
-                        <span class="self">self</span>.<span class="ident">styles</span>.<span class="ident">pass</span>
-                    };
+                <span class="kw">let</span> <span class="ident">summary_style</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">run_stats</span>.<span class="ident">any_failed</span>() {
+                    <span class="self">self</span>.<span class="ident">styles</span>.<span class="ident">fail</span>
+                } <span class="kw">else</span> {
+                    <span class="self">self</span>.<span class="ident">styles</span>.<span class="ident">pass</span>
+                };
                 <span class="macro">write!</span>(<span class="ident">writer</span>, <span class="string">&quot;{:&gt;12} &quot;</span>, <span class="string">&quot;Summary&quot;</span>.<span class="ident">style</span>(<span class="ident">summary_style</span>))<span class="question-mark">?</span>;
 
                 <span class="comment">// Next, print the total time taken.</span>
