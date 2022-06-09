@@ -657,6 +657,19 @@
 <span id="652">652</span>
 <span id="653">653</span>
 <span id="654">654</span>
+<span id="655">655</span>
+<span id="656">656</span>
+<span id="657">657</span>
+<span id="658">658</span>
+<span id="659">659</span>
+<span id="660">660</span>
+<span id="661">661</span>
+<span id="662">662</span>
+<span id="663">663</span>
+<span id="664">664</span>
+<span id="665">665</span>
+<span id="666">666</span>
+<span id="667">667</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -918,6 +931,19 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Error</span>)]</span>
 <span class="attribute">#[<span class="ident">non_exhaustive</span>]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">CreateTestListError</span> {
+    <span class="doccomment">/// The proposed cwd for a process is not a directory.</span>
+    <span class="attribute">#[<span class="ident">error</span>(
+        <span class="string">&quot;for `{binary_id}`, current directory `{cwd}` is not a directory\n\
+         (hint: ensure project source is available at this location)&quot;</span>
+    )]</span>
+    <span class="ident">CwdIsNotDir</span> {
+        <span class="doccomment">/// The binary ID for which the current directory wasn&#39;t found.</span>
+        <span class="ident">binary_id</span>: <span class="ident">String</span>,
+
+        <span class="doccomment">/// The current directory that wasn&#39;t found.</span>
+        <span class="ident">cwd</span>: <span class="ident">Utf8PathBuf</span>,
+    },
+
     <span class="doccomment">/// Running a command to gather the list of tests failed.</span>
     <span class="attribute">#[<span class="ident">error</span>(
         <span class="string">&quot;for `{binary_id}`, running command `{}` failed&quot;</span>,

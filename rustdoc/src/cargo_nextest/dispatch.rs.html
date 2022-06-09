@@ -1123,6 +1123,25 @@
 <span id="1118">1118</span>
 <span id="1119">1119</span>
 <span id="1120">1120</span>
+<span id="1121">1121</span>
+<span id="1122">1122</span>
+<span id="1123">1123</span>
+<span id="1124">1124</span>
+<span id="1125">1125</span>
+<span id="1126">1126</span>
+<span id="1127">1127</span>
+<span id="1128">1128</span>
+<span id="1129">1129</span>
+<span id="1130">1130</span>
+<span id="1131">1131</span>
+<span id="1132">1132</span>
+<span id="1133">1133</span>
+<span id="1134">1134</span>
+<span id="1135">1135</span>
+<span id="1136">1136</span>
+<span id="1137">1137</span>
+<span id="1138">1138</span>
+<span id="1139">1139</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -1130,7 +1149,7 @@
     <span class="ident">cargo_cli</span>::{<span class="ident">CargoCli</span>, <span class="ident">CargoOptions</span>},
     <span class="ident">output</span>::{<span class="ident">OutputContext</span>, <span class="ident">OutputOpts</span>, <span class="ident">OutputWriter</span>},
     <span class="ident">reuse_build</span>::{<span class="ident">make_path_mapper</span>, <span class="ident">ArchiveFormatOpt</span>, <span class="ident">ReuseBuildOpts</span>},
-    <span class="ident">ExpectedError</span>,
+    <span class="ident">ExpectedError</span>, <span class="ident">ReuseBuildKind</span>,
 };
 <span class="kw">use</span> <span class="ident">camino</span>::{<span class="ident">Utf8Path</span>, <span class="ident">Utf8PathBuf</span>};
 <span class="kw">use</span> <span class="ident">clap</span>::{<span class="ident">ArgEnum</span>, <span class="ident">Args</span>, <span class="ident">Parser</span>, <span class="ident">Subcommand</span>};
@@ -1743,6 +1762,25 @@
             <span class="prelude-val">Some</span>(<span class="ident">path</span>) =&gt; <span class="ident">path</span>.<span class="ident">to_owned</span>(),
             <span class="kw">_</span> =&gt; <span class="ident">graph_data</span>.<span class="number">1</span>.<span class="ident">workspace</span>().<span class="ident">root</span>().<span class="ident">to_owned</span>(),
         };
+
+        <span class="kw">let</span> <span class="ident">root_manifest_path</span> <span class="op">=</span> <span class="ident">workspace_root</span>.<span class="ident">join</span>(<span class="string">&quot;Cargo.toml&quot;</span>);
+        <span class="kw">if</span> <span class="op">!</span><span class="ident">root_manifest_path</span>.<span class="ident">exists</span>() {
+            <span class="comment">// This doesn&#39;t happen in normal use, but is a common situation if the build is being</span>
+            <span class="comment">// reused.</span>
+            <span class="kw">let</span> <span class="ident">reuse_build_kind</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">reuse_build</span>.<span class="ident">workspace_remap</span>().<span class="ident">is_some</span>() {
+                <span class="ident">ReuseBuildKind::ReuseWithWorkspaceRemap</span> { <span class="ident">workspace_root</span> }
+            } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">reuse_build</span>.<span class="ident">is_active</span>() {
+                <span class="ident">ReuseBuildKind::Reuse</span>
+            } <span class="kw">else</span> {
+                <span class="ident">ReuseBuildKind::Normal</span>
+            };
+
+            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ExpectedError::RootManifestNotFound</span> {
+                <span class="ident">path</span>: <span class="ident">root_manifest_path</span>,
+                <span class="ident">reuse_build_kind</span>,
+            }
+            .<span class="ident">into</span>());
+        }
 
         <span class="prelude-val">Ok</span>(<span class="self">Self</span> {
             <span class="ident">output</span>,
